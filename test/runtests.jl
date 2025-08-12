@@ -16,10 +16,20 @@ SV = joinpath(DATA, "20151231T2300Z_XX_YYY_SV_.xml")
 TP = joinpath(DATA, "20151231T2300Z_XX_YYY_TP_.xml")
 EQ = joinpath(DATA, "20151231T2300Z_YYY_EQ_.xml")
 
+collect(values(CIMFile(DL).objects))[1]
+
 CIMFile(DL)
 CIMFile(DY)
 CIMFile(GL)
 CIMFile(SSH)
 CIMFile(SV)
 CIMFile(TP)
-CIMFile(EQ)
+CIMFile(EQ).objects["#_b767a615-69c9-46cb-89fb-998824454f6d"]
+collect(keys(CIMFile(EQ).objects))
+
+dataset = CIMDataset(DATA)
+resolve_references!(dataset)
+
+eq = dataset[:Equipment]
+terminals = eq("Terminal")
+terminals[1]

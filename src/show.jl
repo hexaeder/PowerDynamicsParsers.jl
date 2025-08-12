@@ -11,6 +11,9 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
         # Compact mode: CIMObject:ClassName
         print(io, "CIMObject:")
         printstyled(io, obj.class_name, color=:blue)
+        if hasname(obj)
+            print(io, " (", getname(obj), ")")
+        end
     else
         # Non-compact mode: Multi-line display
         print(io, "CIMObject:")
