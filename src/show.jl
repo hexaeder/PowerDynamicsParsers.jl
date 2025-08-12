@@ -130,3 +130,33 @@ function Base.show(io::IO, mime::MIME"text/plain", cim_file::CIMFile)
         println(io, "  Extensions: ", length(cim_file.extensions))
     end
 end
+
+function Base.show(io::IO, dataset::CIMDataset)
+    c = IOContext(io, :compact => true)
+    show(c, MIME"text/plain"(), dataset)
+end
+
+function Base.show(io::IO, mime::MIME"text/plain", dataset::CIMDataset)
+    compact = get(io, :compact, false)
+
+    if compact
+        print(io, "CIMDataset: ")
+        printstyled(io, "$(length(dataset.files)) profiles", color=:blue)
+    else
+        print(io, "CIMDataset: ")
+        printstyled(io, "$(length(dataset.files)) profiles", color=:blue)
+        println(io)
+        println(io, "  Directory: ", dataset.directory)
+
+        if !isempty(dataset.files)
+            println(io, "  Profiles:")
+            for (profile, cim_file) in dataset.files
+                print(io, "    ", profile, ": ")
+                print(io, cim_file.filename, " (")
+                print(io, "$(length(cim_file.objects)) objects, ")
+                print(io, "$(length(cim_file.extensions)) extensions)")
+                println(io)
+            end
+        end
+    end
+end

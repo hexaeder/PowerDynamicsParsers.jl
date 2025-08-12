@@ -4,7 +4,7 @@ using XML: XML, Node, nodetype, attributes, children, tag,
            is_simple, simple_value
 using OrderedCollections: OrderedDict
 
-export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile
+export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile, CIMDataset
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 
 """
@@ -23,7 +23,7 @@ end
 abstract type CIMEntity end
 abstract type AbstractCIMReference end
 
-struct CIMRef <: AbstractCIMReference
+mutable struct CIMRef <: AbstractCIMReference
     id::String
     resolved::Bool
     target::Union{CIMEntity, Nothing}
@@ -60,8 +60,13 @@ struct CIMFile <: CIMEntity
     dependencies::Vector{CIMRef}
     modeling_authority::String
     objects::OrderedDict{String, CIMObject}
-    extensions::OrderedDict{String, CIMExtension}
+    extensions::Vector{CIMExtension}
     filename::String
+end
+
+struct CIMDataset <: CIMEntity
+    files::OrderedDict{Symbol, CIMFile}
+    directory::String
 end
 
 plain_name(el::Node, prefix::String; kw...) = plain_name(el, [prefix]; kw...)
@@ -224,7 +229,7 @@ function CIMFile(filepath::String)
     deleteat!(childs, midx)
 
     objects = OrderedDict{String, CIMObject}()
-    extensions = OrderedDict{String, CIMExtension}()
+    extensions = Vector{CIMExtension}()
 
     for el in childs
         if is_object(el)
@@ -232,7 +237,7 @@ function CIMFile(filepath::String)
             objects[obj.id] = obj
         elseif is_extension(el)
             ext = CIMExtension(el, metadata.profile)
-            extensions[ext.base.id] = ext
+            push!(extensions, ext)
         else
             @warn "Skipping $(tag(el)), no parser for this element type."
         end
@@ -253,6 +258,43 @@ function CIMFile(filepath::String)
 
     return cim_file
 end
+
+function CIMDataset(directory::String)
+    files = OrderedDict{Symbol, CIMFile}()
+
+    # Check if directory exists
+    if !isdir(directory)
+        error("Directory not found: $directory")
+    end
+
+    # Find all XML files in directory
+    xml_files = filter(f -> endswith(lowercase(f), ".xml"), readdir(directory))
+
+    if isempty(xml_files)
+        @warn "No XML files found in directory: $directory"
+    end
+
+    # Parse each XML file
+    for filename in xml_files
+        filepath = joinpath(directory, filename)
+        try
+            cim_file = CIMFile(filepath)
+            profile = cim_file.profile
+
+            # Check for profile conflicts
+            if haskey(files, profile)
+                @warn "Multiple files found for profile $profile. Overwriting $(files[profile].filename) with $filename"
+            end
+
+            files[profile] = cim_file
+        catch e
+            @warn "Failed to parse file $filename: $e"
+        end
+    end
+
+    CIMDataset(files, directory)
+end
+
 
 include("show.jl")
 
