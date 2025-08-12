@@ -15,6 +15,9 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
         # Non-compact mode: Multi-line display
         print(io, "CIMObject:")
         printstyled(io, obj.class_name, color=:blue)
+        println(io)
+        println(io, "  ID: ", obj.id)
+        println(io, "  Profile: ", obj.profile)
 
         # Show properties
         if !isempty(obj.properties)
@@ -33,6 +36,11 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
         # Show references count if any
         if !isempty(obj.references)
             println(io, "  referenced by: $(length(obj.references))")
+        end
+
+        # Show extension count if any
+        if !isempty(obj.extension)
+            println(io, "  extensions: $(length(obj.extension))")
         end
     end
 end
@@ -119,5 +127,6 @@ function Base.show(io::IO, mime::MIME"text/plain", cim_file::CIMFile)
         end
 
         println(io, "  Objects: ", length(cim_file.objects))
+        println(io, "  Extensions: ", length(cim_file.extensions))
     end
 end

@@ -5,7 +5,7 @@ using XML: XML, Node, nodetype, attributes, children, tag,
 using OrderedCollections: OrderedDict
 
 export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile
-export plain_name, is_reference, is_object, parse_metadata
+export plain_name, is_reference, is_object, is_extension, parse_metadata
 
 """
 Extract the "Rescource Description Framework" (RDF) node from the XML document.
@@ -60,6 +60,7 @@ struct CIMFile <: CIMEntity
     dependencies::Vector{CIMRef}
     modeling_authority::String
     objects::OrderedDict{String, CIMObject}
+    extensions::OrderedDict{String, CIMExtension}
     filename::String
 end
 
@@ -88,8 +89,13 @@ function is_reference(el::Node)
 end
 
 function is_object(el::Node)
-    nodetype(el) == XML.Element && contains(tag(el), r"^cim:")
+    nodetype(el) == XML.Element && contains(tag(el), r"^cim:") && haskey(attributes(el), "rdf:ID")
 end
+
+function is_extension(el::Node)
+    nodetype(el) == XML.Element && contains(tag(el), r"^cim:") && haskey(attributes(el), "rdf:about")
+end
+
 function is_metadata(el::Node)
     nodetype(el) == XML.Element && tag(el) == "md:FullModel"
 end
@@ -175,7 +181,19 @@ end
 function CIMObject(el::Node, profile)
     name = plain_name(el, ["cim", "entsoe"])
     id = get(attributes(el), "rdf:ID", "")
-    id == "" && @warn "Element $(tag(el)) has no rdf:ID attribute!"
+    props = _parseprops(el, name)
+    CIMObject(profile, id, name, props)
+end
+
+function CIMExtension(el::Node, profile)
+    name = plain_name(el, ["cim", "entsoe"])
+    about = get(attributes(el), "rdf:about", "")
+    base = CIMRef(about)
+    props = _parseprops(el, name)
+    CIMExtension(profile, base, name, props)
+end
+
+function _parseprops(el::Node, name::AbstractString)
     props = OrderedDict{String, Any}()
     for p in children(el)
         key = plain_name(p, ["cim", "entsoe"]; strip_ns=[name, "IdentifiedObject"])
@@ -187,15 +205,13 @@ function CIMObject(el::Node, profile)
             @warn "Skipping property $p, no parser defined yet."
         end
     end
-    CIMObject(profile, id, name, props)
+    props
 end
 
 function CIMFile(filepath::String)
     filename = basename(filepath)
     doc = XML.read(filepath, Node)
     rdf = rdf_node(doc)
-
-    objects = OrderedDict{String, CIMObject}()
 
     childs = copy(children(rdf))
     midx = findall(is_metadata, childs)
@@ -207,10 +223,16 @@ function CIMFile(filepath::String)
     metadata = parse_metadata(childs[only(midx)])
     deleteat!(childs, midx)
 
+    objects = OrderedDict{String, CIMObject}()
+    extensions = OrderedDict{String, CIMExtension}()
+
     for el in childs
         if is_object(el)
             obj = CIMObject(el, metadata.profile)
             objects[obj.id] = obj
+        elseif is_extension(el)
+            ext = CIMExtension(el, metadata.profile)
+            extensions[ext.base.id] = ext
         else
             @warn "Skipping $(tag(el)), no parser for this element type."
         end
@@ -225,6 +247,7 @@ function CIMFile(filepath::String)
         metadata.dependencies,
         metadata.modeling_authority,
         objects,
+        extensions,
         filename
     )
 
