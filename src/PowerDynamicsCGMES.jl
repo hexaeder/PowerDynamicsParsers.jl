@@ -20,37 +20,47 @@ function rdf_node(headnode)
     only(childs)
 end
 
+abstract type CIMEntity end
 abstract type AbstractCIMReference end
-
-struct CIMObject
-    id::String
-    class_name::String
-    properties::OrderedDict{String, Any}
-    backrefs::Vector{AbstractCIMReference}
-    CIMObject(id, n, p) = new(id, n, p, AbstractCIMReference[])
-end
-
-struct CIMFile
-    uuid::String
-    profiles::Vector{String}
-    created::String
-    scenario_time::String
-    dependencies::Vector{AbstractCIMReference}
-    modeling_authority::String
-    objects::OrderedDict{String, CIMObject}
-    filename::String
-end
 
 struct CIMRef <: AbstractCIMReference
     id::String
     resolved::Bool
-    target::Union{CIMObject, CIMFile, Nothing}
+    target::Union{CIMEntity, Nothing}
 
     CIMRef(id::String) = new(id, false, nothing)
 end
 struct CIMBackref <: AbstractCIMReference
     id::String
-    target::CIMObject
+    target::CIMEntity
+end
+
+struct CIMObject <: CIMEntity
+    profile::Symbol
+    id::String
+    class_name::String
+    properties::OrderedDict{String, Any}
+    references::Vector{CIMBackref}
+    extension::Vector{CIMBackref}
+    CIMObject(profile, id, n, p) = new(profile, id, n, p, CIMBackref[], CIMBackref[])
+end
+
+struct CIMExtension <: CIMEntity
+    profile::Symbol
+    base::CIMRef
+    class_name::String
+    properties::OrderedDict{String, Any}
+end
+
+struct CIMFile <: CIMEntity
+    profile::Symbol
+    uuid::String
+    created::String
+    scenario_time::String
+    dependencies::Vector{CIMRef}
+    modeling_authority::String
+    objects::OrderedDict{String, CIMObject}
+    filename::String
 end
 
 plain_name(el::Node, prefix::String; kw...) = plain_name(el, [prefix]; kw...)
@@ -80,6 +90,9 @@ end
 function is_object(el::Node)
     nodetype(el) == XML.Element && contains(tag(el), r"^cim:")
 end
+function is_metadata(el::Node)
+    nodetype(el) == XML.Element && tag(el) == "md:FullModel"
+end
 
 CIMRef(el::Node) = CIMRef(attributes(el)["rdf:resource"])
 
@@ -88,7 +101,7 @@ function parse_metadata(md_node::Node)
     uuid = get(attrs, "rdf:about", "")
     uuid = replace(uuid, "urn:uuid:" => "")
 
-    profiles = String[]
+    _profiles = String[]
     dependencies = CIMRef[]
     created = ""
     scenario_time = ""
@@ -100,7 +113,7 @@ function parse_metadata(md_node::Node)
             if XML.is_simple(child)
                 val = XML.simple_value(child)
                 if !isnothing(val)
-                    push!(profiles, val)
+                    push!(_profiles, val)
                 end
             end
         elseif tag_name == "md:Model.DependentOn"
@@ -130,12 +143,36 @@ function parse_metadata(md_node::Node)
         end
     end
 
-    return (uuid=uuid, profiles=profiles, dependencies=dependencies,
+    profile = _determine_profile(_profiles)
+    return (uuid=uuid, profile=profile, dependencies=dependencies,
             created=created, scenario_time=scenario_time, modeling_authority=modeling_authority)
 end
+function _determine_profile(profiles)
+    keys = [
+        :Equipment,
+        :Topology,
+        :StateVariables,
+        :DiagramLayout,
+        :SteadyStateHypothesis,
+        :GeographicalLocation,
+        :Dynamics,
+    ]
+    candidates = map(profiles) do profile
+        keyidx = findall(k -> occursin(string(k), profile), keys)
+        if !(length(keyidx) == 1)
+            error("Profile $profile does not contain exactly one of the expected keys: $keys")
+        end
+        keys[only(keyidx)]
+    end
+    if !allequal(candidates)
+        error("Profiles $profiles do not match (got $candidates), expected all to be the same.")
+    end
+    first(candidates)
+end
+
 
 # parser function
-function CIMObject(el::Node)
+function CIMObject(el::Node, profile)
     name = plain_name(el, ["cim", "entsoe"])
     id = get(attributes(el), "rdf:ID", "")
     id == "" && @warn "Element $(tag(el)) has no rdf:ID attribute!"
@@ -150,7 +187,7 @@ function CIMObject(el::Node)
             @warn "Skipping property $p, no parser defined yet."
         end
     end
-    CIMObject(id, name, props)
+    CIMObject(profile, id, name, props)
 end
 
 function CIMFile(filepath::String)
@@ -159,28 +196,30 @@ function CIMFile(filepath::String)
     rdf = rdf_node(doc)
 
     objects = OrderedDict{String, CIMObject}()
-    metadata = nothing
 
-    for el in children(rdf)
+    childs = copy(children(rdf))
+    midx = findall(is_metadata, childs)
+    if isnothing(midx)
+        error("No md:FullModel metadata found in file: $filepath")
+    elseif length(midx) > 1
+        error("Found more than one md:FullModel metadata in file: $filepath")
+    end
+    metadata = parse_metadata(childs[only(midx)])
+    deleteat!(childs, midx)
+
+    for el in childs
         if is_object(el)
-            obj = CIMObject(el)
+            obj = CIMObject(el, metadata.profile)
             objects[obj.id] = obj
-        elseif nodetype(el) == XML.Element && tag(el) == "md:FullModel"
-            isnothing(metadata) || error("Found more than one md:FullModel metadata in file: $filepath")
-            metadata = parse_metadata(el)
         else
             @warn "Skipping $(tag(el)), no parser for this element type."
         end
     end
 
-    if isnothing(metadata)
-        error("No md:FullModel metadata found in file: $filepath")
-    end
-
     # Create CIMFile with metadata
     cim_file = CIMFile(
+        metadata.profile,
         metadata.uuid,
-        metadata.profiles,
         metadata.created,
         metadata.scenario_time,
         metadata.dependencies,

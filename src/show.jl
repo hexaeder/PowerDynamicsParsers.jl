@@ -30,9 +30,9 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
             end
         end
 
-        # Show backrefs count if any
-        if !isempty(obj.backrefs)
-            println(io, "  backrefs: $(length(obj.backrefs))")
+        # Show references count if any
+        if !isempty(obj.references)
+            println(io, "  referenced by: $(length(obj.references))")
         end
     end
 end
@@ -56,18 +56,53 @@ function Base.show(io::IO, cim_file::CIMFile)
     show(c, MIME"text/plain"(), cim_file)
 end
 
+# Show methods for CIMExtension
+function Base.show(io::IO, ext::CIMExtension)
+    c = IOContext(io, :compact => true)
+    show(c, MIME"text/plain"(), ext)
+end
+
+function Base.show(io::IO, mime::MIME"text/plain", ext::CIMExtension)
+    compact = get(io, :compact, false)
+
+    if compact
+        print(io, "CIMExtension:")
+        printstyled(io, ext.class_name, color=:blue)
+    else
+        print(io, "CIMExtension:")
+        printstyled(io, ext.class_name, color=:blue)
+        println(io)
+        print(io, "  Base: ")
+        show(IOContext(io, :compact => true), mime, ext.base)
+        println(io)
+        println(io, "  Profile: ", ext.profile)
+
+        if !isempty(ext.properties)
+            for (key, value) in ext.properties
+                print(io, "  ", key, ": ")
+                if value isa AbstractCIMReference
+                    show(IOContext(io, :compact => true), mime, value)
+                else
+                    printstyled(io, value, color=:light_black)
+                end
+                println(io)
+            end
+        end
+    end
+end
+
 function Base.show(io::IO, mime::MIME"text/plain", cim_file::CIMFile)
     compact = get(io, :compact, false)
 
     if compact
         print(io, "CIMFile:")
-        printstyled(io, cim_file.filename, color=:blue)
+        printstyled(io, cim_file.profile, color=:blue)
     else
         print(io, "CIMFile:")
-        printstyled(io, cim_file.filename, color=:blue)
+        printstyled(io, cim_file.profile, color=:blue)
         println(io)
         println(io, "  UUID: ", cim_file.uuid)
-        println(io, "  Profiles: ", join(cim_file.profiles, ", "))
+        println(io, "  File: ", cim_file.filename)
         println(io, "  Created: ", cim_file.created)
         println(io, "  Scenario Time: ", cim_file.scenario_time)
         println(io, "  Modeling Authority: ", cim_file.modeling_authority)
