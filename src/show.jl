@@ -9,16 +9,17 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
 
     if compact
         # Compact mode: CIMObject:ClassName
-        print(io, "CIMObject:")
+        print(io, obj.profile, ":")
         printstyled(io, obj.class_name, color=:blue)
         if hasname(obj)
             print(io, " (", getname(obj), ")")
         end
     else
         # Non-compact mode: Multi-line display
-        print(io, "CIMObject:")
+        print(io, obj.profile, ":")
         printstyled(io, obj.class_name, color=:blue)
         println(io)
+        hasname(obj) && println(io, "  Name: ", getname(obj))
         println(io, "  ID: ", obj.id)
         println(io, "  Profile: ", obj.profile)
 
@@ -26,6 +27,7 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
         if !isempty(obj.properties)
             println(io)
             for (key, value) in obj.properties
+                key == "name" && continue # shown in header
                 print(io, "  ", key, ": ")
                 if value isa AbstractCIMReference
                     show(IOContext(io, :compact => true), mime, value)

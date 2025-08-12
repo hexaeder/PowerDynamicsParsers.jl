@@ -391,6 +391,13 @@ function (cm::CIMFile)(s)
     keys = findall(obj -> contains(obj.class_name, s), cm.objects)
     map(k -> cm.objects[k], keys)
 end
+function (cd::CIMDataset)(s)
+    found_objects = CIMObject[]
+    for (profile, cm) in cd.files
+        append!(found_objects, cm(s))
+    end
+    found_objects
+end
 
 hasname(obj::Union{CIMObject, CIMExtension}) = haskey(obj.properties, "name")
 getname(obj::Union{CIMObject, CIMExtension}) = obj.properties["name"]

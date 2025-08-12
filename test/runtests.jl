@@ -28,8 +28,10 @@ CIMFile(EQ).objects["#_b767a615-69c9-46cb-89fb-998824454f6d"]
 collect(keys(CIMFile(EQ).objects))
 
 dataset = CIMDataset(DATA)
-resolve_references!(dataset)
 
 eq = dataset[:Equipment]
 terminals = eq("Terminal")
 terminals[1]
+
+dataset("Terminal")
+dataset("Terminal")[1]
