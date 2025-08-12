@@ -33,5 +33,15 @@ eq = dataset[:Equipment]
 terminals = eq("Terminal")
 terminals[1]
 
+# show methods for objects
 dataset("Terminal")
-dataset("Terminal")[1]
+dataset("Terminal")[3]
+
+# show methods for extensions
+tp = dataset[:Topology]
+tp.extensions
+tp.extensions[1]
+
+nodes = objects(dataset)
+filter(!hasname, nodes)
+

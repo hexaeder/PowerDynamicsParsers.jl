@@ -7,6 +7,7 @@ using OrderedCollections: OrderedDict
 export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile, CIMDataset
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 export get_by_id, resolve_references!
+export objects, hasname, getname
 
 """
 Extract the "Rescource Description Framework" (RDF) node from the XML document.
@@ -314,14 +315,14 @@ function get_by_id(dataset::CIMDataset, id::String)
             push!(found_objects, cim_file.objects[id])
         end
     end
-    
+
     # Check uniqueness
     if isempty(found_objects)
         error("Object with ID '$id' not found in any profile")
     elseif length(found_objects) > 1
         error("Object with ID '$id' found in multiple profiles.")
     end
-    
+
     only(found_objects)
 end
 
@@ -401,6 +402,9 @@ end
 
 hasname(obj::Union{CIMObject, CIMExtension}) = haskey(obj.properties, "name")
 getname(obj::Union{CIMObject, CIMExtension}) = obj.properties["name"]
+
+objects(f::CIMFile) = collect(values(f.objects))
+objects(d::CIMDataset) = mapreduce(objects, vcat, values(d.files))
 
 
 include("show.jl")
