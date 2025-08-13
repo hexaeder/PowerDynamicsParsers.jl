@@ -8,7 +8,7 @@ export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile, CIMDataset
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 export get_by_id, resolve_references!
 export objects, hasname, getname, properties
-export inspect_dataset
+export inspect_dataset, inspect_node
 
 """
 Extract the "Rescource Description Framework" (RDF) node from the XML document.

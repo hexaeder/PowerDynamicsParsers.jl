@@ -1,5 +1,4 @@
 using PowerDynamicsCGMES
-using Test
 using OrderedCollections
 using XML
 using Graphs
@@ -26,9 +25,17 @@ properties(terminals[1])
 dataset("ACLineSegment")[1]
 
 dataset("Terminal")[1]
+dataset("BusbarSection")[1]
 
 inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 
 using CairoMakie
 fig = inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 save("3bus_overview.pdf", fig)
+
+fig = inspect_dataset(dataset)
+save("3bus_full.pdf", fig)
+
+# sinpect single thing
+terminal = dataset("Terminal")[1]
+fig = inspect_node(terminal; stop_classes=["BaseVoltage", "Topological"])
