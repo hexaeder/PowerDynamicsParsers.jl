@@ -7,7 +7,8 @@ using OrderedCollections: OrderedDict
 export rdf_node, CIMObject, CIMRef, CIMBackref, CIMFile, CIMDataset
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 export get_by_id, resolve_references!
-export objects, hasname, getname
+export objects, hasname, getname, properties
+export inspect_dataset
 
 """
 Extract the "Rescource Description Framework" (RDF) node from the XML document.
@@ -406,7 +407,10 @@ getname(obj::Union{CIMObject, CIMExtension}) = obj.properties["name"]
 objects(f::CIMFile) = collect(values(f.objects))
 objects(d::CIMDataset) = mapreduce(objects, vcat, values(d.files))
 
+properties(obj::CIMObject) = merge(obj.properties, [ext.source.properties for ext in obj.extension]...)
 
+
+include("inspect.jl")
 include("show.jl")
 
 end

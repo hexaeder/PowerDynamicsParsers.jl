@@ -4,12 +4,18 @@ authors = ["Hans Würfel <git@wuerfel.io> and contributors"]
 version = "1.0.0-DEV"
 
 [deps]
+GraphMakie = "1ecd5474-83a3-4783-bb4f-06765db800d2"
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 NetworkDynamics = "22e9dc34-2a0d-11e9-0de0-8588d035468b"
 OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 PowerDynamics = "cc46b21f-1b17-51c2-b642-af74c3d3a8be"
+WGLMakie = "276b4fcb-3e11-5398-bf8b-a0c2d153d008"
 XML = "72c71f33-b9b6-44de-8c94-c961784809e2"
 
 [compat]
+GraphMakie = "0.6.0"
+Graphs = "1.13.0"
 OrderedCollections = "1.8.1"
+WGLMakie = "0.13.3"
 XML = "0.3.6"
 julia = "1.10"
