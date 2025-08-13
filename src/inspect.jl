@@ -1,6 +1,6 @@
 using Graphs
 using GraphMakie: graphplot
-using GraphMakie.Makie: Figure, Axis, hidespines!, hidedecorations!
+using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!
 
 
 """
@@ -25,7 +25,7 @@ fig = inspect_dataset(dataset)
 fig = inspect_dataset(dataset; filter_out=["Limit", "Point"])
 ```
 """
-function inspect_dataset(dataset; filter_out=String[], figure_size=(1500,1500))
+function inspect_dataset(dataset; filter_out=String[], figure_size=(2000,1500))
 
     # Extract nodes from dataset
     nodes = objects(dataset)
@@ -90,7 +90,7 @@ function inspect_dataset(dataset; filter_out=String[], figure_size=(1500,1500))
         add_edge!(g, e.first, e.second)
     end
 
-    # Create GraphMakie plot
+    # Create GraphMakie plot with legend and filter info
     fig = Figure(; size=figure_size)
     ax = Axis(fig[1,1])
     graphplot!(
@@ -102,10 +102,42 @@ function inspect_dataset(dataset; filter_out=String[], figure_size=(1500,1500))
         node_color = colors,
         node_size = 20,
         arrow_shift = :end,
-        arrow_size = 20
+        arrow_size = 10,
+        elabels_fontsize = 8,
+        nlabels_distance = 5,
     )
-    hidespines!(ax)
+    # hidespines!(ax)
     hidedecorations!(ax)
+
+    # Add profile color legend
+    unique_profiles_in_data = unique(profiles)
+    legend_colors = [profile_color_map[profile] for profile in unique_profiles_in_data]
+    legend_labels = [string(profile) for profile in unique_profiles_in_data]
+
+    # Create legend with colored markers
+    Legend(fig[1, 2],
+           [scatter!(ax, Float64[], Float64[], color=color, markersize=15) for color in legend_colors],
+           legend_labels,
+           "CGMES Profiles",
+           framevisible=true,
+           tellwidth=true,
+           margin=(10, 10, 10, 10))
+
+    # Add filter information at the bottom
+    filter_text = if isempty(filter_out)
+        "Filters: None applied"
+    else
+        "Filters: Excluded classes containing: " * join(filter_out, ", ")
+    end
+
+    # Add node count information
+    total_nodes = length(objects(dataset))
+    filtered_nodes = length(nodes)
+    info_text = "Nodes: $filtered_nodes/$total_nodes shown"
+
+    # Add filter and node information using Label
+    Label(fig[2, 1:2], filter_text * "\n" * info_text,
+          halign=:left, valign=:top, tellwidth=false, tellheight=true, justification=:left)
 
     return fig
 end

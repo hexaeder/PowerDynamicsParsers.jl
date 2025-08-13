@@ -25,5 +25,10 @@ properties(terminals[1])
 
 dataset("ACLineSegment")[1]
 
+dataset("Terminal")[1]
 
 inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
+
+using CairoMakie
+fig = inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
+save("3bus_overview.pdf", fig)
