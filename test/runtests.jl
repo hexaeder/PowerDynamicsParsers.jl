@@ -37,5 +37,13 @@ fig = inspect_dataset(dataset)
 save("3bus_full.pdf", fig)
 
 # sinpect single thing
-terminal = dataset("Terminal")[1]
-fig = inspect_node(terminal; stop_classes=["BaseVoltage", "Topological"])
+terminal = dataset("Terminal")[15] # feld2
+# fig = inspect_node(terminal; stop_classes=["BaseVoltage", "Topological", "OperationalLimitType"])
+fig = inspect_node(
+    terminal;
+    stop_classes=["BaseVoltage", "VoltageLevel", "TopologicalNode", "OperationalLimitType", "Substation"],
+    # filter_out=["BaseVoltage"],
+    max_depth=100
+)
+
+dataset("VoltageLevel")[1]
