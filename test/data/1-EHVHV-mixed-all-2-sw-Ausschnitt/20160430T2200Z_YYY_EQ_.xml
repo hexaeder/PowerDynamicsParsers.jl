@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with PowerFactory 2023 SP3A (x64) (digcimdb.dll ServicePack 0) -->
+<rdf:RDF xmlns:cim="http://iec.ch/TC57/2013/CIM-schema-cim16#" xmlns:entsoe="http://entsoe.eu/CIM/SchemaExtension/3/1#" xmlns:md="http://iec.ch/TC57/61970-552/ModelDescription/1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <md:FullModel rdf:about="urn:uuid:22d83895-ed88-4547-9f0c-c5e6b3c2afee">
+    <md:Model.created>2025-08-15T12:13:35Z</md:Model.created>
+    <md:Model.modelingAuthoritySet>dummyURI</md:Model.modelingAuthoritySet>
+    <md:Model.profile>http://entsoe.eu/CIM/EquipmentCore/3/1</md:Model.profile>
+    <md:Model.profile>http://entsoe.eu/CIM/EquipmentShortCircuit/3/1</md:Model.profile>
+    <md:Model.scenarioTime>2016-04-30T22:00:00Z</md:Model.scenarioTime>
+  </md:FullModel>
+  <cim:Terminal rdf:ID="_a0b02482-beef-e4d0-8246-290d583497b1">
+    <cim:ACDCTerminal.sequenceNumber>2</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 345</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_e3696aba-b196-4bc4-820a-21a56605bf16" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_8675d49d-f5c4-a79e-3889-2880a60f1841">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_EHV Gen 200</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_b056f176-81af-43bf-bf85-2e824bf1f55a" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_ece3bc95-def2-839e-1610-feba2818ebe9">
+    <cim:ACDCTerminal.sequenceNumber>2</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 22</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_feb41dfa-1298-46eb-a344-32e045666e1c" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_384aec40-edf6-a587-1c28-40f10db45887">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_EHV Sgen 76</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_a20bb99b-a226-49d8-8872-c0d7aa3ec3c4" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_2da2b5af-68ee-2d38-ef18-e1ce1c59b054">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 11</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_e3696aba-b196-4bc4-820a-21a56605bf16" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_ab929e91-25c6-0140-29d8-1a4318f5f9b9">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 8</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_303d148f-1713-01f9-73c4-c5018404d851" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_49e4c808-3a6f-3ae8-62d2-43f6e36a2b27">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_HV2 Sgen 44</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_f806ccaf-1543-4b09-9d7f-f8e8cc6e283d" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_1a38e42d-feca-2fd4-cbfc-4c8381a8a25c">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 340</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_e0a23526-31bd-9061-5d04-d14dabffaa13" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_18a98ffe-e517-4927-7d3c-cd110bdff1d0">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>EHV Bus 1866</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_c0d219c9-e8ab-dd0e-b48a-219583ace4f8" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_cbee3e21-3ec1-7599-adf7-10b1b5e2173d">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 7</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_f872fce3-ee91-49c1-e497-0e3c264c2e62" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_2fb65cc6-05c3-4b6c-1365-513a3cfbbe98">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_8bd44752-67b7-6f65-5086-0e5705c71f34" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_6e9161ad-b159-737b-2e42-33246030e6b0">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>HV2 Bus 339</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_166841dc-556c-a886-f783-9b2276ac2b7e" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_eefdcf89-21a6-6ab0-bcf6-3898a2691e17">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_EHV Gen 295</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_e2688a83-ffdb-4474-bfae-a33452a21d55" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_39def683-808c-55fa-45ef-dc0f3b2eb0bd">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_HV2 Load 2</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_8322dc04-c443-4971-a78c-cebfa4ecddb6" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_c7b1acdb-74ec-cb09-9f33-e68c3e8ed71c">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>Cubicle_HV2 Load 45</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_6ae847fb-a214-4bab-833d-16451ac56bb8" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_e5b473fe-3a2b-d3f1-0e21-34e59915c4e0">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.name>EHV Bus 3094</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_feb41dfa-1298-46eb-a344-32e045666e1c" />
+    <cim:Terminal.phases rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#PhaseCode.ABC" />
+  </cim:Terminal>
+  <cim:PowerTransformer rdf:ID="_feb41dfa-1298-46eb-a344-32e045666e1c">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+    <cim:IdentifiedObject.name>HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:PowerTransformer.isPartOfGeneratorUnit>false</cim:PowerTransformer.isPartOfGeneratorUnit>
+    <cim:PowerTransformer.operationalValuesConsidered>false</cim:PowerTransformer.operationalValuesConsidered>
+  </cim:PowerTransformer>
+  <cim:VoltageLimit rdf:ID="_500c9b68-d53d-046c-6ad6-3280e0209d1c">
+    <cim:IdentifiedObject.name>low limit for EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_8ba0a3bc-8f89-022c-2f07-be70a06f4243" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>198</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_d5483a11-42d8-9253-bfad-291f59a62c4d">
+    <cim:IdentifiedObject.name>high limit for HV2 Bus 7</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_d906e104-7485-8a2f-a547-8b790b0a4dc1" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>121</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_fd172c3b-7e4c-435f-61c9-dc4d18a9ebfc">
+    <cim:IdentifiedObject.name>low limit for HV2 Bus 7</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_d906e104-7485-8a2f-a547-8b790b0a4dc1" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>99</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_74f02f48-a2eb-0b16-e7f6-99cb93a91c87">
+    <cim:IdentifiedObject.name>high limit for EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_8ba0a3bc-8f89-022c-2f07-be70a06f4243" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>242</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_2597996e-9b0f-aae6-37ad-44cf67c75830">
+    <cim:IdentifiedObject.name>low limit for HV2 Bus 339</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_6d13bb43-70be-503a-5c07-cfc87bda9061" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>99</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_2222117d-7055-40b1-cfaf-a1a3ab860193">
+    <cim:IdentifiedObject.name>high limit for HV2 Bus 339</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_6d13bb43-70be-503a-5c07-cfc87bda9061" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>121</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_a81441c0-ef5a-5faf-7d72-9327db12e874">
+    <cim:IdentifiedObject.name>low limit for HV2 Bus 8</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_fee8c99e-775c-e4e5-7c49-e522842b5360" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>99</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_92e798d0-53b3-201e-cbd9-f95ed8658d97">
+    <cim:IdentifiedObject.name>high limit for HV2 Bus 340</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_e68cdf1c-8d1e-b7e2-4323-61f2b5e477de" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>121</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_0e7034b7-813e-e3bd-86de-bd7b3eda1084">
+    <cim:IdentifiedObject.name>low limit for HV2 Bus 340</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_e68cdf1c-8d1e-b7e2-4323-61f2b5e477de" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>99</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_e1f761f4-5c3d-b872-db12-f0b8dfcc17fd">
+    <cim:IdentifiedObject.name>high limit for HV2 Bus 8</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_fee8c99e-775c-e4e5-7c49-e522842b5360" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>121</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_8ef4d6b4-3cda-30e1-d30d-0f64db63a1ce">
+    <cim:IdentifiedObject.name>high limit for EHV Bus 1866</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_f2617bd3-f83a-1e6e-aa71-848383a79c6a" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_ad484dae-c5a2-0377-bc53-d899fd2d7980" />
+    <cim:VoltageLimit.value>242</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_95b06b28-b105-ce12-4729-8351cdbded3d">
+    <cim:IdentifiedObject.name>low limit for EHV Bus 1866</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_f2617bd3-f83a-1e6e-aa71-848383a79c6a" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb" />
+    <cim:VoltageLimit.value>198</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:SynchronousMachine rdf:ID="_e2688a83-ffdb-4474-bfae-a33452a21d55">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_831ef560-177a-4d24-bba0-c6a1722eb6b7" />
+    <cim:IdentifiedObject.description>pp_302</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>EHV Gen 295</cim:IdentifiedObject.name>
+    <cim:RegulatingCondEq.RegulatingControl rdf:resource="#_67fa23af-a07c-cabb-9564-16476819952b" />
+    <cim:RotatingMachine.GeneratingUnit rdf:resource="#_8a9de39e-bbaa-b49a-17f8-10aaef3f77cf" />
+    <cim:RotatingMachine.ratedPowerFactor>0.95</cim:RotatingMachine.ratedPowerFactor>
+    <cim:RotatingMachine.ratedS>23.6842</cim:RotatingMachine.ratedS>
+    <cim:RotatingMachine.ratedU>220</cim:RotatingMachine.ratedU>
+    <cim:SynchronousMachine.earthing>true</cim:SynchronousMachine.earthing>
+    <cim:SynchronousMachine.earthingStarPointR>0</cim:SynchronousMachine.earthingStarPointR>
+    <cim:SynchronousMachine.earthingStarPointX>0</cim:SynchronousMachine.earthingStarPointX>
+    <cim:SynchronousMachine.maxQ>7.39539</cim:SynchronousMachine.maxQ>
+    <cim:SynchronousMachine.minQ>-7.39539</cim:SynchronousMachine.minQ>
+    <cim:SynchronousMachine.qPercent>9.00113</cim:SynchronousMachine.qPercent>
+    <cim:SynchronousMachine.r>0</cim:SynchronousMachine.r>
+    <cim:SynchronousMachine.r0>0</cim:SynchronousMachine.r0>
+    <cim:SynchronousMachine.r2>0</cim:SynchronousMachine.r2>
+    <cim:SynchronousMachine.satDirectSubtransX>0.2</cim:SynchronousMachine.satDirectSubtransX>
+    <cim:SynchronousMachine.satDirectSyncX>1.2</cim:SynchronousMachine.satDirectSyncX>
+    <cim:SynchronousMachine.shortCircuitRotorType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#ShortCircuitRotorKind.salientPole1" />
+    <cim:SynchronousMachine.type rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineKind.generator" />
+    <cim:SynchronousMachine.x0>0.1</cim:SynchronousMachine.x0>
+    <cim:SynchronousMachine.x2>0.2</cim:SynchronousMachine.x2>
+  </cim:SynchronousMachine>
+  <cim:SynchronousMachine rdf:ID="_a20bb99b-a226-49d8-8872-c0d7aa3ec3c4">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_831ef560-177a-4d24-bba0-c6a1722eb6b7" />
+    <cim:IdentifiedObject.description>WP8</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>EHV Sgen 76</cim:IdentifiedObject.name>
+    <cim:RotatingMachine.GeneratingUnit rdf:resource="#_164f5fee-5f36-d286-8855-147732229a29" />
+    <cim:RotatingMachine.ratedPowerFactor>1</cim:RotatingMachine.ratedPowerFactor>
+    <cim:RotatingMachine.ratedS>36</cim:RotatingMachine.ratedS>
+    <cim:RotatingMachine.ratedU>220</cim:RotatingMachine.ratedU>
+    <cim:SynchronousMachine.earthing>false</cim:SynchronousMachine.earthing>
+    <cim:SynchronousMachine.earthingStarPointR>0</cim:SynchronousMachine.earthingStarPointR>
+    <cim:SynchronousMachine.earthingStarPointX>0</cim:SynchronousMachine.earthingStarPointX>
+    <cim:SynchronousMachine.maxQ>0</cim:SynchronousMachine.maxQ>
+    <cim:SynchronousMachine.minQ>0</cim:SynchronousMachine.minQ>
+    <cim:SynchronousMachine.r>0</cim:SynchronousMachine.r>
+    <cim:SynchronousMachine.r0>0</cim:SynchronousMachine.r0>
+    <cim:SynchronousMachine.r2>99999</cim:SynchronousMachine.r2>
+    <cim:SynchronousMachine.satDirectSubtransX>999</cim:SynchronousMachine.satDirectSubtransX>
+    <cim:SynchronousMachine.type rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineKind.generatorOrCondenser" />
+    <cim:SynchronousMachine.x0>0.1</cim:SynchronousMachine.x0>
+    <cim:SynchronousMachine.x2>99999</cim:SynchronousMachine.x2>
+  </cim:SynchronousMachine>
+  <cim:SynchronousMachine rdf:ID="_b056f176-81af-43bf-bf85-2e824bf1f55a">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_831ef560-177a-4d24-bba0-c6a1722eb6b7" />
+    <cim:IdentifiedObject.description>pp_207</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>EHV Gen 200</cim:IdentifiedObject.name>
+    <cim:RegulatingCondEq.RegulatingControl rdf:resource="#_d197e7e4-e3a3-bb80-5ffa-58b513396c83" />
+    <cim:RotatingMachine.GeneratingUnit rdf:resource="#_29677867-5e30-e3a0-2b8f-97cc7a9aaf6a" />
+    <cim:RotatingMachine.ratedPowerFactor>0.95</cim:RotatingMachine.ratedPowerFactor>
+    <cim:RotatingMachine.ratedS>242.105</cim:RotatingMachine.ratedS>
+    <cim:RotatingMachine.ratedU>220</cim:RotatingMachine.ratedU>
+    <cim:SynchronousMachine.earthing>true</cim:SynchronousMachine.earthing>
+    <cim:SynchronousMachine.earthingStarPointR>0</cim:SynchronousMachine.earthingStarPointR>
+    <cim:SynchronousMachine.earthingStarPointX>0</cim:SynchronousMachine.earthingStarPointX>
+    <cim:SynchronousMachine.maxQ>75.5973</cim:SynchronousMachine.maxQ>
+    <cim:SynchronousMachine.minQ>-75.5973</cim:SynchronousMachine.minQ>
+    <cim:SynchronousMachine.qPercent>90.9989</cim:SynchronousMachine.qPercent>
+    <cim:SynchronousMachine.r>0</cim:SynchronousMachine.r>
+    <cim:SynchronousMachine.r0>0</cim:SynchronousMachine.r0>
+    <cim:SynchronousMachine.r2>0</cim:SynchronousMachine.r2>
+    <cim:SynchronousMachine.satDirectSubtransX>0.2</cim:SynchronousMachine.satDirectSubtransX>
+    <cim:SynchronousMachine.satDirectSyncX>1.2</cim:SynchronousMachine.satDirectSyncX>
+    <cim:SynchronousMachine.shortCircuitRotorType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#ShortCircuitRotorKind.salientPole1" />
+    <cim:SynchronousMachine.type rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineKind.generator" />
+    <cim:SynchronousMachine.x0>0.1</cim:SynchronousMachine.x0>
+    <cim:SynchronousMachine.x2>0.2</cim:SynchronousMachine.x2>
+  </cim:SynchronousMachine>
+  <cim:SynchronousMachine rdf:ID="_f806ccaf-1543-4b09-9d7f-f8e8cc6e283d">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_e2de71ea-3d45-4786-9aea-b7fa0d713b24" />
+    <cim:IdentifiedObject.description>mv_add1</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>HV2 Sgen 44</cim:IdentifiedObject.name>
+    <cim:RotatingMachine.ratedPowerFactor>1</cim:RotatingMachine.ratedPowerFactor>
+    <cim:RotatingMachine.ratedS>1</cim:RotatingMachine.ratedS>
+    <cim:RotatingMachine.ratedU>110</cim:RotatingMachine.ratedU>
+    <cim:SynchronousMachine.earthing>false</cim:SynchronousMachine.earthing>
+    <cim:SynchronousMachine.earthingStarPointR>0</cim:SynchronousMachine.earthingStarPointR>
+    <cim:SynchronousMachine.earthingStarPointX>0</cim:SynchronousMachine.earthingStarPointX>
+    <cim:SynchronousMachine.maxQ>0</cim:SynchronousMachine.maxQ>
+    <cim:SynchronousMachine.minQ>0</cim:SynchronousMachine.minQ>
+    <cim:SynchronousMachine.r>0</cim:SynchronousMachine.r>
+    <cim:SynchronousMachine.r0>0</cim:SynchronousMachine.r0>
+    <cim:SynchronousMachine.r2>99999</cim:SynchronousMachine.r2>
+    <cim:SynchronousMachine.satDirectSubtransX>999</cim:SynchronousMachine.satDirectSubtransX>
+    <cim:SynchronousMachine.type rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineKind.condenser" />
+    <cim:SynchronousMachine.x0>0.1</cim:SynchronousMachine.x0>
+    <cim:SynchronousMachine.x2>99999</cim:SynchronousMachine.x2>
+  </cim:SynchronousMachine>
+  <cim:CurrentLimit rdf:ID="_b23cfadd-da64-fe95-502b-57cca5bb0f93">
+    <cim:CurrentLimit.value>680</cim:CurrentLimit.value>
+    <cim:IdentifiedObject.name>patl for HV2 Line 112</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_6cb7fc7b-b241-aa28-a863-6744cb7d90b8" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_6b5a4b21-7a56-19c9-518a-de9108208011" />
+  </cim:CurrentLimit>
+  <cim:CurrentLimit rdf:ID="_e8d6749a-9d6d-0c81-0d3e-1e1f562c0e1d">
+    <cim:CurrentLimit.value>680</cim:CurrentLimit.value>
+    <cim:IdentifiedObject.name>patl for HV2 Line 112</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_f67a2bac-2f8a-693d-2064-c5c58a092b42" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_6b5a4b21-7a56-19c9-518a-de9108208011" />
+  </cim:CurrentLimit>
+  <cim:CurrentLimit rdf:ID="_3481eaa4-6a29-0440-f5d8-8a63c05af5df">
+    <cim:CurrentLimit.value>787.296</cim:CurrentLimit.value>
+    <cim:IdentifiedObject.name>patl for HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_dcd3b669-aff5-0354-d92e-851351afdd5d" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_6b5a4b21-7a56-19c9-518a-de9108208011" />
+  </cim:CurrentLimit>
+  <cim:CurrentLimit rdf:ID="_6279b1e0-d501-19ed-6191-c29bfa3a8948">
+    <cim:CurrentLimit.value>1574.59</cim:CurrentLimit.value>
+    <cim:IdentifiedObject.name>patl for HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_60844f44-ad76-0ecb-d5ed-10cb0123a389" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_6b5a4b21-7a56-19c9-518a-de9108208011" />
+  </cim:CurrentLimit>
+  <cim:OperationalLimitSet rdf:ID="_6d13bb43-70be-503a-5c07-cfc87bda9061">
+    <cim:IdentifiedObject.name>Voltage limits for HV2 Bus 339</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_6e9161ad-b159-737b-2e42-33246030e6b0" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_f67a2bac-2f8a-693d-2064-c5c58a092b42">
+    <cim:IdentifiedObject.name>Current rating for HV2 Line 112</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_2da2b5af-68ee-2d38-ef18-e1ce1c59b054" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_6cb7fc7b-b241-aa28-a863-6744cb7d90b8">
+    <cim:IdentifiedObject.name>Current rating for HV2 Line 112</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_a0b02482-beef-e4d0-8246-290d583497b1" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_dcd3b669-aff5-0354-d92e-851351afdd5d">
+    <cim:IdentifiedObject.name>Current rating for HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_e5b473fe-3a2b-d3f1-0e21-34e59915c4e0" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_8ba0a3bc-8f89-022c-2f07-be70a06f4243">
+    <cim:IdentifiedObject.name>Voltage limits for EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_2fb65cc6-05c3-4b6c-1365-513a3cfbbe98" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_d906e104-7485-8a2f-a547-8b790b0a4dc1">
+    <cim:IdentifiedObject.name>Voltage limits for HV2 Bus 7</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_cbee3e21-3ec1-7599-adf7-10b1b5e2173d" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_60844f44-ad76-0ecb-d5ed-10cb0123a389">
+    <cim:IdentifiedObject.name>Current rating for HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_ece3bc95-def2-839e-1610-feba2818ebe9" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_f2617bd3-f83a-1e6e-aa71-848383a79c6a">
+    <cim:IdentifiedObject.name>Voltage limits for EHV Bus 1866</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_18a98ffe-e517-4927-7d3c-cd110bdff1d0" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_fee8c99e-775c-e4e5-7c49-e522842b5360">
+    <cim:IdentifiedObject.name>Voltage limits for HV2 Bus 8</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_ab929e91-25c6-0140-29d8-1a4318f5f9b9" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_e68cdf1c-8d1e-b7e2-4323-61f2b5e477de">
+    <cim:IdentifiedObject.name>Voltage limits for HV2 Bus 340</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_1a38e42d-feca-2fd4-cbfc-4c8381a8a25c" />
+  </cim:OperationalLimitSet>
+  <cim:RatioTapChanger rdf:ID="_9d5b9fc2-4514-8dbf-996c-34bae9ca0995">
+    <cim:IdentifiedObject.name>HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:RatioTapChanger.TransformerEnd rdf:resource="#_cfd2ef1a-50e9-3f81-4a1d-4919a69f2cf3" />
+    <cim:RatioTapChanger.stepVoltageIncrement>1</cim:RatioTapChanger.stepVoltageIncrement>
+    <cim:RatioTapChanger.tculControlMode rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#TransformerControlMode.volt" />
+    <cim:TapChanger.TapChangerControl rdf:resource="#_8deee417-1ae0-40e4-7e5d-17e45787e202" />
+    <cim:TapChanger.highStep>16</cim:TapChanger.highStep>
+    <cim:TapChanger.lowStep>-16</cim:TapChanger.lowStep>
+    <cim:TapChanger.ltcFlag>false</cim:TapChanger.ltcFlag>
+    <cim:TapChanger.neutralStep>0</cim:TapChanger.neutralStep>
+    <cim:TapChanger.neutralU>220</cim:TapChanger.neutralU>
+    <cim:TapChanger.normalStep>0</cim:TapChanger.normalStep>
+  </cim:RatioTapChanger>
+  <cim:BaseVoltage rdf:ID="_33d082a7-d3a7-0e36-5961-65e68dcdc616">
+    <cim:BaseVoltage.nominalVoltage>220</cim:BaseVoltage.nominalVoltage>
+    <cim:IdentifiedObject.description>BaseVoltage 220.00 kV</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>220.00 kV</cim:IdentifiedObject.name>
+    <entsoe:IdentifiedObject.shortName>220.00 kV</entsoe:IdentifiedObject.shortName>
+  </cim:BaseVoltage>
+  <cim:BaseVoltage rdf:ID="_0dc1ff6f-9f6a-f6b3-75cc-37cbcef72596">
+    <cim:BaseVoltage.nominalVoltage>110</cim:BaseVoltage.nominalVoltage>
+    <cim:IdentifiedObject.description>BaseVoltage 110.00 kV</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>110.00 kV</cim:IdentifiedObject.name>
+    <entsoe:IdentifiedObject.shortName>110.00 kV</entsoe:IdentifiedObject.shortName>
+  </cim:BaseVoltage>
+  <cim:BaseVoltage rdf:ID="_e4750291-d581-a694-bcd6-f377d496ba0f">
+    <cim:BaseVoltage.nominalVoltage>0</cim:BaseVoltage.nominalVoltage>
+    <cim:IdentifiedObject.description>BaseVoltage 0.00 kV</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.name>0.00 kV</cim:IdentifiedObject.name>
+    <entsoe:IdentifiedObject.shortName>0.00 kV</entsoe:IdentifiedObject.shortName>
+  </cim:BaseVoltage>
+  <cim:WindGeneratingUnit rdf:ID="_164f5fee-5f36-d286-8855-147732229a29">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+    <cim:GeneratingUnit.initialP>0.063126</cim:GeneratingUnit.initialP>
+    <cim:GeneratingUnit.maxOperatingP>36</cim:GeneratingUnit.maxOperatingP>
+    <cim:GeneratingUnit.minOperatingP>0</cim:GeneratingUnit.minOperatingP>
+    <cim:IdentifiedObject.name>EHV Sgen 76</cim:IdentifiedObject.name>
+    <cim:WindGeneratingUnit.windGenUnitType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#WindGenUnitKind.onshore" />
+  </cim:WindGeneratingUnit>
+  <cim:OperationalLimitType rdf:ID="_6b5a4b21-7a56-19c9-518a-de9108208011">
+    <cim:IdentifiedObject.name>patl</cim:IdentifiedObject.name>
+    <cim:OperationalLimitType.direction rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#OperationalLimitDirectionKind.absoluteValue" />
+    <entsoe:OperationalLimitType.limitType rdf:resource="http://entsoe.eu/CIM/SchemaExtension/3/1#LimitTypeKind.patl" />
+  </cim:OperationalLimitType>
+  <cim:OperationalLimitType rdf:ID="_ad484dae-c5a2-0377-bc53-d899fd2d7980">
+    <cim:IdentifiedObject.name>highVoltage</cim:IdentifiedObject.name>
+    <entsoe:OperationalLimitType.limitType rdf:resource="http://entsoe.eu/CIM/SchemaExtension/3/1#LimitTypeKind.highVoltage" />
+  </cim:OperationalLimitType>
+  <cim:OperationalLimitType rdf:ID="_a8fe4e8e-5c5a-e6d7-7aff-f7a939b61ceb">
+    <cim:IdentifiedObject.name>lowVoltage</cim:IdentifiedObject.name>
+    <entsoe:OperationalLimitType.limitType rdf:resource="http://entsoe.eu/CIM/SchemaExtension/3/1#LimitTypeKind.lowVoltage" />
+  </cim:OperationalLimitType>
+  <cim:ThermalGeneratingUnit rdf:ID="_29677867-5e30-e3a0-2b8f-97cc7a9aaf6a">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+    <cim:GeneratingUnit.initialP>0</cim:GeneratingUnit.initialP>
+    <cim:GeneratingUnit.maxOperatingP>230</cim:GeneratingUnit.maxOperatingP>
+    <cim:GeneratingUnit.minOperatingP>50</cim:GeneratingUnit.minOperatingP>
+    <cim:IdentifiedObject.name>EHV Gen 200</cim:IdentifiedObject.name>
+  </cim:ThermalGeneratingUnit>
+  <cim:BusbarSection rdf:ID="_e0a23526-31bd-9061-5d04-d14dabffaa13">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_e2de71ea-3d45-4786-9aea-b7fa0d713b24" />
+    <cim:IdentifiedObject.name>HV2 Bus 340</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_f872fce3-ee91-49c1-e497-0e3c264c2e62">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_2ab7e02d-1d29-48b3-8f95-9a6a1568c841" />
+    <cim:IdentifiedObject.name>HV2 Bus 7</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_303d148f-1713-01f9-73c4-c5018404d851">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_2ab7e02d-1d29-48b3-8f95-9a6a1568c841" />
+    <cim:IdentifiedObject.name>HV2 Bus 8</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_166841dc-556c-a886-f783-9b2276ac2b7e">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_e2de71ea-3d45-4786-9aea-b7fa0d713b24" />
+    <cim:IdentifiedObject.name>HV2 Bus 339</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_8bd44752-67b7-6f65-5086-0e5705c71f34">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_831ef560-177a-4d24-bba0-c6a1722eb6b7" />
+    <cim:IdentifiedObject.name>EHV Bus 1865</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_c0d219c9-e8ab-dd0e-b48a-219583ace4f8">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_831ef560-177a-4d24-bba0-c6a1722eb6b7" />
+    <cim:IdentifiedObject.name>EHV Bus 1866</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:GeneratingUnit rdf:ID="_8a9de39e-bbaa-b49a-17f8-10aaef3f77cf">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+    <cim:GeneratingUnit.initialP>0</cim:GeneratingUnit.initialP>
+    <cim:GeneratingUnit.maxOperatingP>22.5</cim:GeneratingUnit.maxOperatingP>
+    <cim:GeneratingUnit.minOperatingP>1</cim:GeneratingUnit.minOperatingP>
+    <cim:IdentifiedObject.name>EHV Gen 295</cim:IdentifiedObject.name>
+  </cim:GeneratingUnit>
+  <cim:FossilFuel rdf:ID="_5d031725-0f05-74e8-f7f2-2d145f4e5359">
+    <cim:FossilFuel.ThermalGeneratingUnit rdf:resource="#_29677867-5e30-e3a0-2b8f-97cc7a9aaf6a" />
+    <cim:FossilFuel.fossilFuelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#FuelType.gas" />
+    <cim:IdentifiedObject.name>EHV Gen 200</cim:IdentifiedObject.name>
+  </cim:FossilFuel>
+  <cim:TapChangerControl rdf:ID="_8deee417-1ae0-40e4-7e5d-17e45787e202">
+    <cim:IdentifiedObject.name>HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:RegulatingControl.Terminal rdf:resource="#_ece3bc95-def2-839e-1610-feba2818ebe9" />
+    <cim:RegulatingControl.mode rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RegulatingControlModeKind.voltage" />
+  </cim:TapChangerControl>
+  <cim:VoltageLevel rdf:ID="_e2de71ea-3d45-4786-9aea-b7fa0d713b24">
+    <cim:IdentifiedObject.name>HV2 Bus 339-HV2 Bus 340</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_0dc1ff6f-9f6a-f6b3-75cc-37cbcef72596" />
+    <cim:VoltageLevel.Substation rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+  </cim:VoltageLevel>
+  <cim:VoltageLevel rdf:ID="_831ef560-177a-4d24-bba0-c6a1722eb6b7">
+    <cim:IdentifiedObject.name>EHV Bus 1865-EHV Bus 1866</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_33d082a7-d3a7-0e36-5961-65e68dcdc616" />
+    <cim:VoltageLevel.Substation rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+  </cim:VoltageLevel>
+  <cim:VoltageLevel rdf:ID="_cfa5078f-ab3c-4584-9bf8-98401910754d">
+    <cim:IdentifiedObject.name>EHV_HV_substation_4</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_e4750291-d581-a694-bcd6-f377d496ba0f" />
+    <cim:VoltageLevel.Substation rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+  </cim:VoltageLevel>
+  <cim:VoltageLevel rdf:ID="_2ab7e02d-1d29-48b3-8f95-9a6a1568c841">
+    <cim:IdentifiedObject.name>HV2 Bus 7-HV2 Bus 8</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_0dc1ff6f-9f6a-f6b3-75cc-37cbcef72596" />
+    <cim:VoltageLevel.Substation rdf:resource="#_a7f2b281-51ee-21c1-401b-5b46910f41b5" />
+  </cim:VoltageLevel>
+  <cim:LoadArea rdf:ID="_29dc9309-f7a5-ce8e-61a3-ef6ea21adaa7">
+    <cim:IdentifiedObject.name>HV2 Load 45</cim:IdentifiedObject.name>
+  </cim:LoadArea>
+  <cim:SubLoadArea rdf:ID="_07981b5a-bccb-ab73-2c40-cae19d101590">
+    <cim:IdentifiedObject.name>HV2 Load 45</cim:IdentifiedObject.name>
+    <cim:SubLoadArea.LoadArea rdf:resource="#_29dc9309-f7a5-ce8e-61a3-ef6ea21adaa7" />
+  </cim:SubLoadArea>
+  <cim:RegulatingControl rdf:ID="_d197e7e4-e3a3-bb80-5ffa-58b513396c83">
+    <cim:IdentifiedObject.name>Stactrl_EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:RegulatingControl.Terminal rdf:resource="#_8675d49d-f5c4-a79e-3889-2880a60f1841" />
+    <cim:RegulatingControl.mode rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RegulatingControlModeKind.voltage" />
+  </cim:RegulatingControl>
+  <cim:RegulatingControl rdf:ID="_67fa23af-a07c-cabb-9564-16476819952b">
+    <cim:IdentifiedObject.name>Stactrl_EHV Bus 1865</cim:IdentifiedObject.name>
+    <cim:RegulatingControl.Terminal rdf:resource="#_8675d49d-f5c4-a79e-3889-2880a60f1841" />
+    <cim:RegulatingControl.mode rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RegulatingControlModeKind.voltage" />
+  </cim:RegulatingControl>
+  <cim:ACLineSegment rdf:ID="_e3696aba-b196-4bc4-820a-21a56605bf16">
+    <cim:ACLineSegment.b0ch>0</cim:ACLineSegment.b0ch>
+    <cim:ACLineSegment.bch>7.7883e-6</cim:ACLineSegment.bch>
+    <cim:ACLineSegment.g0ch>0</cim:ACLineSegment.g0ch>
+    <cim:ACLineSegment.gch>0</cim:ACLineSegment.gch>
+    <cim:ACLineSegment.r>0.301627</cim:ACLineSegment.r>
+    <cim:ACLineSegment.r0>0</cim:ACLineSegment.r0>
+    <cim:ACLineSegment.shortCircuitEndTemperature>80</cim:ACLineSegment.shortCircuitEndTemperature>
+    <cim:ACLineSegment.x>0.815356</cim:ACLineSegment.x>
+    <cim:ACLineSegment.x0>0</cim:ACLineSegment.x0>
+    <cim:ConductingEquipment.BaseVoltage rdf:resource="#_0dc1ff6f-9f6a-f6b3-75cc-37cbcef72596" />
+    <cim:Conductor.length>2.75458</cim:Conductor.length>
+    <cim:IdentifiedObject.name>HV2 Line 112</cim:IdentifiedObject.name>
+  </cim:ACLineSegment>
+  <cim:ConformLoad rdf:ID="_6ae847fb-a214-4bab-833d-16451ac56bb8">
+    <cim:ConformLoad.LoadGroup rdf:resource="#_265dbf2d-a168-18f7-c27b-6b146b9ff935" />
+    <cim:EnergyConsumer.LoadResponse rdf:resource="#_4ab4123d-4fa5-9aa2-6092-ca2fb60d2b27" />
+    <cim:Equipment.EquipmentContainer rdf:resource="#_e2de71ea-3d45-4786-9aea-b7fa0d713b24" />
+    <cim:IdentifiedObject.name>HV2 Load 45</cim:IdentifiedObject.name>
+  </cim:ConformLoad>
+  <cim:ConformLoad rdf:ID="_8322dc04-c443-4971-a78c-cebfa4ecddb6">
+    <cim:ConformLoad.LoadGroup rdf:resource="#_265dbf2d-a168-18f7-c27b-6b146b9ff935" />
+    <cim:EnergyConsumer.LoadResponse rdf:resource="#_4ab4123d-4fa5-9aa2-6092-ca2fb60d2b27" />
+    <cim:Equipment.EquipmentContainer rdf:resource="#_2ab7e02d-1d29-48b3-8f95-9a6a1568c841" />
+    <cim:IdentifiedObject.name>HV2 Load 2</cim:IdentifiedObject.name>
+  </cim:ConformLoad>
+  <cim:SubGeographicalRegion rdf:ID="_5c8a3030-e4a5-cb25-8b0e-9cea5d1df21b">
+    <cim:IdentifiedObject.name>1-EHVHV-mixed-all-2-sw</cim:IdentifiedObject.name>
+    <cim:SubGeographicalRegion.Region rdf:resource="#_80c2d9c6-a417-991f-fa6c-dca95f6aeabe" />
+  </cim:SubGeographicalRegion>
+  <cim:ConformLoadGroup rdf:ID="_265dbf2d-a168-18f7-c27b-6b146b9ff935">
+    <cim:IdentifiedObject.name>HV2 Load 45</cim:IdentifiedObject.name>
+    <cim:LoadGroup.SubLoadArea rdf:resource="#_07981b5a-bccb-ab73-2c40-cae19d101590" />
+  </cim:ConformLoadGroup>
+  <cim:GeographicalRegion rdf:ID="_80c2d9c6-a417-991f-fa6c-dca95f6aeabe">
+    <cim:IdentifiedObject.name>1-EHVHV-mixed-all-2-sw</cim:IdentifiedObject.name>
+  </cim:GeographicalRegion>
+  <cim:LoadResponseCharacteristic rdf:ID="_4ab4123d-4fa5-9aa2-6092-ca2fb60d2b27">
+    <cim:IdentifiedObject.name>mv_add1</cim:IdentifiedObject.name>
+    <cim:LoadResponseCharacteristic.exponentModel>true</cim:LoadResponseCharacteristic.exponentModel>
+    <cim:LoadResponseCharacteristic.pVoltageExponent>2</cim:LoadResponseCharacteristic.pVoltageExponent>
+    <cim:LoadResponseCharacteristic.qVoltageExponent>2</cim:LoadResponseCharacteristic.qVoltageExponent>
+  </cim:LoadResponseCharacteristic>
+  <cim:Substation rdf:ID="_a7f2b281-51ee-21c1-401b-5b46910f41b5">
+    <cim:IdentifiedObject.name>1-EHVHV-mixed-all-2-sw</cim:IdentifiedObject.name>
+    <cim:Substation.Region rdf:resource="#_5c8a3030-e4a5-cb25-8b0e-9cea5d1df21b" />
+  </cim:Substation>
+  <cim:PowerTransformerEnd rdf:ID="_cfd2ef1a-50e9-3f81-4a1d-4919a69f2cf3">
+    <cim:IdentifiedObject.name>HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:PowerTransformerEnd.PowerTransformer rdf:resource="#_feb41dfa-1298-46eb-a344-32e045666e1c" />
+    <cim:PowerTransformerEnd.b>-2.0138e-6</cim:PowerTransformerEnd.b>
+    <cim:PowerTransformerEnd.b0>-0.00206612</cim:PowerTransformerEnd.b0>
+    <cim:PowerTransformerEnd.connectionKind rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#WindingConnection.Yn" />
+    <cim:PowerTransformerEnd.g>1.44628e-6</cim:PowerTransformerEnd.g>
+    <cim:PowerTransformerEnd.g0>0</cim:PowerTransformerEnd.g0>
+    <cim:PowerTransformerEnd.phaseAngleClock>0</cim:PowerTransformerEnd.phaseAngleClock>
+    <cim:PowerTransformerEnd.r>0.207044</cim:PowerTransformerEnd.r>
+    <cim:PowerTransformerEnd.r0>0</cim:PowerTransformerEnd.r0>
+    <cim:PowerTransformerEnd.ratedS>300</cim:PowerTransformerEnd.ratedS>
+    <cim:PowerTransformerEnd.ratedU>220</cim:PowerTransformerEnd.ratedU>
+    <cim:PowerTransformerEnd.x>19.3589</cim:PowerTransformerEnd.x>
+    <cim:PowerTransformerEnd.x0>4.84</cim:PowerTransformerEnd.x0>
+    <cim:TransformerEnd.BaseVoltage rdf:resource="#_33d082a7-d3a7-0e36-5961-65e68dcdc616" />
+    <cim:TransformerEnd.Terminal rdf:resource="#_e5b473fe-3a2b-d3f1-0e21-34e59915c4e0" />
+    <cim:TransformerEnd.endNumber>1</cim:TransformerEnd.endNumber>
+    <cim:TransformerEnd.grounded>true</cim:TransformerEnd.grounded>
+    <cim:TransformerEnd.rground>0</cim:TransformerEnd.rground>
+    <cim:TransformerEnd.xground>0</cim:TransformerEnd.xground>
+  </cim:PowerTransformerEnd>
+  <cim:PowerTransformerEnd rdf:ID="_52bea25f-46bd-5675-d20b-9f6ee55c7dbd">
+    <cim:IdentifiedObject.name>HV2 Trafo 3</cim:IdentifiedObject.name>
+    <cim:PowerTransformerEnd.PowerTransformer rdf:resource="#_feb41dfa-1298-46eb-a344-32e045666e1c" />
+    <cim:PowerTransformerEnd.b>0</cim:PowerTransformerEnd.b>
+    <cim:PowerTransformerEnd.b0>0</cim:PowerTransformerEnd.b0>
+    <cim:PowerTransformerEnd.connectionKind rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#WindingConnection.Yn" />
+    <cim:PowerTransformerEnd.g>0</cim:PowerTransformerEnd.g>
+    <cim:PowerTransformerEnd.g0>0</cim:PowerTransformerEnd.g0>
+    <cim:PowerTransformerEnd.phaseAngleClock>0</cim:PowerTransformerEnd.phaseAngleClock>
+    <cim:PowerTransformerEnd.r>0</cim:PowerTransformerEnd.r>
+    <cim:PowerTransformerEnd.r0>0</cim:PowerTransformerEnd.r0>
+    <cim:PowerTransformerEnd.ratedS>300</cim:PowerTransformerEnd.ratedS>
+    <cim:PowerTransformerEnd.ratedU>110</cim:PowerTransformerEnd.ratedU>
+    <cim:PowerTransformerEnd.x>0</cim:PowerTransformerEnd.x>
+    <cim:PowerTransformerEnd.x0>0</cim:PowerTransformerEnd.x0>
+    <cim:TransformerEnd.BaseVoltage rdf:resource="#_0dc1ff6f-9f6a-f6b3-75cc-37cbcef72596" />
+    <cim:TransformerEnd.Terminal rdf:resource="#_ece3bc95-def2-839e-1610-feba2818ebe9" />
+    <cim:TransformerEnd.endNumber>2</cim:TransformerEnd.endNumber>
+    <cim:TransformerEnd.grounded>true</cim:TransformerEnd.grounded>
+    <cim:TransformerEnd.rground>0</cim:TransformerEnd.rground>
+    <cim:TransformerEnd.xground>0</cim:TransformerEnd.xground>
+  </cim:PowerTransformerEnd>
+</rdf:RDF>
