@@ -185,16 +185,16 @@ function CIMFile(filepath::String)
         end
     end
 
-    # Create CIMFile with metadata
+    # Create CIMCollection and then CIMFile with metadata
+    collection = CIMCollection(objects, extensions)
     cim_file = CIMFile(
+        collection,
         metadata.profile,
         metadata.uuid,
         metadata.created,
         metadata.scenario_time,
         metadata.dependencies,
         metadata.modeling_authority,
-        objects,
-        extensions,
         filename
     )
 
@@ -236,4 +236,5 @@ function CIMDataset(directory::String)
 
     dataset = CIMDataset(files, directory)
     resolve_references!(dataset)
+    return dataset
 end

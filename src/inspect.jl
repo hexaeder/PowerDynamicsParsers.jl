@@ -5,7 +5,7 @@ using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hide
 
 function inspect_dataset(dataset; filter_out=String[], size=(2000,1500), hl1=[], hl2=[])
     # Extract nodes from dataset
-    nodes = objects(dataset)
+    nodes = collect(values(objects(dataset)))
 
     # Apply filtering
     if !isempty(filter_out)

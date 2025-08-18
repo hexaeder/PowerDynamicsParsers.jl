@@ -16,6 +16,21 @@ function _format_class_breakdown(io::IO, class_counts::Dict{String, Int}, indent
     end
 end
 
+# Helper function to print content breakdown for AbstractCIMCollection types
+function _print_content_breakdown(io::IO, collection)
+    # Count and format class breakdowns
+    object_counts = _class_count(values(objects(collection)))
+    extension_counts = _class_count(extensions(collection))
+
+    # Display objects with breakdown
+    println(io, "  Objects: ", length(objects(collection)))
+    _format_class_breakdown(io, object_counts)
+
+    # Display extensions with breakdown
+    println(io, "  Extensions: ", length(extensions(collection)))
+    _format_class_breakdown(io, extension_counts)
+end
+
 # Helper function to show properties
 function show_properties(io::IO, mime::MIME"text/plain", properties::AbstractDict)
     if !isempty(properties)
@@ -142,6 +157,21 @@ function Base.show(io::IO, mime::MIME"text/plain", ext::CIMExtension)
     end
 end
 
+function Base.show(io::IO, mime::MIME"text/plain", collection::CIMCollection)
+    compact = get(io, :compact, false)
+
+    if compact
+        print(io, "CIMCollection: ")
+        printstyled(io, "$(length(collection.objects)) objects, $(length(collection.extensions)) extensions", color=:blue)
+    else
+        print(io, "CIMCollection: ")
+        printstyled(io, "$(length(collection.objects)) objects, $(length(collection.extensions)) extensions", color=:blue)
+        println(io)
+
+        _print_content_breakdown(io, collection)
+    end
+end
+
 function Base.show(io::IO, mime::MIME"text/plain", cim_file::CIMFile)
     compact = get(io, :compact, false)
 
@@ -169,17 +199,7 @@ function Base.show(io::IO, mime::MIME"text/plain", cim_file::CIMFile)
             println(io)
         end
 
-        # Count and format class breakdowns
-        object_counts = _class_count(values(cim_file.objects))
-        extension_counts = _class_count(cim_file.extensions)
-
-        # Display objects with breakdown
-        println(io, "  Objects: ", length(cim_file.objects))
-        _format_class_breakdown(io, object_counts)
-
-        # Display extensions with breakdown
-        println(io, "  Extensions: ", length(cim_file.extensions))
-        _format_class_breakdown(io, extension_counts)
+        _print_content_breakdown(io, cim_file.collection)
     end
 end
 
@@ -205,8 +225,8 @@ function Base.show(io::IO, mime::MIME"text/plain", dataset::CIMDataset)
             for (profile, cim_file) in dataset.files
                 print(io, "    ", profile, ": ")
                 print(io, cim_file.filename, " (")
-                print(io, "$(length(cim_file.objects)) objects, ")
-                print(io, "$(length(cim_file.extensions)) extensions)")
+                print(io, "$(length(cim_file.collection.objects)) objects, ")
+                print(io, "$(length(cim_file.collection.extensions)) extensions)")
                 println(io)
             end
         end

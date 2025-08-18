@@ -2,10 +2,10 @@ using PowerDynamicsCGMES
 using OrderedCollections
 using XML
 using Graphs
-using WGLMakiesing GraphMakie, WGLMakie
+using GraphMakie
 
-using WGLMakie
-WGLMakie.activate!
+# using WGLMakie; WGLMakie.activate!()
+using CairoMakie; CairoMakie.activate!()
 
 DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "testdata1")
 dataset = CIMDataset(DATA)
@@ -20,8 +20,6 @@ dataset("Terminal")[3]
 
 # show methods for extensions
 tp = dataset[:Topology]
-tp.extensions
-tp.extensions[1]
 
 properties(terminals[1])
 
@@ -32,7 +30,6 @@ dataset("BusbarSection")[1]
 
 inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 
-using CairoMakie
 fig = inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 save("3bus_overview.pdf", fig)
 
@@ -71,11 +68,11 @@ dataset("SynchronousMachine")[3]
 dataset("ThermalGeneratingUnit")[1]
 dataset("FossilFuel")[1]
 
-dataset[:SteadyStateHypothesis].extensions
-dataset[:SteadyStateHypothesis].extensions[1] # GeneratingUnit
-dataset[:SteadyStateHypothesis].extensions[3] # RegulatingControl
-dataset[:SteadyStateHypothesis].extensions[5] # ConformLoad
-dataset[:SteadyStateHypothesis].extensions[21] # Machine
+extensions(dataset[:SteadyStateHypothesis])
+extensions(dataset[:SteadyStateHypothesis])[1] # GeneratingUnit
+extensions(dataset[:SteadyStateHypothesis])[3] # RegulatingControl
+extensions(dataset[:SteadyStateHypothesis])[5] # ConformLoad
+extensions(dataset[:SteadyStateHypothesis])[21] # Machine
 
 dataset[:Dynamics]("LoadAggregate")[1]
 dataset[:Dynamics]("LoadStatic")[1]
