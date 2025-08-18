@@ -132,7 +132,7 @@ function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, o
                 prop_value.target = target_object
                 _register_reference!(target_object, source_object)
             catch e
-                warn && @warn "Failed to resolve reference $(prop_value) in object $(source_object): $e"
+                warn && @warn "Failed to resolve reference for property $(prop_name) in object $(source_object): $e"
                 # rethrow(e)
             end
         end

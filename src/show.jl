@@ -232,3 +232,114 @@ function Base.show(io::IO, mime::MIME"text/plain", dataset::CIMDataset)
         end
     end
 end
+
+function dump_properties(collection::AbstractCIMCollection)
+    io = stdout
+
+    # Group objects by class name
+    class_objects = Dict{String, Vector{CIMObject}}()
+    for obj in values(objects(collection))
+        if !haskey(class_objects, obj.class_name)
+            class_objects[obj.class_name] = CIMObject[]
+        end
+        push!(class_objects[obj.class_name], obj)
+    end
+
+    # Calculate importance for each class (count of non-reference, non-name properties)
+    class_importance = Dict{String, Int}()
+    for (class_name, objects_of_class) in class_objects
+        # Count unique non-reference, non-name properties across all objects of this class
+        important_properties = Set{String}()
+        for obj in objects_of_class
+            obj_props = properties(obj)
+            for (prop_name, prop_value) in obj_props
+                if prop_name != "name" && !(prop_value isa AbstractCIMReference)
+                    push!(important_properties, prop_name)
+                end
+            end
+        end
+        class_importance[class_name] = length(important_properties)
+    end
+
+    # Sort classes by importance (descending), then alphabetically as tiebreaker
+    sorted_classes = sort(collect(keys(class_objects)), by = class_name -> (-class_importance[class_name], class_name))
+
+    printstyled(io, "Property Analysis for Collection:\n", bold=true, color=:blue)
+    println(io, "=" ^ 50)
+
+    for class_name in sorted_classes
+        objects_of_class = class_objects[class_name]
+        count = length(objects_of_class)
+
+        printstyled(io, "\n", class_name, " (", count, " objects):\n", bold=true, color=:green)
+
+        # Collect all unique property names for this class
+        all_property_names = Set{String}()
+        for obj in objects_of_class
+            union!(all_property_names, keys(properties(obj)))
+        end
+
+        # Sort property names for consistent output
+        sorted_properties = sort(collect(all_property_names))
+
+        if isempty(sorted_properties)
+            println(io, "  (no properties)")
+            continue
+        end
+
+        for prop_name in sorted_properties
+            # Collect all values for this property across objects of this class
+            values_found = Any[]
+            missing_count = 0
+
+            for obj in objects_of_class
+                obj_props = properties(obj)
+                if haskey(obj_props, prop_name)
+                    push!(values_found, obj_props[prop_name])
+                else
+                    missing_count += 1
+                end
+            end
+
+            # Analyze the values
+            unique_values = unique(values_found)
+            has_missing = missing_count > 0
+
+            print(io, "  ", prop_name, " = ")
+
+            # Helper function to format a value using compact display
+            format_value = function(val)
+                val_io = IOBuffer()
+                show(IOContext(val_io, :compact => true), MIME"text/plain"(), val)
+                String(take!(val_io))
+            end
+
+            if has_missing && length(unique_values) == 0
+                # All objects are missing this property
+                printstyled(io, "[nothing]", color=:light_black)
+            elseif has_missing && length(unique_values) == 1
+                # Some missing, some have same value
+                formatted_val = format_value(unique_values[1])
+                printstyled(io, "[nothing, ", formatted_val, "]", color=:light_black)
+            elseif has_missing && length(unique_values) > 1
+                # Some missing, some have different values
+                formatted_values = [format_value(val) for val in unique_values]
+                value_str = join(formatted_values, ", ")
+                printstyled(io, "[nothing, ", value_str, "]", color=:light_black)
+            elseif !has_missing && length(unique_values) == 1
+                # All have same value
+                formatted_val = format_value(unique_values[1])
+                printstyled(io, formatted_val, color=:light_black)
+            else
+                # All have values, but different ones
+                formatted_values = [format_value(val) for val in unique_values]
+                value_str = join(formatted_values, ", ")
+                printstyled(io, "[", value_str, "]", color=:light_black)
+            end
+
+            println(io)
+        end
+    end
+
+    println(io, "\n", "=" ^ 50)
+end

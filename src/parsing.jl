@@ -145,7 +145,17 @@ function _parseprops(el::Node, name::AbstractString)
     for p in children(el)
         key = plain_name(p, ["cim", "entsoe"]; strip_ns=[name, "IdentifiedObject"])
         if is_simple(p)
-            props[key] = simple_value(p)
+            stringvalue = simple_value(p)
+            value = if !isnothing(tryparse(Int, stringvalue))
+                tryparse(Int, stringvalue)
+            elseif !isnothing(tryparse(Float64, stringvalue))
+                tryparse(Float64, stringvalue)
+            elseif !isnothing(tryparse(Bool, stringvalue))
+                tryparse(Bool, stringvalue)
+            else
+                stringvalue
+            end
+            props[key] = value
         elseif is_reference(p)
             props[key] = CIMRef(p)
         else

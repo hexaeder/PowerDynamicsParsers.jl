@@ -54,7 +54,7 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     ids = [n.id for n in nodes]
 
     # Create short representation vector for visualization
-    short_repr = [obj.class_name * (hasname(obj) ? "\n\"" * getname(obj) * "\"" : "") for obj in nodes]
+    short_repr = object_text.(nodes)
 
     # Create profiles vector showing which profile each node belongs to
     profiles = [obj.profile for obj in nodes]
@@ -238,4 +238,53 @@ function discover_nodes(start_node::CIMObject, stop_classes; filter_out=String[]
 
     recursive_discover!(start_node, 1)
     return nodes, stop_nodes
+end
+
+function object_text(obj::CIMObject)
+    if is_class(obj, "SvPowerFlow")
+        props = properties(obj)
+        """
+        SvPowerFlow
+        P=$(props["p"])
+        Q=$(props["q"])
+        """
+    elseif is_class(obj, "SvVoltage")
+        props = properties(obj)
+        """
+        SvVoltage
+        V=$(props["v"])
+        δ=$(props["angle"])
+        """
+    elseif is_class(obj, "SvTapStep")
+        props = properties(obj)
+        """
+        SvTapStep
+        pos=$(props["position"])
+        """
+    elseif is_class(obj, "ConformLoad")
+        props = properties(obj)
+        """
+        ConformLoad
+        $(getname(obj))
+        P=$(props["EnergyConsumer.p"])
+        Q=$(props["EnergyConsumer.q"])
+        """
+    elseif is_class(obj, "SynchronousMachine")
+        props = properties(obj)
+        """
+        SynchronousMachine
+        $(getname(obj))
+        P=$(props["RotatingMachine.p"])
+        Q=$(props["RotatingMachine.q"])
+        """
+    elseif is_class(obj, "RegulatingControl")
+        props = properties(obj)
+        """
+        RegulatingControl
+        $(getname(obj))
+        Vref=$(props["targetValue"])
+        """
+    else
+        obj.class_name * (hasname(obj) ? "\n\"" * getname(obj) * "\"" : "")
+    end
 end

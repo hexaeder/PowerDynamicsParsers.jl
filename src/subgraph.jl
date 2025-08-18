@@ -138,13 +138,14 @@ function split_topologically(collection::CIMCollection)
 end
 function _discover_tpn_subgraph(t)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    discover_subgraph(t; filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n))
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation"])
+    discover_subgraph(t; filter_out)
 end
 function _discover_linened_subgraph(t)
     @assert is_lineend(t) "Expected LineEnd, got $(t.class_name)"
 
-    nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode"))
-    filter_out = is_class([r"Diagram"])
+    nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
+    filter_out = is_class([r"Diagram", "Substation"])
     discover_subgraph(t; nobackref, filter_out, maxdepth=100)
 end
 

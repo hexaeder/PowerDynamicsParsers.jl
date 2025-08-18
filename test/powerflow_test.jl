@@ -8,5 +8,10 @@ dataset = CIMCollection(CIMDataset(DATA))
 
 inspect_collection(reduce_complexity(dataset))
 
+nodes, edges = split_topologically(dataset);
 
-nodes, edges = split_topologically(dataset)
+inspect_collection(nodes[3])
+dump_properties(nodes[3])
+
+inspect_collection(edges[2])
+dump_properties(edges[2])
