@@ -74,6 +74,7 @@ struct CIMDataset <: AbstractCIMCollection
         new(files, directory)
     end
 end
+CIMCollection(ds::CIMDataset) = CIMCollection(objects(ds), extensions(ds))
 
 Base.getindex(o::CIMObject, key::String) = follow_ref(properties(o)[key])
 Base.getindex(c::CIMCollection, id::String) = c.objects[id]
@@ -122,7 +123,7 @@ function _register_extension!(target::CIMObject, extension::CIMExtension)
     push!(target.extension, backref)
 end
 
-function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, objectdict)
+function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, objectdict; warn)
     for (prop_name, prop_value) in source_object.properties
         if prop_value isa CIMRef && !prop_value.resolved && !startswith(prop_value.id, "http://")
             try
@@ -131,7 +132,7 @@ function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, o
                 prop_value.target = target_object
                 _register_reference!(target_object, source_object)
             catch e
-                @warn "Failed to resolve reference $(prop_value) in object $(source_object): $e"
+                warn && @warn "Failed to resolve reference $(prop_value) in object $(source_object): $e"
                 # rethrow(e)
             end
         end
@@ -153,17 +154,17 @@ function _resolve_extension_refs!(extension::CIMExtension, objectdict)
     end
 end
 
-function resolve_references!(collection::AbstractCIMCollection)
+function resolve_references!(collection::AbstractCIMCollection; warn=true)
     objectdict = objects(collection)
     # Stage 1: Resolve extension references
     for extension in extensions(collection)
         _resolve_extension_refs!(extension, objectdict)
-        _resolve_property_refs!(extension, objectdict)
+        _resolve_property_refs!(extension, objectdict; warn)
     end
 
     # Stage 2: Resolve property references in all objects
     for obj in values(objects(collection))
-        _resolve_property_refs!(obj, objectdict)
+        _resolve_property_refs!(obj, objectdict; warn)
     end
 
     collection
@@ -197,6 +198,10 @@ properties(obj::CIMObject) = merge(obj.properties, [ext.source.properties for ex
 follow_ref(x) = x
 follow_ref(x::CIMRef) = x.target
 follow_ref(x::CIMBackref) = x.source
+
+base_object(x::AbstractCIMReference) = base_object(follow_ref(x))
+base_object(x::CIMObject) = x
+base_object(x::CIMExtension) = follow_ref(x.base)
 
 include("parsing.jl")
 include("inspect.jl")

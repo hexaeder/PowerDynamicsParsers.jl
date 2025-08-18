@@ -3,7 +3,7 @@ using GraphMakie: GraphMakie, graphplot!
 using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!
 
 
-function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[])
+function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[], seed=1)
     # Extract nodes from collection
     nodes = collect(values(objects(collection)))
 
@@ -13,7 +13,7 @@ function inspect_collection(collection::AbstractCIMCollection; filter_out=String
     end
 
     # Create base plot
-    fig = _plot_nodelist(nodes; size=size, hl1=hl1, hl2=hl2)
+    fig = _plot_nodelist(nodes; size=size, hl1=hl1, hl2=hl2, seed)
 
     # Add filter information at the bottom
     filter_text = if isempty(filter_out)
@@ -36,16 +36,16 @@ function inspect_collection(collection::AbstractCIMCollection; filter_out=String
     return fig
 end
 
-function inspect_node(node::CIMObject; stop_classes=String[], filter_out=String[], max_depth=100, size=(2000,1500))
+function inspect_node(node::CIMObject; stop_classes=String[], filter_out=String[], max_depth=100, size=(2000,1500), seed=1)
     # Discover connected nodes recursively, filtering during discovery
     nodes, stop_nodes = discover_nodes(node, stop_classes; filter_out, max_depth)
 
     # Create visualization using the shared plotting function
     # Root node gets hl1, stop nodes get hl2
-    return _plot_nodelist(nodes; size=size, hl1=[node], hl2=stop_nodes)
+    return _plot_nodelist(nodes; size=size, hl1=[node], hl2=stop_nodes, seed)
 end
 
-function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[])
+function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[], seed)
     if isempty(nodes)
         @warn "No nodes found to plot"
         return nothing
@@ -152,7 +152,7 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     graphplot!(
         ax,
         g;
-        layout = GraphMakie.Stress(),
+        layout = GraphMakie.Stress(; seed),
         nlabels = short_repr,
         elabels = edge_names_sorted,
         node_color = colors,

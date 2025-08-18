@@ -2,15 +2,11 @@ using PowerDynamics
 using PowerDynamicsCGMES
 using WGLMakie
 
-DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "testdata1")
-dataset = CIMDataset(DATA)
+# DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "testdata1")
+DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "1-EHVHV-mixed-all-2-sw-Ausschnitt")
+dataset = CIMCollection(CIMDataset(DATA))
 
-topological_nodes = dataset("TopologicalNode")
+inspect_collection(reduce_complexity(dataset))
 
-b1 = discover_subgraph(topological_nodes[1]; filter_out = is_lineend)
-b2 = discover_subgraph(topological_nodes[2]; filter_out = is_lineend)
-b3 = discover_subgraph(topological_nodes[3]; filter_out = is_lineend)
 
-inspect_collection(b1)
-
-b1("BusbarSection")[2]
+nodes, edges = split_topologically(dataset)
