@@ -49,6 +49,7 @@ fig = inspect_node(
     max_depth=100
 )
 
+
 dataset("VoltageLevel")[1]
 
 topo = dataset("TopologicalNode")[1]
@@ -59,6 +60,10 @@ fig = inspect_node(
     max_depth=100
 )
 save("topological_bus_details.pdf", fig)
+
+subg = discover_subgraph(topo; filter_out = is_lineend, maxdepth=10)
+inspect_collection(subg)
+
 
 
 dataset("ConformLoad")[1]

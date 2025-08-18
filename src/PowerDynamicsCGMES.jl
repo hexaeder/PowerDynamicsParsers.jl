@@ -25,6 +25,9 @@ mutable struct CIMRef <: AbstractCIMReference
         new(id, false, nothing)
     end
 end
+is_resolved(ref::CIMRef) = ref.resolved
+is_external_ref(ref::CIMRef) = startswith(ref.id, "http")
+
 struct CIMBackref <: AbstractCIMReference
     source::CIMEntity
 end
@@ -87,6 +90,27 @@ Base.values(c::CIMCollection) = values(c.objects)
 Base.haskey(o::CIMObject, key::String) = haskey(properties(o), key)
 Base.haskey(c::CIMCollection, id::String) = haskey(c.objects, id)
 Base.haskey(ds::CIMDataset, profile::Symbol) = haskey(ds.files, profile)
+
+# Copy methods for CIM types
+Base.copy(ref::CIMRef) = CIMRef(ref.id)
+
+function Base.copy(obj::CIMObject)
+    props_copy = OrderedDict{String, Any}()
+    for (key, val) in obj.properties
+        props_copy[key] = val isa CIMRef ? copy(val) : val
+    end
+    # Create new object with empty reference vectors (rebuilt by resolve_references!)
+    CIMObject(obj.profile, obj.id, obj.class_name, props_copy)
+end
+
+function Base.copy(ext::CIMExtension)
+    base_copy = copy(ext.base) # gets rid of resolve reference by copying
+    props_copy = OrderedDict{String, Any}()
+    for (key, val) in ext.properties
+        props_copy[key] = val isa CIMRef ? copy(val) : val
+    end
+    CIMExtension(ext.profile, base_copy, ext.class_name, props_copy)
+end
 
 function _register_reference!(target::CIMObject, source::Union{CIMObject,CIMExtension})
     backref = CIMBackref(source)
