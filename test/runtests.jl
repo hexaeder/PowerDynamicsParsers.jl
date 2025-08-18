@@ -28,13 +28,13 @@ dataset("ACLineSegment")[1]
 dataset("Terminal")[1]
 dataset("BusbarSection")[1]
 
-inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
+inspect_collection(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 
-fig = inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
+fig = inspect_collection(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 save("3bus_overview.pdf", fig)
 
-# fig = inspect_dataset(dataset)
-fig = inspect_dataset(dataset; filter_out=["BaseVoltage", "OperationalLimitType", r"^Diagram$", "CoordinateSystem", "Substation", "Geographical"])
+# fig = inspect_collection(dataset)
+fig = inspect_collection(dataset; filter_out=["BaseVoltage", "OperationalLimitType", r"^Diagram$", "CoordinateSystem", "Substation", "Geographical"])
 save("3bus_nealy_full.pdf", fig)
 
 # save("3bus_full.pdf", fig)

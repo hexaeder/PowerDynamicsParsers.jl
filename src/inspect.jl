@@ -3,9 +3,9 @@ using GraphMakie: GraphMakie, graphplot!
 using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!
 
 
-function inspect_dataset(dataset; filter_out=String[], size=(2000,1500), hl1=[], hl2=[])
-    # Extract nodes from dataset
-    nodes = collect(values(objects(dataset)))
+function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[])
+    # Extract nodes from collection
+    nodes = collect(values(objects(collection)))
 
     # Apply filtering
     if !isempty(filter_out)
@@ -23,7 +23,7 @@ function inspect_dataset(dataset; filter_out=String[], size=(2000,1500), hl1=[],
     end
 
     # Add node count information
-    total_nodes = length(objects(dataset))
+    total_nodes = length(objects(collection))
     filtered_nodes = length(nodes)
     info_text = "Nodes: $filtered_nodes/$total_nodes shown"
 

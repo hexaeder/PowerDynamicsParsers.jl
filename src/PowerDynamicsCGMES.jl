@@ -8,7 +8,7 @@ export rdf_node, CIMObject, CIMRef, CIMBackref, CIMCollection, CIMFile, CIMDatas
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 export resolve_references!
 export objects, extensions, hasname, getname, properties
-export inspect_dataset, inspect_node
+export inspect_collection, inspect_node
 export follow_ref
 
 abstract type CIMEntity end
