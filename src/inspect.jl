@@ -89,10 +89,11 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     # Create edges vector representing references between objects
     edges = Vector{Pair{Int,Int}}()
     edge_names = Vector{String}()
+    edge_profiles = Vector{Symbol}()
 
     for (source_idx, node) in enumerate(nodes)
-        props = properties(node)
-        for (key, value) in props
+        # First check base object properties
+        for (key, value) in node.properties
             if value isa CIMRef && !startswith(value.id, "http")
                 target_idx = findfirst(id -> id == value.id, ids)
                 if !isnothing(target_idx)
@@ -101,8 +102,29 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
                     if isnothing(existing_edge)
                         push!(edges, source_idx => target_idx)
                         push!(edge_names, key)
+                        push!(edge_profiles, node.profile)  # Base object profile
                     else
                         edge_names[existing_edge] *= " + " * key
+                    end
+                end
+            end
+        end
+
+        # Then check extension properties
+        for ext in node.extension
+            for (key, value) in ext.source.properties
+                if value isa CIMRef && !startswith(value.id, "http")
+                    target_idx = findfirst(id -> id == value.id, ids)
+                    if !isnothing(target_idx)
+                        e = source_idx => target_idx
+                        existing_edge = findfirst(isequal(e), edges)
+                        if isnothing(existing_edge)
+                            push!(edges, source_idx => target_idx)
+                            push!(edge_names, key)
+                            push!(edge_profiles, ext.source.profile)  # Extension profile
+                        else
+                            edge_names[existing_edge] *= " + " * key
+                        end
                     end
                 end
             end
@@ -113,6 +135,10 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     perm = sortperm(edges, by = e -> (e.first, e.second))
     edges_sorted = edges[perm]
     edge_names_sorted = edge_names[perm]
+    edge_profiles_sorted = edge_profiles[perm]
+
+    # Create edge colors based on property source profiles
+    edge_colors = [get(profile_color_map, p, :gray) for p in edge_profiles_sorted]
 
     # Create graph
     g = SimpleDiGraph(length(nodes))
@@ -131,8 +157,10 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         elabels = edge_names_sorted,
         node_color = colors,
         node_size = node_sizes,
+        edge_color = edge_colors,
+        edge_width = 2,
         arrow_shift = :end,
-        arrow_size = 10,
+        arrow_size = 15,
         elabels_fontsize = 8,
         nlabels_distance = 5,
     )
@@ -155,7 +183,7 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     return fig
 end
 
-function discover_nodes(start_node::CIMObject, stop_classes::Vector{String}; filter_out::Vector{String}=String[], max_depth::Int=10)
+function discover_nodes(start_node::CIMObject, stop_classes; filter_out=String[], max_depth=10)
     nodes = Vector{CIMObject}()
     stop_nodes = Vector{CIMObject}()
 
@@ -187,14 +215,7 @@ function discover_nodes(start_node::CIMObject, stop_classes::Vector{String}; fil
         props = properties(node)
         for (key, value) in props
             if value isa CIMRef && value.resolved && !startswith(value.id, "http")
-                target_node = value.target
-                if !isnothing(target_node) && target_node isa CIMObject
-                    # Skip traversal if target node would be filtered out
-                    target_is_filtered = any(filter_class -> contains(target_node.class_name, filter_class), filter_out)
-                    if !target_is_filtered
-                        recursive_discover!(target_node, depth + 1)
-                    end
-                end
+                recursive_discover!(value.target, depth + 1)
             end
         end
 
@@ -208,11 +229,9 @@ function discover_nodes(start_node::CIMObject, stop_classes::Vector{String}; fil
         for backref in node.references
             source_obj = backref.source
             if source_obj isa CIMObject
-                # Skip traversal if source node would be filtered out
-                source_is_filtered = any(filter_class -> contains(source_obj.class_name, filter_class), filter_out)
-                if !source_is_filtered
-                    recursive_discover!(source_obj, depth + 1)
-                end
+                recursive_discover!(source_obj, depth + 1)
+            elseif source_obj isa CIMExtension
+                recursive_discover!(source_obj.base.target, depth + 1)
             end
         end
     end

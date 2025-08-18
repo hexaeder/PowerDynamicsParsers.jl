@@ -2,9 +2,12 @@ using PowerDynamicsCGMES
 using OrderedCollections
 using XML
 using Graphs
-using GraphMakie, WGLMakie
+using WGLMakiesing GraphMakie, WGLMakie
 
-DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data")
+using WGLMakie
+WGLMakie.activate!
+
+DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "testdata1")
 dataset = CIMDataset(DATA)
 
 eq = dataset[:Equipment]
@@ -33,8 +36,11 @@ using CairoMakie
 fig = inspect_dataset(dataset; filter_out=["Limit","Area","Diagram","BaseVoltage","CoordinateSystem","Region", "Position", "Location","VoltageLevel","Substation"])
 save("3bus_overview.pdf", fig)
 
-fig = inspect_dataset(dataset)
-save("3bus_full.pdf", fig)
+# fig = inspect_dataset(dataset)
+fig = inspect_dataset(dataset; filter_out=["BaseVoltage", "OperationalLimitType", r"^Diagram$", "CoordinateSystem", "Substation", "Geographical"])
+save("3bus_nealy_full.pdf", fig)
+
+# save("3bus_full.pdf", fig)
 
 # sinpect single thing
 terminal = dataset("Terminal")[15] # feld2
@@ -47,3 +53,30 @@ fig = inspect_node(
 )
 
 dataset("VoltageLevel")[1]
+
+topo = dataset("TopologicalNode")[1]
+fig = inspect_node(
+    topo;
+    stop_classes=["BaseVoltage", "VoltageLevel", "OperationalLimitType", "Substation", "LineSegment"],
+    filter_out=[],
+    max_depth=100
+)
+save("topological_bus_details.pdf", fig)
+
+
+dataset("ConformLoad")[1]
+dataset("SynchronousMachine")[1]
+dataset("SynchronousMachine")[3]
+
+dataset("ThermalGeneratingUnit")[1]
+dataset("FossilFuel")[1]
+
+dataset[:SteadyStateHypothesis].extensions
+dataset[:SteadyStateHypothesis].extensions[1] # GeneratingUnit
+dataset[:SteadyStateHypothesis].extensions[3] # RegulatingControl
+dataset[:SteadyStateHypothesis].extensions[5] # ConformLoad
+dataset[:SteadyStateHypothesis].extensions[21] # Machine
+
+dataset[:Dynamics]("LoadAggregate")[1]
+dataset[:Dynamics]("LoadStatic")[1]
+dataset[:Dynamics]("Synchronous")[1]
