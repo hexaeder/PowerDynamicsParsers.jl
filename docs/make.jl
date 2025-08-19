@@ -36,7 +36,7 @@ kwargs = (;
     pages=[
         "Home" => "index.md",
         "Tutorials" => [
-            "Basic Usage" => "generated/basic_usage.md",
+            "Inspection of Test Data" => "generated/testdata.md",
         ]
     ],
     draft=false,

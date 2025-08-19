@@ -40,6 +40,7 @@ function discover_subgraph(
     nobackref = is_class(STOP_BACKREF),
     maxdepth = 100,
     filter_out = x -> false,
+    warn
 )
     objects = OrderedDict{String, CIMObject}()
     extensions = Vector{CIMExtension}()
@@ -90,7 +91,7 @@ function discover_subgraph(
     recursive_discover!(root, 1)
 
     collection = CIMCollection(objects, extensions)
-    resolve_references!(collection)
+    resolve_references!(collection; warn)
 end
 
 function Base.filter(f, collection::AbstractCIMCollection; warn=true)
@@ -110,16 +111,16 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
     resolve_references!(collection; warn)
 end
 
-function split_topologically(collection::CIMCollection)
+function split_topologically(collection::CIMCollection; warn=true)
     # collection = CIMDataset(DATA)
     topnodes = collection("TopologicalNode")
-    node_subgraphs = _discover_tpn_subgraph.(topnodes)
+    node_subgraphs = _discover_tpn_subgraph.(topnodes; warn)
 
     undiscovered_lineends = filter(is_lineend, collection("Terminal"))
     edge_subgraphs = CIMCollection[]
     while !isempty(undiscovered_lineends)
         lineend = popfirst!(undiscovered_lineends)
-        subgraph = _discover_linened_subgraph(lineend)
+        subgraph = _discover_linened_subgraph(lineend; warn)
         push!(edge_subgraphs, subgraph)
 
         discovered_ids = [n.id for n in filter(is_lineend, subgraph("Terminal"))]
@@ -136,17 +137,17 @@ function split_topologically(collection::CIMCollection)
 
     (; node_subgraphs, edge_subgraphs)
 end
-function _discover_tpn_subgraph(t)
+function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
     filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation"])
-    discover_subgraph(t; filter_out)
+    discover_subgraph(t; filter_out, warn)
 end
-function _discover_linened_subgraph(t)
+function _discover_linened_subgraph(t; warn)
     @assert is_lineend(t) "Expected LineEnd, got $(t.class_name)"
 
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
     filter_out = is_class([r"Diagram", "Substation"])
-    discover_subgraph(t; nobackref, filter_out, maxdepth=100)
+    discover_subgraph(t; nobackref, filter_out, warn)
 end
 
 

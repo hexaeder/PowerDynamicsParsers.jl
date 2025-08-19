@@ -4,7 +4,7 @@ using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hide
 using Base.Docs: HTML
 
 
-function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[], seed=1)
+function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[], seed=1, edge_labels=true, node_labels=:long)
     # Extract nodes from collection
     nodes = collect(values(objects(collection)))
 
@@ -14,7 +14,7 @@ function inspect_collection(collection::AbstractCIMCollection; filter_out=String
     end
 
     # Create base plot
-    fig = _plot_nodelist(nodes; size=size, hl1=hl1, hl2=hl2, seed)
+    fig = _plot_nodelist(nodes; size=size, hl1=hl1, hl2=hl2, seed, edge_labels, node_labels)
 
     # Add filter information at the bottom
     filter_text = if isempty(filter_out)
@@ -29,24 +29,24 @@ function inspect_collection(collection::AbstractCIMCollection; filter_out=String
     info_text = "Nodes: $filtered_nodes/$total_nodes shown"
 
     # Update the existing label with filter information
-    if !isnothing(fig)
-        Label(fig[2, 1:2], filter_text * "\n" * info_text,
-              halign=:left, valign=:top, tellwidth=false, tellheight=true, justification=:left)
-    end
+    # if !isnothing(fig)
+    #     Label(fig[3, 1], filter_text * "\n" * info_text,
+    #           halign=:left, valign=:top, tellwidth=false, tellheight=true, justification=:left)
+    # end
 
     return fig
 end
 
-function inspect_node(node::CIMObject; stop_classes=String[], filter_out=String[], max_depth=100, size=(2000,1500), seed=1)
+function inspect_node(node::CIMObject; stop_classes=String[], filter_out=String[], max_depth=100, size=(2000,1500), seed=1, edge_labels=true, node_labels=:long)
     # Discover connected nodes recursively, filtering during discovery
     nodes, stop_nodes = discover_nodes(node, stop_classes; filter_out, max_depth)
 
     # Create visualization using the shared plotting function
     # Root node gets hl1, stop nodes get hl2
-    return _plot_nodelist(nodes; size=size, hl1=[node], hl2=stop_nodes, seed)
+    return _plot_nodelist(nodes; size=size, hl1=[node], hl2=stop_nodes, seed, edge_labels, node_labels)
 end
 
-function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[], seed)
+function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[], seed, edge_labels=true, node_labels=:long)
     if isempty(nodes)
         @warn "No nodes found to plot"
         return nothing
@@ -54,8 +54,16 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
 
     ids = [n.id for n in nodes]
 
-    # Create short representation vector for visualization
-    short_repr = object_text.(nodes)
+    # Create node labels based on node_labels parameter
+    node_label_data = if node_labels == :long
+        object_text.(nodes)
+    elseif node_labels == :short
+        [n.class_name for n in nodes]
+    elseif node_labels == :none
+        String[]
+    else
+        error("node_labels must be :long, :short, or :none")
+    end
 
     # Create profiles vector showing which profile each node belongs to
     profiles = [obj.profile for obj in nodes]
@@ -141,6 +149,9 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     # Create edge colors based on property source profiles
     edge_colors = [get(profile_color_map, p, :gray) for p in edge_profiles_sorted]
 
+    # Handle edge labels based on edge_labels parameter
+    edge_label_data = edge_labels ? edge_names_sorted : nothing
+
     # Create graph
     g = SimpleDiGraph(length(nodes))
     for e in edges_sorted
@@ -149,13 +160,13 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
 
     # Create GraphMakie plot with legend
     fig = Figure(; size=size)
-    ax = Axis(fig[1,1])
+    ax = Axis(fig[2,1])
     graphplot!(
         ax,
         g;
         layout = GraphMakie.Stress(; seed),
-        nlabels = short_repr,
-        elabels = edge_names_sorted,
+        nlabels = node_label_data,
+        elabels = edge_label_data,
         node_color = colors,
         node_size = node_sizes,
         edge_color = edge_colors,
@@ -166,20 +177,23 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         nlabels_distance = 5,
     )
     hidedecorations!(ax)
+    hidespines!(ax)
 
-    # Add profile color legend
+    # Add profile color legend below the axis
     unique_profiles_in_data = unique(profiles)
     legend_colors = [profile_color_map[profile] for profile in unique_profiles_in_data]
     legend_labels = [string(profile) for profile in unique_profiles_in_data]
 
-    # Create legend with colored markers
-    Legend(fig[1, 2],
-           [scatter!(ax, Float64[], Float64[], color=color, markersize=15) for color in legend_colors],
-           legend_labels,
-           "CGMES Profiles",
-           framevisible=true,
-           tellwidth=true,
-           margin=(10, 10, 10, 10))
+    # Create legend with colored markers in horizontal orientation
+    Legend(fig[1, 1],
+        [scatter!(ax, Float64[], Float64[], color=color, markersize=15) for color in legend_colors],
+        legend_labels,
+        "CGMES Profiles",
+        orientation = :horizontal,
+        framevisible=false,
+        tellheight=true,
+        tellwidth=false,
+        )
 
     return fig
 end
@@ -292,8 +306,18 @@ end
 
 function html_hover_map(fig, labels)
     sc = fig.scene;
-    ax = only(filter(c -> c isa Axis, fig.content))
-    gp = only(ax.scene.plots) # graphplot
+
+    # Find all axes and filter for those with graphplots
+    axes_with_graphplots = filter(fig.content) do c
+        c isa Axis && any(plot -> isa(plot, GraphMakie.GraphPlot), c.scene.plots)
+    end
+
+    if length(axes_with_graphplots) != 1
+        error("Expected exactly one axis with a graphplot, found $(length(axes_with_graphplots))")
+    end
+
+    ax = axes_with_graphplots[1]
+    gp = only(filter(plot -> isa(plot, GraphMakie.GraphPlot), ax.scene.plots))
     positions = gp[:node_pos][]
     markersize = gp[:nodeplot_markersize][]
 
@@ -367,12 +391,13 @@ function html_hover_map(fig, labels)
                                 color: white;
                                 padding: 5px 10px;
                                 border-radius: 4px;
-                                font-size: 12px;
+                                font-size: 10px;
+                                font-family: monospace;
                                 white-space: pre-line;
                                 pointer-events: none;
                                 z-index: 20;
                                 display: none;
-                                max-width: 200px;
+                                max-width: 400px;
                                 word-wrap: break-word;`;
         wrapper.appendChild(tooltip);
 
@@ -408,8 +433,8 @@ function html_hover_map(fig, labels)
                                  pointer-events: all;
                                  cursor: pointer;
                                  z-index: 10;
-                                 border: 2px solid red;
-                                 background: rgba(255, 0, 0, 0.2);`;
+                                 border: none;
+                                 background: transparent;`;
             zone.setAttribute('data-label', zoneData.label);
             zone.setAttribute('data-node', zoneData.node);
             hoverZones.appendChild(zone);
@@ -462,4 +487,51 @@ function html_hover_map(fig, labels)
     """
 
     return HTML(html_string)
+end
+
+function add_property_hover(fig, collection::AbstractCIMCollection)
+    nodes = collect(values(objects(collection)))
+
+    # Generate hover labels with classname, name, and filtered properties
+    hover_labels = String[]
+    for node in nodes
+        label_parts = []
+
+        # Add classname
+        push!(label_parts, node.class_name)
+
+        # Add name if available
+        if hasname(node)
+            push!(label_parts, "\"$(getname(node))\"")
+        end
+
+        # Get all properties (including extensions)
+        props = properties(node)
+
+        # Filter out resolved references within dataset and name properties
+        # Keep unresolved references (external or filtered out objects)
+        filtered_props = []
+        for (key, value) in props
+            # Include if it's not a name property and either:
+            # - Not a CIMRef at all, or
+            # - A CIMRef that's not resolved (external reference or filtered out object)
+            if !contains(lowercase(key), "name") &&
+               (!(value isa CIMRef) || !value.resolved)
+                # Display unresolved references as "unresolved ref" instead of printing the object
+                display_value = (value isa CIMRef && !value.resolved) ? "unresolved ref" : value
+                push!(filtered_props, "$key = $display_value")
+            end
+        end
+
+        # Add filtered properties to label parts
+        if !isempty(filtered_props)
+            append!(label_parts, filtered_props)
+        else
+            push!(label_parts, "no properties")
+        end
+
+        push!(hover_labels, join(label_parts, "\n"))
+    end
+
+    return html_hover_map(fig, hover_labels)
 end
