@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Inspection of Test Data · PowerDynamicsCGMES.jl</title><meta name="title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta property="og:title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta property="twitter:title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta name="description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="og:description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsCGMES.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li class="is-active"><a class="tocitem" href>Inspection of Test Data</a><ul class="internal"><li><a class="tocitem" href="#Bus-1:-Load"><span>Bus 1: Load</span></a></li><li><a class="tocitem" href="#Bus-2:-Load-Machine"><span>Bus 2: Load + Machine</span></a></li><li><a class="tocitem" href="#Bus-3:-Three-Machines"><span>Bus 3: Three Machines</span></a></li><li><a class="tocitem" href="#Powerline-1:-AC-Pi-Line"><span>Powerline 1: AC Pi-Line</span></a></li><li><a class="tocitem" href="#Powerline-2:-Transformer"><span>Powerline 2: Transformer</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Inspection of Test Data</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Inspection of Test Data</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsCGMES.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsCGMES.jl/blob/main/docs/examples/testdata.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt"><a class="docs-heading-anchor" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt">Inspection of Test 1-EHVHV-mixed-all-2-sw-Ausschnitt</a><a id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt-1"></a><a class="docs-heading-anchor-permalink" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt" title="Permalink"></a></h1><pre><code class="language-julia hljs">using PowerDynamics
+using PowerDynamicsCGMES
+using CairoMakie
+
+DATA = joinpath(pkgdir(PowerDynamicsCGMES), &quot;test&quot;, &quot;data&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt&quot;)
+dataset = CIMCollection(CIMDataset(DATA))</code></pre><div class="admonition is-success" id="Tip-fef913799f39104c"><header class="admonition-header">Tip<a class="admonition-anchor" href="#Tip-fef913799f39104c" title="Permalink"></a></header><div class="admonition-body"><p>Hover the nodes to inspect the properties!</p></div></div><pre><code class="language-julia hljs">reduced_dataset = reduce_complexity(dataset)
+inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))</code></pre><img src="fd62696f.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 58.89238148228762, y: 79.31498880640144, width: 2.0, height: 2.0, label: "LoadAggregate\nno properties", node: 1},
+            {x: 55.84485700990906, y: 86.98323672879641, width: 2.0, height: 2.0, label: "LoadStatic\nstaticLoadModelType = unresolved ref", node: 2},
+            {x: 17.670537314439777, y: 19.19647194687687, width: 2.0, height: 2.0, label: "SynchronousMachineTimeConstantReactance\n\"EHV Gen 200\"\nDynamicsFunctionBlock.enabled = true\nRotatingMachineDynamics.damping = 0\nRotatingMachineDynamics.inertia = 4.75\nRotatingMachineDynamics.saturationFactor = 0\nRotatingMachineDynamics.saturationFactor120 = 0\nRotatingMachineDynamics.statorLeakageReactance = 0.172\nRotatingMachineDynamics.statorResistance = 0\nSynchronousMachineDetailed.efdBaseRatio = 1\nSynchronousMachineDetailed.ifdBaseType = unresolved ref\nmodelType = unresolved ref\nrotorType = unresolved ref\ntpdo = 6.66667\ntppdo = 0.075\ntppqo = 0.075\ntpqo = 6.66667\nxDirectSubtrans = 0.2\nxDirectSync = 2\nxDirectTrans = 0.3\nxQuadSubtrans = 0.2\nxQuadSync = 2\nxQuadTrans = 0.3", node: 3},
+            {x: 30.20685968244371, y: 13.063640361744245, width: 2.0, height: 2.0, label: "SynchronousMachineTimeConstantReactance\n\"EHV Gen 295\"\nDynamicsFunctionBlock.enabled = true\nRotatingMachineDynamics.damping = 0\nRotatingMachineDynamics.inertia = 4.75\nRotatingMachineDynamics.saturationFactor = 0\nRotatingMachineDynamics.saturationFactor120 = 0\nRotatingMachineDynamics.statorLeakageReactance = 0.172\nRotatingMachineDynamics.statorResistance = 0\nSynchronousMachineDetailed.efdBaseRatio = 1\nSynchronousMachineDetailed.ifdBaseType = unresolved ref\nmodelType = unresolved ref\nrotorType = unresolved ref\ntpdo = 6.66667\ntppdo = 0.075\ntppqo = 0.075\ntpqo = 6.66667\nxDirectSubtrans = 0.2\nxDirectSync = 2\nxDirectTrans = 0.3\nxQuadSubtrans = 0.2\nxQuadSync = 2\nxQuadTrans = 0.3", node: 4},
+            {x: 80.54220936002649, y: 60.40978304290956, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 5},
+            {x: 20.07642347682569, y: 33.47305133233355, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -0.20569\nq = 0.00168842", node: 6},
+            {x: 51.50613748575184, y: 49.52956503933081, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -0.394418\nq = 0.130803", node: 7},
+            {x: 72.70156935654387, y: 89.24782619311445, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 0.197259\nq = -0.0113707", node: 8},
+            {x: 64.95784508639935, y: 53.00101158352294, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 9},
+            {x: 58.89131579689032, y: 64.39300456350641, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 0.197259\nq = -0.0113707", node: 10},
+            {x: 17.74330886644032, y: 36.667809094946946, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -0.206473\nq = 0.0170694", node: 11},
+            {x: 28.374821586809567, y: 44.707931436101056, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 0.474291\nq = -0.0195198", node: 12},
+            {x: 94.00000247846594, y: 71.9352819608105, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 0\nq = 0", node: 13},
+            {x: 49.897928400333605, y: 23.995909967095486, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -0.063126\nq = 0", node: 14},
+            {x: 40.00504940639272, y: 34.6891045688947, width: 2.0, height: 2.0, label: "TopologicalIsland\n\"Island_001\"\nno properties", node: 15},
+            {x: 83.37986193514456, y: 68.86848757836204, width: 2.0, height: 2.0, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 16},
+            {x: 53.60349312719003, y: 56.816290510335165, width: 2.0, height: 2.0, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 17},
+            {x: 30.269267971121067, y: 36.91383843407219, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0\nv = 235.001", node: 18},
+            {x: 22.708736156205436, y: 57.618633643819365, width: 2.0, height: 2.0, label: "SvTapStep\nposition = 0", node: 19},
+            {x: 49.73090380781841, y: 60.66647825055975, width: 2.0, height: 2.0, label: "TopologicalNode\n\"HV2 Bus 7\"\nBaseVoltage = unresolved ref", node: 20},
+            {x: 77.5179531631795, y: 73.54153516923556, width: 2.0, height: 2.0, label: "TopologicalNode\n\"HV2 Bus 339\"\nBaseVoltage = unresolved ref", node: 21},
+            {x: 34.44488937357005, y: 33.26296098987761, width: 2.0, height: 2.0, label: "TopologicalNode\n\"EHV Bus 1865\"\nBaseVoltage = unresolved ref", node: 22},
+            {x: 74.47952026865764, y: 65.9080994879083, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 23},
+            {x: 25.345893892330583, y: 32.03789671318509, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_EHV Gen 200\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 24},
+            {x: 44.832270114305885, y: 54.03057939715619, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 22\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 25},
+            {x: 42.696932196331225, y: 27.54273228265073, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_EHV Sgen 76\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 26},
+            {x: 59.603410996688766, y: 58.68937897565463, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 27},
+            {x: 42.216904590224416, y: 64.14688883978503, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 8\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 28},
+            {x: 86.29584968617905, y: 73.27432132245903, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_HV2 Sgen 44\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 29},
+            {x: 80.46405585346243, y: 79.56546206961949, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 340\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 30},
+            {x: 37.35830455681137, y: 28.659087178898822, width: 2.0, height: 2.0, label: "Terminal\n\"EHV Bus 1866\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 31},
+            {x: 44.86848861662793, y: 64.94881582486704, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 7\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 32},
+            {x: 41.164940095173094, y: 30.979476585290776, width: 2.0, height: 2.0, label: "Terminal\n\"EHV Bus 1865\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 33},
+            {x: 83.92561613419284, y: 76.85779474422382, width: 2.0, height: 2.0, label: "Terminal\n\"HV2 Bus 339\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 34},
+            {x: 29.108632762405602, y: 29.807381840600875, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_EHV Gen 295\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 35},
+            {x: 52.99748552995194, y: 66.57022164262271, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_HV2 Load 2\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 36},
+            {x: 71.7904083418545, y: 80.03820064515418, width: 2.0, height: 2.0, label: "Terminal\n\"Cubicle_HV2 Load 45\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 37},
+            {x: 36.06546434306283, y: 41.497246607473535, width: 2.0, height: 2.0, label: "Terminal\n\"EHV Bus 3094\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 38},
+            {x: 40.654366490617946, y: 47.5064704740119, width: 2.0, height: 2.0, label: "PowerTransformer\n\"HV2 Trafo 3\"\nEquipment.EquipmentContainer = unresolved ref\nisPartOfGeneratorUnit = false\noperationalValuesConsidered = false", node: 39},
+            {x: 28.408067078290557, y: 20.65319867760358, width: 2.0, height: 2.0, label: "SynchronousMachine\n\"EHV Gen 295\"\ndescription = pp_302\nRotatingMachine.ratedPowerFactor = 0.95\nRotatingMachine.ratedS = 23.6842\nRotatingMachine.ratedU = 220\nearthing = true\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 7.39539\nminQ = -7.39539\nqPercent = 9.00113\nr = 0\nr0 = 0\nr2 = 0\nsatDirectSubtransX = 0.2\nsatDirectSyncX = 1.2\nshortCircuitRotorType = unresolved ref\ntype = unresolved ref\nx0 = 0.1\nx2 = 0.2\nRegulatingCondEq.controlEnabled = true\nRotatingMachine.p = 0\nRotatingMachine.q = -23.6842\noperatingMode = unresolved ref\nreferencePriority = 0", node: 40},
+            {x: 39.914697289432354, y: 19.810628866800673, width: 2.0, height: 2.0, label: "SynchronousMachine\n\"EHV Sgen 76\"\ndescription = WP8\nRotatingMachine.ratedPowerFactor = 1\nRotatingMachine.ratedS = 36\nRotatingMachine.ratedU = 220\nearthing = false\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 0\nminQ = 0\nr = 0\nr0 = 0\nr2 = 99999\nsatDirectSubtransX = 999\ntype = unresolved ref\nx0 = 0.1\nx2 = 99999\nRegulatingCondEq.controlEnabled = false\nRotatingMachine.p = -0.063126\nRotatingMachine.q = 0\noperatingMode = unresolved ref\nreferencePriority = 0", node: 41},
+            {x: 21.883248461629407, y: 25.521855547940998, width: 2.0, height: 2.0, label: "SynchronousMachine\n\"EHV Gen 200\"\ndescription = pp_207\nRotatingMachine.ratedPowerFactor = 0.95\nRotatingMachine.ratedS = 242.105\nRotatingMachine.ratedU = 220\nearthing = true\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 75.5973\nminQ = -75.5973\nqPercent = 90.9989\nr = 0\nr0 = 0\nr2 = 0\nsatDirectSubtransX = 0.2\nsatDirectSyncX = 1.2\nshortCircuitRotorType = unresolved ref\ntype = unresolved ref\nx0 = 0.1\nx2 = 0.2\nRegulatingCondEq.controlEnabled = true\nRotatingMachine.p = 0\nRotatingMachine.q = -242.105\noperatingMode = unresolved ref\nreferencePriority = 0", node: 42},
+            {x: 84.2728414161683, y: 80.9514646047436, width: 2.0, height: 2.0, label: "SynchronousMachine\n\"HV2 Sgen 44\"\ndescription = mv_add1\nRotatingMachine.ratedPowerFactor = 1\nRotatingMachine.ratedS = 1\nRotatingMachine.ratedU = 110\nearthing = false\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 0\nminQ = 0\nr = 0\nr0 = 0\nr2 = 99999\nsatDirectSubtransX = 999\ntype = unresolved ref\nx0 = 0.1\nx2 = 99999\nRegulatingCondEq.controlEnabled = false\nRotatingMachine.p = 0\nRotatingMachine.q = 0\noperatingMode = unresolved ref\nreferencePriority = 0", node: 43},
+            {x: 30.06174804315448, y: 54.023453325250024, width: 2.0, height: 2.0, label: "RatioTapChanger\n\"HV2 Trafo 3\"\nstepVoltageIncrement = 1\ntculControlMode = unresolved ref\nTapChanger.highStep = 16\nTapChanger.lowStep = -16\nTapChanger.ltcFlag = false\nTapChanger.neutralStep = 0\nTapChanger.neutralU = 220\nTapChanger.normalStep = 0\nTapChanger.controlEnabled = true\nTapChanger.step = 0", node: 44},
+            {x: 43.559746860137025, y: 13.201140601321315, width: 2.0, height: 2.0, label: "WindGeneratingUnit\n\"EHV Sgen 76\"\nEquipment.EquipmentContainer = unresolved ref\nGeneratingUnit.initialP = 0.063126\nGeneratingUnit.maxOperatingP = 36\nGeneratingUnit.minOperatingP = 0\nwindGenUnitType = unresolved ref\nGeneratingUnit.normalPF = 0", node: 45},
+            {x: 13.337353433874078, y: 24.339630519222123, width: 2.0, height: 2.0, label: "ThermalGeneratingUnit\n\"EHV Gen 200\"\nEquipment.EquipmentContainer = unresolved ref\nGeneratingUnit.initialP = 0\nGeneratingUnit.maxOperatingP = 230\nGeneratingUnit.minOperatingP = 50\nGeneratingUnit.normalPF = 0", node: 46},
+            {x: 77.34612315271174, y: 87.31832483067382, width: 2.0, height: 2.0, label: "BusbarSection\n\"HV2 Bus 340\"\nno properties", node: 47},
+            {x: 42.57519021056034, y: 73.01742705465256, width: 2.0, height: 2.0, label: "BusbarSection\n\"HV2 Bus 7\"\nno properties", node: 48},
+            {x: 39.89664470856595, y: 71.41492068418806, width: 2.0, height: 2.0, label: "BusbarSection\n\"HV2 Bus 8\"\nno properties", node: 49},
+            {x: 81.28715427164543, y: 85.02516985834345, width: 2.0, height: 2.0, label: "BusbarSection\n\"HV2 Bus 339\"\nno properties", node: 50},
+            {x: 39.08926798857672, y: 23.375842838455984, width: 2.0, height: 2.0, label: "BusbarSection\n\"EHV Bus 1865\"\nno properties", node: 51},
+            {x: 34.90613001667405, y: 20.48105746381025, width: 2.0, height: 2.0, label: "BusbarSection\n\"EHV Bus 1866\"\nno properties", node: 52},
+            {x: 24.416700572372186, y: 14.288862384220991, width: 2.0, height: 2.0, label: "GeneratingUnit\n\"EHV Gen 295\"\nEquipment.EquipmentContainer = unresolved ref\ninitialP = 0\nmaxOperatingP = 22.5\nminOperatingP = 1\nnormalPF = 0", node: 53},
+            {x: 6.000000796278934, y: 22.683152555439968, width: 2.0, height: 2.0, label: "FossilFuel\n\"EHV Gen 200\"\nfossilFuelType = unresolved ref", node: 54},
+            {x: 37.05325657246638, y: 57.03768221147535, width: 2.0, height: 2.0, label: "TapChangerControl\n\"HV2 Trafo 3\"\nRegulatingControl.mode = unresolved ref\nRegulatingControl.discrete = true\nRegulatingControl.enabled = true\nRegulatingControl.targetDeadband = 2.2\nRegulatingControl.targetValue = 110\nRegulatingControl.targetValueUnitMultiplier = unresolved ref", node: 55},
+            {x: 74.89068505242318, y: 80.58339711757714, width: 2.0, height: 2.0, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nBaseVoltage = unresolved ref\nSubstation = unresolved ref", node: 56},
+            {x: 32.17631117856104, y: 25.522531601301967, width: 2.0, height: 2.0, label: "VoltageLevel\n\"EHV Bus 1865-EHV Bus 1866\"\nBaseVoltage = unresolved ref\nSubstation = unresolved ref", node: 57},
+            {x: 48.102118890963126, y: 69.0150844914962, width: 2.0, height: 2.0, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nBaseVoltage = unresolved ref\nSubstation = unresolved ref", node: 58},
+            {x: 48.917029265764896, y: 94.3363626585747, width: 2.0, height: 2.0, label: "LoadArea\n\"HV2 Load 45\"\nno properties", node: 59},
+            {x: 51.98360874454336, y: 87.816005268206, width: 2.0, height: 2.0, label: "SubLoadArea\n\"HV2 Load 45\"\nno properties", node: 60},
+            {x: 18.609745157446753, y: 30.51654378817179, width: 2.0, height: 2.0, label: "RegulatingControl\n\"Stactrl_EHV Bus 1865\"\nmode = unresolved ref\ndiscrete = false\nenabled = true\ntargetValue = 234.96\ntargetValueUnitMultiplier = unresolved ref", node: 61},
+            {x: 24.570926498187166, y: 24.577988906211534, width: 2.0, height: 2.0, label: "RegulatingControl\n\"Stactrl_EHV Bus 1865\"\nmode = unresolved ref\ndiscrete = false\nenabled = true\ntargetValue = 234.96\ntargetValueUnitMultiplier = unresolved ref", node: 62},
+            {x: 67.87850109097025, y: 61.18048763027064, width: 2.0, height: 2.0, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductingEquipment.BaseVoltage = unresolved ref\nConductor.length = 2.75458", node: 63},
+            {x: 65.70510628226081, y: 81.11958254986872, width: 2.0, height: 2.0, label: "ConformLoad\n\"HV2 Load 45\"\nEnergyConsumer.p = 0.197259\nEnergyConsumer.q = -0.0113707", node: 64},
+            {x: 53.61655061189056, y: 74.26281049069432, width: 2.0, height: 2.0, label: "ConformLoad\n\"HV2 Load 2\"\nEnergyConsumer.p = 0.197259\nEnergyConsumer.q = -0.0113707", node: 65},
+            {x: 56.694614594526286, y: 81.16241428613837, width: 2.0, height: 2.0, label: "ConformLoadGroup\n\"HV2 Load 45\"\nno properties", node: 66},
+            {x: 61.469010072098826, y: 75.19572657031684, width: 2.0, height: 2.0, label: "LoadResponseCharacteristic\n\"mv_add1\"\nexponentModel = true\npVoltageExponent = 2\nqVoltageExponent = 2", node: 67},
+            {x: 34.098536753305, y: 47.720441362759814, width: 2.0, height: 2.0, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = -2.0138e-6\nb0 = -0.00206612\nconnectionKind = unresolved ref\ng = 1.44628e-6\ng0 = 0\nphaseAngleClock = 0\nr = 0.207044\nr0 = 0\nratedS = 300\nratedU = 220\nx = 19.3589\nx0 = 4.84\nTransformerEnd.BaseVoltage = unresolved ref\nTransformerEnd.endNumber = 1\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 68},
+            {x: 46.18094384877551, y: 48.40562933139502, width: 2.0, height: 2.0, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = 0\nb0 = 0\nconnectionKind = unresolved ref\ng = 0\ng0 = 0\nphaseAngleClock = 0\nr = 0\nr0 = 0\nratedS = 300\nratedU = 110\nx = 0\nx0 = 0\nTransformerEnd.BaseVoltage = unresolved ref\nTransformerEnd.endNumber = 2\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 69}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<p>Well thats still a bit to much. Let split the dataset topologicially</p><pre><code class="language-julia hljs">nodes, edges = split_topologically(dataset; warn=false)</code></pre><h2 id="Bus-1:-Load"><a class="docs-heading-anchor" href="#Bus-1:-Load">Bus 1: Load</a><a id="Bus-1:-Load-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-1:-Load" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(nodes[1]; size=(900,900))</code></pre><img src="a82708e7.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 23.309320796974685, y: 61.54790951941369, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 6.161615066596647, y: 72.1607312840925, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 2},
+            {x: 41.40653292984739, y: 71.23018308352187, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_HV2 Load 2\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 61.62841332704391, y: 68.30980288387201, width: 2.2222222222222223, height: 2.2222222222222223, label: "ConformLoad\n\"HV2 Load 2\"\nEquipment.EquipmentContainer = unresolved ref\nEnergyConsumer.p = 0.197259\nEnergyConsumer.q = -0.0113707", node: 4},
+            {x: 70.46290794136225, y: 47.013363678653086, width: 2.2222222222222223, height: 2.2222222222222223, label: "ConformLoadGroup\n\"HV2 Load 45\"\nno properties", node: 5},
+            {x: 82.15443857475088, y: 29.988037722617655, width: 2.2222222222222223, height: 2.2222222222222223, label: "SubLoadArea\n\"HV2 Load 45\"\nno properties", node: 6},
+            {x: 93.83838068178034, y: 14.010105587063181, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadArea\n\"HV2 Load 45\"\nno properties", node: 7},
+            {x: 67.08238990780396, y: 91.37260682468855, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadResponseCharacteristic\n\"mv_add1\"\nexponentModel = true\npVoltageExponent = 2\nqVoltageExponent = 2", node: 8},
+            {x: 79.59784042646751, y: 76.57862889359043, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadAggregate\nno properties", node: 9},
+            {x: 36.03193705837962, y: 94.21212186545299, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197259\nq = -0.0113707", node: 10},
+            {x: 13.84457596408238, y: 41.797340357833335, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 11}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<h2 id="Bus-2:-Load-Machine"><a class="docs-heading-anchor" href="#Bus-2:-Load-Machine">Bus 2: Load + Machine</a><a id="Bus-2:-Load-Machine-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-2:-Load-Machine" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(nodes[2]; size=(900,900))</code></pre><img src="c38129dd.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 43.014774927614084, y: 78.35427906168839, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 40.059751422774994, y: 94.21212258631486, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 2},
+            {x: 55.372708721787525, y: 64.44421738800112, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_HV2 Load 45\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 74.81040416205002, y: 58.59972957453263, width: 2.2222222222222223, height: 2.2222222222222223, label: "ConformLoad\n\"HV2 Load 45\"\nEquipment.EquipmentContainer = unresolved ref\nEnergyConsumer.p = 0.197259\nEnergyConsumer.q = -0.0113707", node: 4},
+            {x: 78.43359330009896, y: 41.99276609328864, width: 2.2222222222222223, height: 2.2222222222222223, label: "ConformLoadGroup\n\"HV2 Load 45\"\nno properties", node: 5},
+            {x: 85.16488892410793, y: 27.596589493919055, width: 2.2222222222222223, height: 2.2222222222222223, label: "SubLoadArea\n\"HV2 Load 45\"\nno properties", node: 6},
+            {x: 92.30196901920166, y: 14.010099549972843, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadArea\n\"HV2 Load 45\"\nno properties", node: 7},
+            {x: 87.78949302116303, y: 71.42485752152147, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadResponseCharacteristic\n\"mv_add1\"\nexponentModel = true\npVoltageExponent = 2\nqVoltageExponent = 2", node: 8},
+            {x: 93.83838506812097, y: 58.83332069471692, width: 2.2222222222222223, height: 2.2222222222222223, label: "LoadAggregate\nno properties", node: 9},
+            {x: 43.877915205418255, y: 51.22898377056042, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197259\nq = -0.0113707", node: 10},
+            {x: 22.374686294618222, y: 77.81998239454298, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_HV2 Sgen 44\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 11},
+            {x: 6.161614256627028, y: 69.16771219222792, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachine\n\"HV2 Sgen 44\"\nEquipment.EquipmentContainer = unresolved ref\ndescription = mv_add1\nRotatingMachine.ratedPowerFactor = 1\nRotatingMachine.ratedS = 1\nRotatingMachine.ratedU = 110\nearthing = false\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 0\nminQ = 0\nr = 0\nr0 = 0\nr2 = 99999\nsatDirectSubtransX = 999\ntype = unresolved ref\nx0 = 0.1\nx2 = 99999\nRegulatingCondEq.controlEnabled = false\nRotatingMachine.p = 0\nRotatingMachine.q = 0\noperatingMode = unresolved ref\nreferencePriority = 0", node: 12},
+            {x: 9.331382322472717, y: 89.91999097812595, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0\nq = 0", node: 13},
+            {x: 55.23212611219582, y: 91.68065790958686, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 14}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<h2 id="Bus-3:-Three-Machines"><a class="docs-heading-anchor" href="#Bus-3:-Three-Machines">Bus 3: Three Machines</a><a id="Bus-3:-Three-Machines-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-3:-Three-Machines" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(nodes[3]; size=(900,900))</code></pre><img src="4b60236c.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 59.198331957498304, y: 60.60111662441343, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"EHV Bus 1865\"\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 53.69792109090902, y: 70.4437280660684, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"220.00 kV\"\nnominalVoltage = 220\ndescription = BaseVoltage 220.00 kV", node: 2},
+            {x: 55.41855683260168, y: 47.56627271782554, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_EHV Gen 200\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 52.88215915766541, y: 34.19008387096898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachine\n\"EHV Gen 200\"\nEquipment.EquipmentContainer = unresolved ref\ndescription = pp_207\nRotatingMachine.ratedPowerFactor = 0.95\nRotatingMachine.ratedS = 242.105\nRotatingMachine.ratedU = 220\nearthing = true\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 75.5973\nminQ = -75.5973\nqPercent = 90.9989\nr = 0\nr0 = 0\nr2 = 0\nsatDirectSubtransX = 0.2\nsatDirectSyncX = 1.2\nshortCircuitRotorType = unresolved ref\ntype = unresolved ref\nx0 = 0.1\nx2 = 0.2\nRegulatingCondEq.controlEnabled = true\nRotatingMachine.p = 0\nRotatingMachine.q = -242.105\noperatingMode = unresolved ref\nreferencePriority = 0", node: 4},
+            {x: 63.07851016115777, y: 38.85175699645595, width: 2.2222222222222223, height: 2.2222222222222223, label: "RegulatingControl\n\"Stactrl_EHV Bus 1865\"\nmode = unresolved ref\ndiscrete = false\nenabled = true\ntargetValue = 234.96\ntargetValueUnitMultiplier = unresolved ref", node: 5},
+            {x: 64.70849143051677, y: 23.88633292028306, width: 2.2222222222222223, height: 2.2222222222222223, label: "ThermalGeneratingUnit\n\"EHV Gen 200\"\nEquipment.EquipmentContainer = unresolved ref\nGeneratingUnit.initialP = 0\nGeneratingUnit.maxOperatingP = 230\nGeneratingUnit.minOperatingP = 50\nGeneratingUnit.normalPF = 0", node: 6},
+            {x: 73.15013769444438, y: 14.010108210759842, width: 2.2222222222222223, height: 2.2222222222222223, label: "FossilFuel\n\"EHV Gen 200\"\nfossilFuelType = unresolved ref", node: 7},
+            {x: 39.525167863859224, y: 26.182715081333217, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachineTimeConstantReactance\n\"EHV Gen 200\"\nDynamicsFunctionBlock.enabled = true\nRotatingMachineDynamics.damping = 0\nRotatingMachineDynamics.inertia = 4.75\nRotatingMachineDynamics.saturationFactor = 0\nRotatingMachineDynamics.saturationFactor120 = 0\nRotatingMachineDynamics.statorLeakageReactance = 0.172\nRotatingMachineDynamics.statorResistance = 0\nSynchronousMachineDetailed.efdBaseRatio = 1\nSynchronousMachineDetailed.ifdBaseType = unresolved ref\nmodelType = unresolved ref\nrotorType = unresolved ref\ntpdo = 6.66667\ntppdo = 0.075\ntppqo = 0.075\ntpqo = 6.66667\nxDirectSubtrans = 0.2\nxDirectSync = 2\nxDirectTrans = 0.3\nxQuadSubtrans = 0.2\nxQuadSync = 2\nxQuadTrans = 0.3", node: 8},
+            {x: 75.35699056000178, y: 43.87501449099723, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.206473\nq = 0.0170694", node: 9},
+            {x: 35.522608432015865, y: 48.23600712427183, width: 2.2222222222222223, height: 2.2222222222222223, label: "RegulatingControl\n\"Stactrl_EHV Bus 1865\"\nmode = unresolved ref\ndiscrete = false\nenabled = true\ntargetValue = 234.96\ntargetValueUnitMultiplier = unresolved ref", node: 10},
+            {x: 23.00052625776064, y: 56.78877900791465, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachine\n\"EHV Gen 295\"\nEquipment.EquipmentContainer = unresolved ref\ndescription = pp_302\nRotatingMachine.ratedPowerFactor = 0.95\nRotatingMachine.ratedS = 23.6842\nRotatingMachine.ratedU = 220\nearthing = true\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 7.39539\nminQ = -7.39539\nqPercent = 9.00113\nr = 0\nr0 = 0\nr2 = 0\nsatDirectSubtransX = 0.2\nsatDirectSyncX = 1.2\nshortCircuitRotorType = unresolved ref\ntype = unresolved ref\nx0 = 0.1\nx2 = 0.2\nRegulatingCondEq.controlEnabled = true\nRotatingMachine.p = 0\nRotatingMachine.q = -23.6842\noperatingMode = unresolved ref\nreferencePriority = 0", node: 11},
+            {x: 6.308980451138122, y: 62.839937424711835, width: 2.2222222222222223, height: 2.2222222222222223, label: "GeneratingUnit\n\"EHV Gen 295\"\nEquipment.EquipmentContainer = unresolved ref\ninitialP = 0\nmaxOperatingP = 22.5\nminOperatingP = 1\nnormalPF = 0", node: 12},
+            {x: 6.161615982966794, y: 50.93192313382969, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachineTimeConstantReactance\n\"EHV Gen 295\"\nDynamicsFunctionBlock.enabled = true\nRotatingMachineDynamics.damping = 0\nRotatingMachineDynamics.inertia = 4.75\nRotatingMachineDynamics.saturationFactor = 0\nRotatingMachineDynamics.saturationFactor120 = 0\nRotatingMachineDynamics.statorLeakageReactance = 0.172\nRotatingMachineDynamics.statorResistance = 0\nSynchronousMachineDetailed.efdBaseRatio = 1\nSynchronousMachineDetailed.ifdBaseType = unresolved ref\nmodelType = unresolved ref\nrotorType = unresolved ref\ntpdo = 6.66667\ntppdo = 0.075\ntppqo = 0.075\ntpqo = 6.66667\nxDirectSubtrans = 0.2\nxDirectSync = 2\nxDirectTrans = 0.3\nxQuadSubtrans = 0.2\nxQuadSync = 2\nxQuadTrans = 0.3", node: 13},
+            {x: 38.482432947299316, y: 64.12776804436429, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_EHV Gen 295\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 14},
+            {x: 28.54835445940673, y: 74.98056862752667, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.20569\nq = 0.00168842", node: 15},
+            {x: 73.26560241822783, y: 71.83773154200708, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cubicle_EHV Sgen 76\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 16},
+            {x: 75.52284493396493, y: 83.69365058375988, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachine\n\"EHV Sgen 76\"\nEquipment.EquipmentContainer = unresolved ref\ndescription = WP8\nRotatingMachine.ratedPowerFactor = 1\nRotatingMachine.ratedS = 36\nRotatingMachine.ratedU = 220\nearthing = false\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 0\nminQ = 0\nr = 0\nr0 = 0\nr2 = 99999\nsatDirectSubtransX = 999\ntype = unresolved ref\nx0 = 0.1\nx2 = 99999\nRegulatingCondEq.controlEnabled = false\nRotatingMachine.p = -0.063126\nRotatingMachine.q = 0\noperatingMode = unresolved ref\nreferencePriority = 0", node: 17},
+            {x: 81.5114869058214, y: 94.21212154698523, width: 2.2222222222222223, height: 2.2222222222222223, label: "WindGeneratingUnit\n\"EHV Sgen 76\"\nEquipment.EquipmentContainer = unresolved ref\nGeneratingUnit.initialP = 0.063126\nGeneratingUnit.maxOperatingP = 36\nGeneratingUnit.minOperatingP = 0\nwindGenUnitType = unresolved ref\nGeneratingUnit.normalPF = 0", node: 18},
+            {x: 93.83838030454625, y: 72.68141833720925, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.063126\nq = 0", node: 19},
+            {x: 75.02235606592247, y: 62.57843854403693, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalIsland\n\"Island_001\"\nno properties", node: 20},
+            {x: 77.3913965052471, y: 56.242048312819804, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0\nv = 235.001", node: 21}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<h2 id="Powerline-1:-AC-Pi-Line"><a class="docs-heading-anchor" href="#Powerline-1:-AC-Pi-Line">Powerline 1: AC Pi-Line</a><a id="Powerline-1:-AC-Pi-Line-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-1:-AC-Pi-Line" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[1]; size=(900,900))</code></pre><img src="13968a1f.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 27.978381375584416, y: 63.499068627887524, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 50.267909248072904, y: 61.17130504556637, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 51.97169422676705, y: 32.16757654652505, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 72.04544234694113, y: 67.56876632572246, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 72.61474660418682, y: 39.72284340796123, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 68.81888831985012, y: 16.93951237220529, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 93.83838093010866, y: 69.77598347465958, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 7},
+            {x: 76.7927202158789, y: 94.2121204844127, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 8},
+            {x: 30.672688934493873, y: 35.852169328134856, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 9},
+            {x: 37.07562422096522, y: 14.010101738158065, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 10},
+            {x: 6.161614397128409, y: 61.636410369616335, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 11},
+            {x: 20.150243855927798, y: 88.9673670652263, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 12}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<h2 id="Powerline-2:-Transformer"><a class="docs-heading-anchor" href="#Powerline-2:-Transformer">Powerline 2: Transformer</a><a id="Powerline-2:-Transformer-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-2:-Transformer" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[2]; size=(900,900))</code></pre><img src="03c790c7.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+    var script = document.currentScript;
+    var img = script.previousElementSibling;
+
+    // Find the preceding img element
+    while (img && img.tagName !== 'IMG') {
+        img = img.previousElementSibling;
+    }
+
+    if (!img) return; // No image found
+
+    function setupHoverZones() {
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Ensure wrapper is exactly the same size as the image
+        wrapper.style.width = img.offsetWidth + 'px';
+        wrapper.style.height = img.offsetHeight + 'px';
+
+    // Create hover zones container
+    var hoverZones = document.createElement('div');
+    hoverZones.className = 'hover-zones';
+    hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+    wrapper.appendChild(hoverZones);
+
+    // Create tooltip
+    var tooltip = document.createElement('div');
+    tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+    tooltip.style.cssText = `position: absolute;
+                            background: rgba(0,0,0,0.8);
+                            color: white;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-family: monospace;
+                            white-space: pre-line;
+                            pointer-events: none;
+                            z-index: 20;
+                            display: none;
+                            max-width: 400px;
+                            word-wrap: break-word;`;
+    wrapper.appendChild(tooltip);
+
+    // Create hover zone data
+    var hoverZoneData = [{x: 55.77953242917316, y: 75.91245421676489, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 22\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 53.61239117126851, y: 56.33399599943905, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformer\n\"HV2 Trafo 3\"\nEquipment.EquipmentContainer = unresolved ref\nisPartOfGeneratorUnit = false\noperationalValuesConsidered = false", node: 2},
+            {x: 40.79102766583455, y: 37.22015887106177, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"EHV Bus 3094\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 50.533666388967966, y: 20.73344385550907, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"EHV Bus 1865\"\nno properties", node: 4},
+            {x: 59.3863861868531, y: 31.828165163032207, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"220.00 kV\"\nnominalVoltage = 220\ndescription = BaseVoltage 220.00 kV", node: 5},
+            {x: 64.814336617923, y: 14.010099439943213, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"EHV Bus 1865-EHV Bus 1866\"\nSubstation = unresolved ref", node: 6},
+            {x: 29.79743705755695, y: 21.727328596531027, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.474291\nq = -0.0195198", node: 7},
+            {x: 19.93923019860932, y: 34.284805198295864, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 8},
+            {x: 42.14040533322344, y: 48.40117978291985, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = -2.0138e-6\nb0 = -0.00206612\nconnectionKind = unresolved ref\ng = 1.44628e-6\ng0 = 0\nphaseAngleClock = 0\nr = 0.207044\nr0 = 0\nratedS = 300\nratedU = 220\nx = 19.3589\nx0 = 4.84\nTransformerEnd.endNumber = 1\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 9},
+            {x: 25.732689925354695, y: 61.62621826422181, width: 2.2222222222222223, height: 2.2222222222222223, label: "RatioTapChanger\n\"HV2 Trafo 3\"\nstepVoltageIncrement = 1\ntculControlMode = unresolved ref\nTapChanger.highStep = 16\nTapChanger.lowStep = -16\nTapChanger.ltcFlag = false\nTapChanger.neutralStep = 0\nTapChanger.neutralU = 220\nTapChanger.normalStep = 0\nTapChanger.controlEnabled = true\nTapChanger.step = 0", node: 10},
+            {x: 36.17504993024194, y: 77.00401460183812, width: 2.2222222222222223, height: 2.2222222222222223, label: "TapChangerControl\n\"HV2 Trafo 3\"\nRegulatingControl.mode = unresolved ref\nRegulatingControl.discrete = true\nRegulatingControl.enabled = true\nRegulatingControl.targetDeadband = 2.2\nRegulatingControl.targetValue = 110\nRegulatingControl.targetValueUnitMultiplier = unresolved ref", node: 11},
+            {x: 6.1616182822840875, y: 65.86333111229696, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvTapStep\nposition = 0", node: 12},
+            {x: 69.2641062752713, y: 63.91570534898826, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = 0\nb0 = 0\nconnectionKind = unresolved ref\ng = 0\ng0 = 0\nphaseAngleClock = 0\nr = 0\nr0 = 0\nratedS = 300\nratedU = 110\nx = 0\nx0 = 0\nTransformerEnd.endNumber = 2\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 13},
+            {x: 88.045074459722, y: 69.70761947176712, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 14},
+            {x: 75.89488142796993, y: 82.00674551522165, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 15},
+            {x: 93.83837767579067, y: 85.72125443651733, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 16},
+            {x: 59.16774233658896, y: 94.21211902514005, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.394418\nq = 0.130803", node: 17},
+            {x: 45.11836371610898, y: 92.85737873271236, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 18}    ];
+
+    // Create hover zones with proper aspect ratio
+    hoverZoneData.forEach(function(zoneData, i) {
+        var zone = document.createElement('div');
+        zone.className = 'hover-zone';
+
+        // Use the width and height percentages calculated directly in Julia
+        var zoneWidth = zoneData.width;
+        var zoneHeight = zoneData.height;
+
+        zone.style.cssText = `position: absolute;
+                             left: ${zoneData.x - zoneWidth/2}%;
+                             top: ${zoneData.y - zoneHeight/2}%;
+                             width: ${zoneWidth}%;
+                             height: ${zoneHeight}%;
+                             pointer-events: all;
+                             cursor: pointer;
+                             z-index: 10;
+                             border: none;
+                             background: transparent;`;
+        zone.setAttribute('data-label', zoneData.label);
+        zone.setAttribute('data-node', zoneData.node);
+        hoverZones.appendChild(zone);
+    });
+
+
+    // Add event listeners to hover zones
+    var zones = hoverZones.querySelectorAll('.hover-zone');
+    zones.forEach(function(zone) {
+        zone.addEventListener('mouseenter', function(e) {
+            var label = this.getAttribute('data-label');
+            tooltip.innerHTML = label;
+            tooltip.style.display = 'block';
+
+            // Position tooltip
+            var rect = wrapper.getBoundingClientRect();
+            var zoneRect = this.getBoundingClientRect();
+            tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+            tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+            // Adjust if tooltip goes outside container
+            var tooltipRect = tooltip.getBoundingClientRect();
+            if (tooltipRect.right > rect.right) {
+                tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+            }
+            if (tooltipRect.left < rect.left) {
+                tooltip.style.left = '5px';
+            }
+            if (tooltipRect.top < rect.top) {
+                tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+            }
+        });
+
+        zone.addEventListener('mouseleave', function(e) {
+            tooltip.style.display = 'none';
+        });
+    });
+    }
+
+    // Wait for image to load before setting up hover zones
+    if (img.complete && img.offsetWidth > 0) {
+        // Image already loaded
+        setupHoverZones();
+    } else {
+        // Wait for image to load
+        img.addEventListener('load', setupHoverZones);
+    }
+})();
+</script>
+<hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Tuesday 19 August 2025 10:37">Tuesday 19 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
