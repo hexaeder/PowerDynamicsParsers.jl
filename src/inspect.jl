@@ -1,6 +1,7 @@
 using Graphs
 using GraphMakie: GraphMakie, graphplot!
-using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!
+using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!, Makie
+using Base.Docs: HTML
 
 
 function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[], seed=1)
@@ -287,4 +288,163 @@ function object_text(obj::CIMObject)
     else
         obj.class_name * (hasname(obj) ? "\n\"" * getname(obj) * "\"" : "")
     end
+end
+
+function html_hover_map(fig, labels)
+    sc = fig.scene;
+    ax = only(filter(c -> c isa Axis, fig.content))
+    gp = only(ax.scene.plots) # graphplot
+    positions = gp[:node_pos][]
+    markersize = gp[:nodeplot_markersize][]
+
+    # Use the same approach as scratch.jl - much simpler!
+    rel_px_pos = Makie.project.(Ref(ax.scene), positions)
+    px_pos = Ref(ax.scene.viewport[].origin) .+ rel_px_pos
+
+    # Get figure dimensions
+    width, height = sc.viewport[].widths
+
+    # Calculate relative positions as fractions (0-1) then convert to percentages
+    hover_zones = []
+    # Handle case where markersize might be a single value or vector
+    sizes = markersize isa AbstractVector ? markersize : fill(markersize, length(px_pos))
+
+    for (i, (px, size, label)) in enumerate(zip(px_pos, sizes, labels))
+        # Convert to relative position (0-1)
+        rel_pos = px ./ [width, height]
+
+        # Convert to percentage and flip Y coordinate for HTML
+        x_pct = rel_pos[1] * 100
+        y_pct = (1 - rel_pos[2]) * 100  # Flip Y for HTML coordinate system
+
+        # Calculate zone dimensions directly as percentages of figure dimensions
+        zone_width_pct = (size / width) * 100
+        zone_height_pct = (size / height) * 100
+
+        push!(hover_zones, (x_pct, y_pct, zone_width_pct, zone_height_pct, label, i))
+    end
+
+    # Generate HTML with CSS and JavaScript
+    html_string = """
+    <script>
+    // Find the previous image element and wrap it with hover functionality
+    (function() {
+        var script = document.currentScript;
+        var img = script.previousElementSibling;
+
+        // Find the preceding img element
+        while (img && img.tagName !== 'IMG') {
+            img = img.previousElementSibling;
+        }
+
+        if (!img) return; // No image found
+
+        // Create wrapper div
+        var wrapper = document.createElement('div');
+        wrapper.className = 'graph-hover-container';
+        wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+        // Insert wrapper before img and move img into wrapper
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        // Create hover zones container
+        var hoverZones = document.createElement('div');
+        hoverZones.className = 'hover-zones';
+        hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+        wrapper.appendChild(hoverZones);
+
+        // Create tooltip
+        var tooltip = document.createElement('div');
+        tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+        tooltip.style.cssText = `position: absolute;
+                                background: rgba(0,0,0,0.8);
+                                color: white;
+                                padding: 5px 10px;
+                                border-radius: 4px;
+                                font-size: 12px;
+                                white-space: pre-line;
+                                pointer-events: none;
+                                z-index: 20;
+                                display: none;
+                                max-width: 200px;
+                                word-wrap: break-word;`;
+        wrapper.appendChild(tooltip);
+
+        // Create hover zone data
+        var hoverZoneData = ["""
+
+    for (i, (x_pct, y_pct, zone_width_pct, zone_height_pct, label, idx)) in enumerate(hover_zones)
+        escaped_label = replace(replace(replace(string(label), "\\" => "\\\\"), "\"" => "\\\""), "\n" => "\\n")
+        if i > 1
+            html_string *= ",\n            "
+        end
+        html_string *= """
+            {x: $(x_pct), y: $(y_pct), width: $(zone_width_pct), height: $(zone_height_pct), label: "$(escaped_label)", node: $(idx)}"""
+    end
+
+    html_string *= """
+        ];
+
+        // Create hover zones with proper aspect ratio
+        hoverZoneData.forEach(function(zoneData, i) {
+            var zone = document.createElement('div');
+            zone.className = 'hover-zone';
+
+            // Use the width and height percentages calculated directly in Julia
+            var zoneWidth = zoneData.width;
+            var zoneHeight = zoneData.height;
+
+            zone.style.cssText = `position: absolute;
+                                 left: \${zoneData.x - zoneWidth/2}%;
+                                 top: \${zoneData.y - zoneHeight/2}%;
+                                 width: \${zoneWidth}%;
+                                 height: \${zoneHeight}%;
+                                 pointer-events: all;
+                                 cursor: pointer;
+                                 z-index: 10;
+                                 border: 2px solid red;
+                                 background: rgba(255, 0, 0, 0.2);`;
+            zone.setAttribute('data-label', zoneData.label);
+            zone.setAttribute('data-node', zoneData.node);
+            hoverZones.appendChild(zone);
+        });
+
+
+        // Add event listeners to hover zones
+        var zones = hoverZones.querySelectorAll('.hover-zone');
+        zones.forEach(function(zone) {
+            zone.addEventListener('mouseenter', function(e) {
+                var label = this.getAttribute('data-label');
+                tooltip.innerHTML = label;
+                tooltip.style.display = 'block';
+
+                // Position tooltip
+                var rect = wrapper.getBoundingClientRect();
+                var zoneRect = this.getBoundingClientRect();
+                tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+                tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+                // Adjust if tooltip goes outside container
+                var tooltipRect = tooltip.getBoundingClientRect();
+                if (tooltipRect.right > rect.right) {
+                    tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+                }
+                if (tooltipRect.left < rect.left) {
+                    tooltip.style.left = '5px';
+                }
+                if (tooltipRect.top < rect.top) {
+                    tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+                }
+            });
+
+            zone.addEventListener('mouseleave', function(e) {
+                tooltip.style.display = 'none';
+            });
+        });
+    })();
+    </script>
+    """
+
+    return HTML(html_string)
 end

@@ -2,13 +2,23 @@
 CurrentModule = PowerDynamicsCGMES
 ```
 
-# PowerDynamicsCGMES
+```@example wgl
+using CairoMakie
+using GraphMakie
+using Graphs
+using Markdown
+using PowerDynamicsCGMES
 
-Documentation for [PowerDynamicsCGMES](https://github.com/hexaeder/PowerDynamicsCGMES.jl).
-
-```@index
+g = smallgraph(:karate)
+fig = Figure()
+ax = Axis(fig[2,2]);
+Label(fig[1,1], "fobarbarxo\nfobarlkj\nlkjasdf")
+#Label(fig[2,1], "bar", tellwidth=false)
+p = graphplot!(g)
+hidespines!(ax)
+hidedecorations!(ax)
+fig
 ```
-
-```@autodocs
-Modules = [PowerDynamicsCGMES]
+```@example wgl
+PowerDynamicsCGMES.html_hover_map(fig, repr.(1:34)) # hide
 ```
