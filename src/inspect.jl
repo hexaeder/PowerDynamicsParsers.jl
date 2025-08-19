@@ -339,14 +339,19 @@ function html_hover_map(fig, labels)
 
         if (!img) return; // No image found
 
-        // Create wrapper div
-        var wrapper = document.createElement('div');
-        wrapper.className = 'graph-hover-container';
-        wrapper.style.cssText = 'position: relative; display: inline-block;';
+        function setupHoverZones() {
+            // Create wrapper div
+            var wrapper = document.createElement('div');
+            wrapper.className = 'graph-hover-container';
+            wrapper.style.cssText = 'position: relative; display: inline-block;';
 
-        // Insert wrapper before img and move img into wrapper
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
+            // Insert wrapper before img and move img into wrapper
+            img.parentNode.insertBefore(wrapper, img);
+            wrapper.appendChild(img);
+
+            // Ensure wrapper is exactly the same size as the image
+            wrapper.style.width = img.offsetWidth + 'px';
+            wrapper.style.height = img.offsetHeight + 'px';
 
         // Create hover zones container
         var hoverZones = document.createElement('div');
@@ -442,6 +447,16 @@ function html_hover_map(fig, labels)
                 tooltip.style.display = 'none';
             });
         });
+        }
+
+        // Wait for image to load before setting up hover zones
+        if (img.complete && img.offsetWidth > 0) {
+            // Image already loaded
+            setupHoverZones();
+        } else {
+            // Wait for image to load
+            img.addEventListener('load', setupHoverZones);
+        }
     })();
     </script>
     """

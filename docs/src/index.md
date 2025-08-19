@@ -22,3 +22,6 @@ fig
 ```@example wgl
 PowerDynamicsCGMES.html_hover_map(fig, repr.(1:34)) # hide
 ```
+fobar
+balskej
+# section
