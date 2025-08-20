@@ -1,4 +1,4 @@
-name = "PowerDynamicsCGMES"
+name = "PowerDynamicsParsers"
 uuid = "1b881f36-751d-4bf3-93fd-6a61c3d2f0d2"
 authors = ["Hans Würfel <git@wuerfel.io> and contributors"]
 version = "1.0.0-DEV"

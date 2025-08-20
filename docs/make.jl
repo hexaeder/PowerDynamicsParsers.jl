@@ -1,8 +1,8 @@
-using PowerDynamicsCGMES
+using PowerDynamicsParsers
 using Documenter
 using Literate
 
-DocMeta.setdocmeta!(PowerDynamicsCGMES, :DocTestSetup, :(using PowerDynamicsCGMES); recursive=true)
+DocMeta.setdocmeta!(PowerDynamicsParsers, :DocTestSetup, :(using PowerDynamicsParsers); recursive=true)
 
 # Generate examples using Literate
 example_dir = joinpath(@__DIR__, "examples")
@@ -20,14 +20,14 @@ end
 
 # Build kwargs with strict and warn-only variants
 kwargs = (;
-    modules=[PowerDynamicsCGMES],
+    modules=[PowerDynamicsParsers],
     authors="Hans Würfel <git@wuerfel.io> and contributors",
-    sitename="PowerDynamicsCGMES.jl",
-    root=joinpath(pkgdir(PowerDynamicsCGMES), "docs"),
+    sitename="PowerDynamicsParsers.jl",
+    root=joinpath(pkgdir(PowerDynamicsParsers), "docs"),
     linkcheck=true, # checks if external links resolve
     pagesonly=true,
     format=Documenter.HTML(;
-        canonical="https://hexaeder.github.io/PowerDynamicsCGMES.jl",
+        canonical="https://hexaeder.github.io/PowerDynamicsParsers.jl",
         edit_link="main",
         assets=String[],
         ansicolor = true,
@@ -58,7 +58,7 @@ if haskey(ENV,"GITHUB_ACTIONS")
     end
 
     deploydocs(;
-        repo="github.com/hexaeder/PowerDynamicsCGMES.jl",
+        repo="github.com/hexaeder/PowerDynamicsParsers.jl",
         devbranch="main",
         push_preview=true
     )

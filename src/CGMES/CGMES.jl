@@ -1,4 +1,4 @@
-module PowerDynamicsCGMES
+module CGMES
 
 using XML: XML, Node, nodetype, attributes, children, tag,
            is_simple, simple_value

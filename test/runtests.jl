@@ -1,4 +1,5 @@
-using PowerDynamicsCGMES
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
 using OrderedCollections
 using XML
 using Graphs
@@ -7,7 +8,7 @@ using GraphMakie
 # using WGLMakie; WGLMakie.activate!()
 using CairoMakie; CairoMakie.activate!()
 
-DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "testdata1")
+DATA = joinpath(pkgdir(PowerDynamicsParsers), "test", "data", "testdata1")
 dataset = CIMDataset(DATA)
 
 eq = dataset[:Equipment]
