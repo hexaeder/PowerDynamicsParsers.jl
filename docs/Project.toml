@@ -1,3 +1,5 @@
+name = "PowerDynamicsCGMES-Docs"
+
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
@@ -6,3 +8,6 @@ Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
 PowerDynamics = "cc46b21f-1b17-51c2-b642-af74c3d3a8be"
 PowerDynamicsCGMES = "1b881f36-751d-4bf3-93fd-6a61c3d2f0d2"
+
+[sources]
+PowerDynamicsGCMES = {path = ".."}
