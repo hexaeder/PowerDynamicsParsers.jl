@@ -40,7 +40,7 @@ function discover_subgraph(
     nobackref = is_class(STOP_BACKREF),
     maxdepth = 100,
     filter_out = x -> false,
-    warn
+    warn=true
 )
     objects = OrderedDict{String, CIMObject}()
     extensions = Vector{CIMExtension}()
