@@ -4,7 +4,7 @@ using CSV
 using DataFrames
 using OrderedCollections
 
-export parse_raw_file
+export parse_raw_file, parse_dyr_file, DynamicDevice
 
 function parse_raw_file(file; verbose=true)
     glob = PSSE.parse_global(file)
@@ -290,5 +290,6 @@ function _pad_line_to_expected_columns(line, expected_cols)
     return line
 end
 
+include("dyr_parsing.jl")
 
 end
