@@ -1,6 +1,7 @@
 using PowerDynamicsParsers
 using PowerDynamicsParsers.PSSE
 using PowerDynamicsParsers.PSSE: PSSESection
+using OrderedCollections, DataFrames
 
 @testset "raw daata parsing" begin
     f1 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "IEEE 39 bus.RAW")
@@ -70,4 +71,39 @@ end
     @test length(devices3) > 400  # Large number of buses
     sample_texas_device = first(devices3)[2][1]
     @test sample_texas_device.busid > 1000  # Texas buses have 4-digit numbers
+end
+
+@testset "unified psse parsing" begin
+    # Test the new unified parse_psse function
+    raw1 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "IEEE 39 bus.RAW")
+    dyr1 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "IEEE 39 bus.dyr")
+
+    raw2 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "Hawaii40_20231026.RAW")
+    dyr2 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "Hawaii40_20231026.dyr")
+
+    # Test unified parsing
+    psse_data1 = parse_psse(raw1, dyr1)
+    @test psse_data1 isa PSSEData
+
+    # Test structure
+    @test psse_data1.filename == "IEEE 39 bus.RAW"
+    @test psse_data1.revision == 33
+    @test psse_data1.sections isa OrderedDict{String, DataFrame}
+    @test psse_data1.dynamic_devices isa Dict{Int, Vector{DynamicDevice}}
+
+    # Test content
+    @test !isempty(psse_data1.sections)
+    @test !isempty(psse_data1.dynamic_devices)
+    @test haskey(psse_data1.sections, "BUS")
+    @test length(psse_data1.dynamic_devices) == 10  # 10 generator buses
+
+    # Test Hawaii case
+    psse_data2 = parse_psse(raw2, dyr2)
+    @test psse_data2.filename == "Hawaii40_20231026.RAW"
+    @test psse_data2.revision isa Int
+    @test length(psse_data2.dynamic_devices) == 10
+
+    # Test that all data is preserved correctly
+    @test nrow(psse_data1.sections["BUS"]) == 39  # 39 buses
+    @test all(busid -> busid in 30:39, keys(psse_data1.dynamic_devices))  # Generator buses 30-39
 end
