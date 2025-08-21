@@ -4,7 +4,7 @@ using CSV
 using DataFrames
 using OrderedCollections
 
-export parse_psse, PSSEData, DynamicDevice
+export parse_psse, PSSEData, DynamicDevice, show_summary
 export parse_raw_file, parse_dyr_file  # Keep for backward compatibility
 
 struct PSSEData
@@ -14,7 +14,7 @@ struct PSSEData
     dynamic_devices::Dict{Int, Vector{DynamicDevice}}
 end
 
-function parse_psse(raw_file::String, dyr_file::String; verbose=true)
+function parse_psse(raw_file::String, dyr_file=replace(raw_file, r"RAW$|raw$"=>"dyr"); verbose=false)
     # Parse RAW file
     raw_data = parse_raw_file(raw_file; verbose)
     
@@ -35,5 +35,6 @@ end
 # Include parsing modules
 include("raw_parsing.jl")
 include("dyr_parsing.jl")
+include("show.jl")
 
 end

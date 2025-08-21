@@ -83,6 +83,7 @@ end
 
     # Test unified parsing
     psse_data1 = parse_psse(raw1, dyr1)
+    parse_psse(raw1) # auto detection of dyr file
     @test psse_data1 isa PSSEData
 
     # Test structure
