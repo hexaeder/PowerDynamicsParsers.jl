@@ -1,10 +1,11 @@
 # # Inspection of Test 1-EHVHV-mixed-all-2-sw-Ausschnitt
 
 using PowerDynamics
-using PowerDynamicsCGMES
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
 using CairoMakie
 
-DATA = joinpath(pkgdir(PowerDynamicsCGMES), "test", "data", "1-EHVHV-mixed-all-2-sw-Ausschnitt")
+DATA = joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "1-EHVHV-mixed-all-2-sw-Ausschnitt")
 dataset = CIMCollection(CIMDataset(DATA))
 nothing #hide
 
@@ -15,7 +16,7 @@ nothing #hide
 reduced_dataset = reduce_complexity(dataset)
 inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), reduced_dataset) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), reduced_dataset) #hide
 
 # Well, that's still a bit too much. Let's split the dataset topologically
 
@@ -26,7 +27,7 @@ nothing #hide
 
 inspect_collection(nodes[1]; size=(900,900))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[1]) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), nodes[1]) #hide
 
 # **Discussion:**
 # Power of load and powerflow result match perfectly. I guess this is just a PQ node for the powerflow.
@@ -35,7 +36,7 @@ PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[1]) #hide
 
 inspect_collection(nodes[2]; size=(900,900))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[2]) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), nodes[2]) #hide
 
 # **Discussion:**
 # - Synchronous machine has power P=Q=0, no voltage controller
@@ -45,7 +46,7 @@ PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[2]) #hide
 
 inspect_collection(nodes[3]; size=(900,900))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[3]) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), nodes[3]) #hide
 
 # **Discussion:**
 # - Why is the regulating control connected to a different terminal equipment than the machine?
@@ -58,7 +59,7 @@ PowerDynamicsCGMES.add_property_hover(current_figure(), nodes[3]) #hide
 
 inspect_collection(edges[1]; size=(900,900))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), edges[1]) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), edges[1]) #hide
 
 # **Discussion:**
 # Seems fine.
@@ -67,10 +68,20 @@ PowerDynamicsCGMES.add_property_hover(current_figure(), edges[1]) #hide
 
 inspect_collection(edges[2]; size=(900,900))
 
-PowerDynamicsCGMES.add_property_hover(current_figure(), edges[2]) #hide
+PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), edges[2]) #hide
 
 # **Discussion:**
 # - Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.
 # - The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?
+
+e = CGMES.get_edge_model(edges[1])
+CGMES.test_powerflow(e)
+
+dataset2 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "testdata1"))
+nodes2, edges2 = split_topologically(dataset2; warn=false)
+
+CGMES.determine_branch_parameters(edges2[1])
+CGMES.determine_branch_parameters(edges2[2])
+CGMES.determine_branch_parameters(edges2[3])
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

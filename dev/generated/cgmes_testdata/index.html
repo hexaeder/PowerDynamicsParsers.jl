@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Inspection of Test Data · PowerDynamicsCGMES.jl</title><meta name="title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta property="og:title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta property="twitter:title" content="Inspection of Test Data · PowerDynamicsCGMES.jl"/><meta name="description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="og:description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsCGMES.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsCGMES.jl/generated/testdata/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsCGMES.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li class="is-active"><a class="tocitem" href>Inspection of Test Data</a><ul class="internal"><li><a class="tocitem" href="#Bus-1:-Load"><span>Bus 1: Load</span></a></li><li><a class="tocitem" href="#Bus-2:-Load-Machine"><span>Bus 2: Load + Machine</span></a></li><li><a class="tocitem" href="#Bus-3:-Three-Machines"><span>Bus 3: Three Machines</span></a></li><li><a class="tocitem" href="#Powerline-1:-AC-Pi-Line"><span>Powerline 1: AC Pi-Line</span></a></li><li><a class="tocitem" href="#Powerline-2:-Transformer"><span>Powerline 2: Transformer</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Inspection of Test Data</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Inspection of Test Data</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsCGMES.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsCGMES.jl/blob/main/docs/examples/testdata.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt"><a class="docs-heading-anchor" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt">Inspection of Test 1-EHVHV-mixed-all-2-sw-Ausschnitt</a><a id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt-1"></a><a class="docs-heading-anchor-permalink" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt" title="Permalink"></a></h1><pre><code class="language-julia hljs">using PowerDynamics
-using PowerDynamicsCGMES
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Inspection of CGMES Test Data · PowerDynamicsParsers.jl</title><meta name="title" content="Inspection of CGMES Test Data · PowerDynamicsParsers.jl"/><meta property="og:title" content="Inspection of CGMES Test Data · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="Inspection of CGMES Test Data · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li class="is-active"><a class="tocitem" href>Inspection of CGMES Test Data</a><ul class="internal"><li><a class="tocitem" href="#Bus-1:-Load"><span>Bus 1: Load</span></a></li><li><a class="tocitem" href="#Bus-2:-Load-Machine"><span>Bus 2: Load + Machine</span></a></li><li><a class="tocitem" href="#Bus-3:-Three-Machines"><span>Bus 3: Three Machines</span></a></li><li><a class="tocitem" href="#Powerline-1:-AC-Pi-Line"><span>Powerline 1: AC Pi-Line</span></a></li><li><a class="tocitem" href="#Powerline-2:-Transformer"><span>Powerline 2: Transformer</span></a></li></ul></li><li><a class="tocitem" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export/</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Inspection of CGMES Test Data</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Inspection of CGMES Test Data</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_testdata.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt"><a class="docs-heading-anchor" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt">Inspection of Test 1-EHVHV-mixed-all-2-sw-Ausschnitt</a><a id="Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt-1"></a><a class="docs-heading-anchor-permalink" href="#Inspection-of-Test-1-EHVHV-mixed-all-2-sw-Ausschnitt" title="Permalink"></a></h1><pre><code class="language-julia hljs">using PowerDynamics
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
 using CairoMakie
 
-DATA = joinpath(pkgdir(PowerDynamicsCGMES), &quot;test&quot;, &quot;data&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt&quot;)
+DATA = joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt&quot;)
 dataset = CIMCollection(CIMDataset(DATA))</code></pre><div class="admonition is-success" id="Tip-fef913799f39104c"><header class="admonition-header">Tip<a class="admonition-anchor" href="#Tip-fef913799f39104c" title="Permalink"></a></header><div class="admonition-body"><p>Hover the nodes to inspect the properties!</p></div></div><pre><code class="language-julia hljs">reduced_dataset = reduce_complexity(dataset)
 inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))</code></pre><img src="fd62696f.png" alt="Example block output"/><script>
 // Find the previous image element and wrap it with hover functionality
@@ -604,7 +605,7 @@ inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=
     }
 })();
 </script>
-<p><strong>Discussion:</strong></p><ul><li>Why is the regulating control connected to a different terminal equipment than the machine?</li><li>The powerflow result on both machine terminals is not even close to the machine setpoint (nor power factor)</li><li>The voltage of the topological node does not match the reference value for the voltage regulator</li><li>On the third machine, the PQ setpoints are consistent with the powerflow result</li><li>The overall bus power (as seen by state value of connected transformer) is P=-0.47 and Q=0.019, so the SvPowerflow values seem consistent</li></ul><h2 id="Powerline-1:-AC-Pi-Line"><a class="docs-heading-anchor" href="#Powerline-1:-AC-Pi-Line">Powerline 1: AC Pi-Line</a><a id="Powerline-1:-AC-Pi-Line-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-1:-AC-Pi-Line" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[1]; size=(900,900))</code></pre><img src="13968a1f.png" alt="Example block output"/><script>
+<p><strong>Discussion:</strong></p><ul><li>Why is the regulating control connected to a different terminal equipment than the machine?</li><li>The powerflow result on both machine terminals is not even close to the machine setpoint (nor power factor)</li><li>The voltage of the topological node does not match the reference value for the voltage regulator</li><li>On the third machine, the PQ setpoints are consistent with the powerflow result</li><li>The overall bus power (as seen by state value of connected transformer) is P=-0.47 and Q=0.019, so the SvPowerflow values seem consistent</li></ul><h2 id="Powerline-1:-AC-Pi-Line"><a class="docs-heading-anchor" href="#Powerline-1:-AC-Pi-Line">Powerline 1: AC Pi-Line</a><a id="Powerline-1:-AC-Pi-Line-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-1:-AC-Pi-Line" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[1]; size=(900,900))</code></pre><img src="d2143954.png" alt="Example block output"/><script>
 // Find the previous image element and wrap it with hover functionality
 (function() {
     var script = document.currentScript;
@@ -656,18 +657,20 @@ inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=
     wrapper.appendChild(tooltip);
 
     // Create hover zone data
-    var hoverZoneData = [{x: 27.978381375584416, y: 63.499068627887524, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
-            {x: 50.267909248072904, y: 61.17130504556637, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
-            {x: 51.97169422676705, y: 32.16757654652505, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
-            {x: 72.04544234694113, y: 67.56876632572246, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
-            {x: 72.61474660418682, y: 39.72284340796123, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
-            {x: 68.81888831985012, y: 16.93951237220529, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
-            {x: 93.83838093010866, y: 69.77598347465958, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 7},
-            {x: 76.7927202158789, y: 94.2121204844127, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 8},
-            {x: 30.672688934493873, y: 35.852169328134856, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 9},
-            {x: 37.07562422096522, y: 14.010101738158065, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 10},
-            {x: 6.161614397128409, y: 61.636410369616335, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 11},
-            {x: 20.150243855927798, y: 88.9673670652263, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 12}    ];
+    var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}    ];
 
     // Create hover zones with proper aspect ratio
     hoverZoneData.forEach(function(zoneData, i) {
@@ -737,7 +740,7 @@ inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=
     }
 })();
 </script>
-<p><strong>Discussion:</strong> Seems fine.</p><h2 id="Powerline-2:-Transformer"><a class="docs-heading-anchor" href="#Powerline-2:-Transformer">Powerline 2: Transformer</a><a id="Powerline-2:-Transformer-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-2:-Transformer" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[2]; size=(900,900))</code></pre><img src="03c790c7.png" alt="Example block output"/><script>
+<p><strong>Discussion:</strong> Seems fine.</p><h2 id="Powerline-2:-Transformer"><a class="docs-heading-anchor" href="#Powerline-2:-Transformer">Powerline 2: Transformer</a><a id="Powerline-2:-Transformer-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-2:-Transformer" title="Permalink"></a></h2><pre><code class="language-julia hljs">inspect_collection(edges[2]; size=(900,900))</code></pre><img src="2534787e.png" alt="Example block output"/><script>
 // Find the previous image element and wrap it with hover functionality
 (function() {
     var script = document.currentScript;
@@ -789,24 +792,27 @@ inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=
     wrapper.appendChild(tooltip);
 
     // Create hover zone data
-    var hoverZoneData = [{x: 55.77953242917316, y: 75.91245421676489, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 22\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
-            {x: 53.61239117126851, y: 56.33399599943905, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformer\n\"HV2 Trafo 3\"\nEquipment.EquipmentContainer = unresolved ref\nisPartOfGeneratorUnit = false\noperationalValuesConsidered = false", node: 2},
-            {x: 40.79102766583455, y: 37.22015887106177, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"EHV Bus 3094\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
-            {x: 50.533666388967966, y: 20.73344385550907, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"EHV Bus 1865\"\nno properties", node: 4},
-            {x: 59.3863861868531, y: 31.828165163032207, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"220.00 kV\"\nnominalVoltage = 220\ndescription = BaseVoltage 220.00 kV", node: 5},
-            {x: 64.814336617923, y: 14.010099439943213, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"EHV Bus 1865-EHV Bus 1866\"\nSubstation = unresolved ref", node: 6},
-            {x: 29.79743705755695, y: 21.727328596531027, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.474291\nq = -0.0195198", node: 7},
-            {x: 19.93923019860932, y: 34.284805198295864, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 8},
-            {x: 42.14040533322344, y: 48.40117978291985, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = -2.0138e-6\nb0 = -0.00206612\nconnectionKind = unresolved ref\ng = 1.44628e-6\ng0 = 0\nphaseAngleClock = 0\nr = 0.207044\nr0 = 0\nratedS = 300\nratedU = 220\nx = 19.3589\nx0 = 4.84\nTransformerEnd.endNumber = 1\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 9},
-            {x: 25.732689925354695, y: 61.62621826422181, width: 2.2222222222222223, height: 2.2222222222222223, label: "RatioTapChanger\n\"HV2 Trafo 3\"\nstepVoltageIncrement = 1\ntculControlMode = unresolved ref\nTapChanger.highStep = 16\nTapChanger.lowStep = -16\nTapChanger.ltcFlag = false\nTapChanger.neutralStep = 0\nTapChanger.neutralU = 220\nTapChanger.normalStep = 0\nTapChanger.controlEnabled = true\nTapChanger.step = 0", node: 10},
-            {x: 36.17504993024194, y: 77.00401460183812, width: 2.2222222222222223, height: 2.2222222222222223, label: "TapChangerControl\n\"HV2 Trafo 3\"\nRegulatingControl.mode = unresolved ref\nRegulatingControl.discrete = true\nRegulatingControl.enabled = true\nRegulatingControl.targetDeadband = 2.2\nRegulatingControl.targetValue = 110\nRegulatingControl.targetValueUnitMultiplier = unresolved ref", node: 11},
-            {x: 6.1616182822840875, y: 65.86333111229696, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvTapStep\nposition = 0", node: 12},
-            {x: 69.2641062752713, y: 63.91570534898826, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = 0\nb0 = 0\nconnectionKind = unresolved ref\ng = 0\ng0 = 0\nphaseAngleClock = 0\nr = 0\nr0 = 0\nratedS = 300\nratedU = 110\nx = 0\nx0 = 0\nTransformerEnd.endNumber = 2\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 13},
-            {x: 88.045074459722, y: 69.70761947176712, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 14},
-            {x: 75.89488142796993, y: 82.00674551522165, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 15},
-            {x: 93.83837767579067, y: 85.72125443651733, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 16},
-            {x: 59.16774233658896, y: 94.21211902514005, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.394418\nq = 0.130803", node: 17},
-            {x: 45.11836371610898, y: 92.85737873271236, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 18}    ];
+    var hoverZoneData = [{x: 63.59372782970153, y: 64.15996394471011, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 22\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 48.328569034641504, y: 55.290629785393605, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformer\n\"HV2 Trafo 3\"\nEquipment.EquipmentContainer = unresolved ref\nisPartOfGeneratorUnit = false\noperationalValuesConsidered = false", node: 2},
+            {x: 37.07110211522026, y: 42.4867580900125, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"EHV Bus 3094\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 25.80307890073265, y: 28.571072594722835, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"EHV Bus 1865\"\nno properties", node: 4},
+            {x: 17.38123962676033, y: 40.923993053953, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"220.00 kV\"\nnominalVoltage = 220\ndescription = BaseVoltage 220.00 kV", node: 5},
+            {x: 6.16161681652954, y: 30.770629064166933, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"EHV Bus 1865-EHV Bus 1866\"\nSubstation = unresolved ref", node: 6},
+            {x: 34.28766773161152, y: 14.010103259510808, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalIsland\n\"Island_001\"\nno properties", node: 7},
+            {x: 15.383340954762575, y: 15.551324401090238, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0\nv = 235.001", node: 8},
+            {x: 51.36153976234583, y: 31.08074095974519, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.474291\nq = -0.0195198", node: 9},
+            {x: 15.540149716123292, y: 48.51227862307748, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 10},
+            {x: 30.080419849431046, y: 54.77498261404248, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = -2.0138e-6\nb0 = -0.00206612\nconnectionKind = unresolved ref\ng = 1.44628e-6\ng0 = 0\nphaseAngleClock = 0\nr = 0.207044\nr0 = 0\nratedS = 300\nratedU = 220\nx = 19.3589\nx0 = 4.84\nTransformerEnd.endNumber = 1\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 11},
+            {x: 24.76745475883371, y: 70.04016251642695, width: 2.2222222222222223, height: 2.2222222222222223, label: "RatioTapChanger\n\"HV2 Trafo 3\"\nstepVoltageIncrement = 1\ntculControlMode = unresolved ref\nTapChanger.highStep = 16\nTapChanger.lowStep = -16\nTapChanger.ltcFlag = false\nTapChanger.neutralStep = 0\nTapChanger.neutralU = 220\nTapChanger.normalStep = 0\nTapChanger.controlEnabled = true\nTapChanger.step = 0", node: 12},
+            {x: 43.456359793176595, y: 75.530463612547, width: 2.2222222222222223, height: 2.2222222222222223, label: "TapChangerControl\n\"HV2 Trafo 3\"\nRegulatingControl.mode = unresolved ref\nRegulatingControl.discrete = true\nRegulatingControl.enabled = true\nRegulatingControl.targetDeadband = 2.2\nRegulatingControl.targetValue = 110\nRegulatingControl.targetValueUnitMultiplier = unresolved ref", node: 13},
+            {x: 9.560713297784492, y: 79.8884041064057, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvTapStep\nposition = 0", node: 14},
+            {x: 54.34331250986184, y: 70.05821343277938, width: 2.2222222222222223, height: 2.2222222222222223, label: "PowerTransformerEnd\n\"HV2 Trafo 3\"\nb = 0\nb0 = 0\nconnectionKind = unresolved ref\ng = 0\ng0 = 0\nphaseAngleClock = 0\nr = 0\nr0 = 0\nratedS = 300\nratedU = 110\nx = 0\nx0 = 0\nTransformerEnd.endNumber = 2\nTransformerEnd.grounded = true\nTransformerEnd.rground = 0\nTransformerEnd.xground = 0", node: 15},
+            {x: 61.36594657322151, y: 85.91291564886936, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 16},
+            {x: 75.00582671349642, y: 78.70387893837201, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 17},
+            {x: 74.12282056624815, y: 94.21211911019823, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 18},
+            {x: 93.8383792323255, y: 82.23766862513592, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 19},
+            {x: 82.14906286070106, y: 61.014482925126856, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.394418\nq = 0.130803", node: 20},
+            {x: 76.86482558784479, y: 51.929248056750744, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Trafo 3\"\nno properties", node: 21}    ];
 
     // Create hover zones with proper aspect ratio
     hoverZoneData.forEach(function(zoneData, i) {
@@ -876,4 +882,129 @@ inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=
     }
 })();
 </script>
-<p><strong>Discussion:</strong></p><ul><li>Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.</li><li>The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Wednesday 20 August 2025 12:51">Wednesday 20 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<p><strong>Discussion:</strong></p><ul><li>Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.</li><li>The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?</li></ul><pre><code class="language-julia hljs">e = CGMES.get_edge_model(edges[1])
+CGMES.test_powerflow(e)
+
+dataset2 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;testdata1&quot;))
+nodes2, edges2 = split_topologically(dataset2; warn=false)
+
+CGMES.determine_branch_parameters(edges2[1])
+CGMES.determine_branch_parameters(edges2[2])
+CGMES.determine_branch_parameters(edges2[3])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr31">✗ Powerflow result P=-0.0024161255602186743 does not match reference P=-0.00197183</span>
+<span class="sgr31">✗ Powerflow result Q=-9.674840217028696e-6 does not match reference Q=0.00119135</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr1">  Branch Parameter Calculation from CGMES Data</span>
+<span class="sgr1">  ============================================</span>
+
+  <span class="sgr1">Base Values:</span>
+
+    •  Vbase = 380 kV (from BaseVoltage.nominalVoltage)
+
+    •  Zbase = Vbase² / SBASE = 1444.0 Ω
+
+    •  Ybase = 1 / Zbase = 0.0006925207756232687 S
+
+    •  SBASE = 100 MVA
+
+  <span class="sgr1">CGMES Properties (ACLineSegment):</span>
+
+    •  r = 0.631125 Ω (positive sequence series resistance)
+
+    •  x = 6.31125 Ω (positive sequence series reactance)
+
+    •  gch = 0 S (positive sequence shunt charging conductance)
+
+    •  bch = 0.000434616 S (positive sequence shunt charging susceptance)
+
+  <span class="sgr1">Parameter Conversion to Per-Unit:</span>
+
+  Parameter   CGMES Value     Calculation        Per-Unit Value             Calculated
+  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– ––––––––––––––––––––––
+          R    0.631125 Ω       r / Zbase 0.0004370671745152355  0.0004370517155875769
+          X     6.31125 Ω       x / Zbase  0.004370671745152354  0.0043706718473998825
+          G           0 S gch / 2 / Ybase                   0.0 -2.5882770292283786e-6
+          B 0.000434616 S bch / 2 / Ybase   0.31379275199999995    0.31379020808520675
+
+  <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
+  <span class="sgr4">split equally between source and destination ends.</span><span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr1">  Branch Parameter Calculation from CGMES Data</span>
+<span class="sgr1">  ============================================</span>
+
+  <span class="sgr1">Base Values:</span>
+
+    •  Vbase = 380 kV (from BaseVoltage.nominalVoltage)
+
+    •  Zbase = Vbase² / SBASE = 1444.0 Ω
+
+    •  Ybase = 1 / Zbase = 0.0006925207756232687 S
+
+    •  SBASE = 100 MVA
+
+  <span class="sgr1">CGMES Properties (ACLineSegment):</span>
+
+    •  r = 1.11441 Ω (positive sequence series resistance)
+
+    •  x = 11.1441 Ω (positive sequence series reactance)
+
+    •  gch = 0 S (positive sequence shunt charging conductance)
+
+    •  bch = 0.000767425 S (positive sequence shunt charging susceptance)
+
+  <span class="sgr1">Parameter Conversion to Per-Unit:</span>
+
+  Parameter   CGMES Value     Calculation        Per-Unit Value            Calculated
+  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– –––––––––––––––––––––
+          R     1.11441 Ω       r / Zbase 0.0007717520775623268 0.0007717329806546284
+          X     11.1441 Ω       x / Zbase  0.007717520775623269  0.007717529322524958
+          G           0 S gch / 2 / Ybase                   0.0 1.6411531447810649e-6
+          B 0.000767425 S bch / 2 / Ybase            0.55408085      0.55408153688583
+
+  <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
+  <span class="sgr4">split equally between source and destination ends.</span><span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr1">  Branch Parameter Calculation from CGMES Data</span>
+<span class="sgr1">  ============================================</span>
+
+  <span class="sgr1">Base Values:</span>
+
+    •  Vbase = 380 kV (from BaseVoltage.nominalVoltage)
+
+    •  Zbase = Vbase² / SBASE = 1444.0 Ω
+
+    •  Ybase = 1 / Zbase = 0.0006925207756232687 S
+
+    •  SBASE = 100 MVA
+
+  <span class="sgr1">CGMES Properties (ACLineSegment):</span>
+
+    •  r = 0.509088 Ω (positive sequence series resistance)
+
+    •  x = 5.09088 Ω (positive sequence series reactance)
+
+    •  gch = 0 S (positive sequence shunt charging conductance)
+
+    •  bch = 0.000350576 S (positive sequence shunt charging susceptance)
+
+  <span class="sgr1">Parameter Conversion to Per-Unit:</span>
+
+  Parameter   CGMES Value     Calculation        Per-Unit Value            Calculated
+  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– –––––––––––––––––––––
+          R    0.509088 Ω       r / Zbase 0.0003525540166204986 0.0003525544382523331
+          X     5.09088 Ω       x / Zbase  0.003525540166204986 0.0035255382845059465
+          G           0 S gch / 2 / Ybase                   0.0 -5.965590406247972e-7
+          B 0.000350576 S bch / 2 / Ybase           0.253115872    0.2531161563263732
+
+  <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
+  <span class="sgr4">split equally between source and destination ends.</span></code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><a class="docs-footer-nextpage" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export/ »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 21 August 2025 16:30">Thursday 21 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

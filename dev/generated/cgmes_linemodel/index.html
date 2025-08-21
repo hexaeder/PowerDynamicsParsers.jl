@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Wrong Powerflow data in CGMES Export/ · PowerDynamicsParsers.jl</title><meta name="title" content="Wrong Powerflow data in CGMES Export/ · PowerDynamicsParsers.jl"/><meta property="og:title" content="Wrong Powerflow data in CGMES Export/ · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="Wrong Powerflow data in CGMES Export/ · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_linemodel/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_linemodel/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_linemodel/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../cgmes_testdata/">Inspection of CGMES Test Data</a></li><li class="is-active"><a class="tocitem" href>Wrong Powerflow data in CGMES Export/</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Wrong Powerflow data in CGMES Export/</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Wrong Powerflow data in CGMES Export/</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_linemodel.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Line-model-calculation"><a class="docs-heading-anchor" href="#Line-model-calculation">Line model calculation</a><a id="Line-model-calculation-1"></a><a class="docs-heading-anchor-permalink" href="#Line-model-calculation" title="Permalink"></a></h1><p>The goal of this example is to create line models for relatively simple lines (single ACLineSegment branch) and check if their results match the power flow.</p><pre><code class="language-julia hljs">using PowerDynamics
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
+dataset1 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt&quot;))
+nodes, edges = split_topologically(dataset1; warn=false)
+edges[1]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CIMCollection: <span class="sgr34">14 objects, 4 extensions</span>
+  Objects: 14
+    1 ACLineSegment
+    1 BaseVoltage
+    2 OperationalLimitSet
+    2 SvPowerFlow
+    2 SvVoltage
+    2 Terminal
+    2 TopologicalNode
+    2 VoltageLevel
+  Extensions: 4
+    4 Terminal
+</code></pre><p>In this second dataset, the first line is an ACLineSegment with two terminals. We go ahead and try to build a Power Dynamics line model for it:</p><pre><code class="language-julia hljs">em = CGMES.get_edge_model(edges[1])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">NetworkDynamics.EdgeModel <span class="sgr1">:HV2 Line 112</span> <span class="sgr94">NetworkDynamics.PureFeedForward()</span> @ Edge HV2 Bus 7=&gt;HV2 Bus 339
+ ├─ 2/2 inputs:  src=[src₊u_r, src₊u_i] dst=[dst₊u_r, dst₊u_i]
+ ├─   0 states:  []  
+ ├─ 2/2 outputs: src=[src₊i_r, src₊i_i] dst=[dst₊i_r, dst₊i_i]
+ └─   9 params:  [ACLineSegment₊R=0.0024928, ACLineSegment₊X=0.0067385, ACLineSegment₊G_src=0, ACLineSegment₊B_src=0.00047119, ACLineSegment₊G_dst=0, ACLineSegment₊B_dst=0.00047119, ACLineSegment₊r_src=1, ACLineSegment₊r_dst=1, ACLineSegment₊active=1]</code></pre><p>I wrote a small function that takes the voltage steady state from the surrounding voltage nodes, calculates the power at both ends of the line model, and compares it to the power flow result stored in the CGMES dataset (i.e., the power through the terminals at both ends).</p><pre><code class="language-julia hljs">CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr31">✗ Powerflow result P=-0.0024161255602186743 does not match reference P=-0.00197183</span>
+<span class="sgr31">✗ Powerflow result Q=-9.674840217028696e-6 does not match reference Q=0.00119135</span></code></pre><p>However, the results do not match! For debugging, I implemented another function: given the voltages and powers at both ends, this function tries to calculate the correct R, X, G, B parameters for a pi-line model.</p><pre><code class="language-julia hljs">CGMES.determine_branch_parameters(edges[1])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr1">  Branch Parameter Calculation from CGMES Data</span>
+<span class="sgr1">  ============================================</span>
+
+  <span class="sgr1">Base Values:</span>
+
+    •  Vbase = 110 kV (from BaseVoltage.nominalVoltage)
+
+    •  Zbase = Vbase² / SBASE = 121.0 Ω
+
+    •  Ybase = 1 / Zbase = 0.008264462809917356 S
+
+    •  SBASE = 100 MVA
+
+  <span class="sgr1">CGMES Properties (ACLineSegment):</span>
+
+    •  r = 0.301627 Ω (positive sequence series resistance)
+
+    •  x = 0.815356 Ω (positive sequence series reactance)
+
+    •  gch = 0 S (positive sequence shunt charging conductance)
+
+    •  bch = 7.7883e-6 S (positive sequence shunt charging susceptance)
+
+  <span class="sgr1">Parameter Conversion to Per-Unit:</span>
+
+  Parameter CGMES Value     Calculation         Per-Unit Value             Calculated
+  ––––––––– ––––––––––– ––––––––––––––– –––––––––––––––––––––– ––––––––––––––––––––––
+          R  0.301627 Ω       r / Zbase   0.002492785123966942   0.006696777419132286
+          X  0.815356 Ω       x / Zbase   0.006738479338842975   0.005344772670887906
+          G         0 S gch / 2 / Ybase                    0.0   -6.71569113453454e-9
+          B 7.7883e-6 S bch / 2 / Ybase 0.00047119214999999994 0.00047118732330254806
+
+  <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
+  <span class="sgr4">split equally between source and destination ends.</span></code></pre><p>We see that the R and X values are different from the calculated ones. If we use the calculated variables instead, the power flow result matches the values from the dataset:</p><pre><code class="language-julia hljs">set_default!(em, :ACLineSegment₊R, 0.00669677741911068)
+set_default!(em, :ACLineSegment₊X, 0.005344772670911904)
+CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32">✓ Powerflow result P=-0.001971837663218789 matches reference P=-0.00197183</span>
+<span class="sgr32">✓ Powerflow result Q=0.001191355507688073 matches reference Q=0.00119135</span></code></pre><p>At first, I thought this was due to some base calculation or some other parameter mismatch. However, let&#39;s take the dataset I got first:</p><pre><code class="language-julia hljs">dataset2 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;testdata1&quot;))
+nodes, edges = split_topologically(dataset2; warn=false)</code></pre><p>Here, we have 3 power lines and each of them is just a pi-line. So we can check again:</p><p><strong>Power line 1:</strong></p><pre><code class="language-julia hljs">em = CGMES.get_edge_model(edges[1])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">NetworkDynamics.EdgeModel <span class="sgr1">:EHV Line 219</span> <span class="sgr94">NetworkDynamics.PureFeedForward()</span> @ Edge EHV Bus 41=&gt;EHV Bus 325
+ ├─ 2/2 inputs:  src=[src₊u_r, src₊u_i] dst=[dst₊u_r, dst₊u_i]
+ ├─   0 states:  []  
+ ├─ 2/2 outputs: src=[src₊i_r, src₊i_i] dst=[dst₊i_r, dst₊i_i]
+ └─   9 params:  [ACLineSegment₊R=0.00043707, ACLineSegment₊X=0.0043707, ACLineSegment₊G_src=0, ACLineSegment₊B_src=0.31379, ACLineSegment₊G_dst=0, ACLineSegment₊B_dst=0.31379, ACLineSegment₊r_src=1, ACLineSegment₊r_dst=1, ACLineSegment₊active=1]</code></pre><pre><code class="language-julia hljs">CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32">✓ Powerflow result P=-2.0528547384013045 matches reference P=-2.05285</span>
+<span class="sgr32">✓ Powerflow result Q=-0.4913539990339694 matches reference Q=-0.491364</span></code></pre><p><strong>Power line 2:</strong></p><pre><code class="language-julia hljs">em = CGMES.get_edge_model(edges[2])
+CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32">✓ Powerflow result P=1.9492741973459244 matches reference P=1.9492699999999998</span>
+<span class="sgr32">✓ Powerflow result Q=0.9050356326536374 matches reference Q=0.905041</span></code></pre><p><strong>Power line 3:</strong></p><pre><code class="language-julia hljs">em = CGMES.get_edge_model(edges[3])
+CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr32">✓ Powerflow result P=1.7338985383147076 matches reference P=1.7338999999999998</span>
+<span class="sgr32">✓ Powerflow result Q=0.07431650498086784 matches reference Q=0.0743164</span></code></pre><p>For this model, the backward calculation of R, X, G, and B can be validated too:</p><pre><code class="language-julia hljs">CGMES.determine_branch_parameters(edges[1])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr33"><span class="sgr1">┌ Warning: </span></span>LU factorization failed, falling back to QR factorization. `A` is potentially rank-deficient.
+<span class="sgr33"><span class="sgr1">└ </span></span><span class="sgr90">@ LinearSolve ~/.julia/packages/LinearSolve/PLuRG/src/default.jl:520</span>
+<span class="sgr1">  Branch Parameter Calculation from CGMES Data</span>
+<span class="sgr1">  ============================================</span>
+
+  <span class="sgr1">Base Values:</span>
+
+    •  Vbase = 380 kV (from BaseVoltage.nominalVoltage)
+
+    •  Zbase = Vbase² / SBASE = 1444.0 Ω
+
+    •  Ybase = 1 / Zbase = 0.0006925207756232687 S
+
+    •  SBASE = 100 MVA
+
+  <span class="sgr1">CGMES Properties (ACLineSegment):</span>
+
+    •  r = 0.631125 Ω (positive sequence series resistance)
+
+    •  x = 6.31125 Ω (positive sequence series reactance)
+
+    •  gch = 0 S (positive sequence shunt charging conductance)
+
+    •  bch = 0.000434616 S (positive sequence shunt charging susceptance)
+
+  <span class="sgr1">Parameter Conversion to Per-Unit:</span>
+
+  Parameter   CGMES Value     Calculation        Per-Unit Value             Calculated
+  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– ––––––––––––––––––––––
+          R    0.631125 Ω       r / Zbase 0.0004370671745152355  0.0004370517155875769
+          X     6.31125 Ω       x / Zbase  0.004370671745152354  0.0043706718473998825
+          G           0 S gch / 2 / Ybase                   0.0 -2.5882770292283786e-6
+          B 0.000434616 S bch / 2 / Ybase   0.31379275199999995    0.31379020808520675
+
+  <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
+  <span class="sgr4">split equally between source and destination ends.</span></code></pre><p>This confirms the results.</p><div class="admonition is-danger" id="Error-in-the-CGMES-Data?-79ba41702e90c55c"><header class="admonition-header">Error in the CGMES Data?<a class="admonition-anchor" href="#Error-in-the-CGMES-Data?-79ba41702e90c55c" title="Permalink"></a></header><div class="admonition-body"><p>In conclusion, it looks like the CGMES data is not consistent in the newer dataset! Either the branch parameters are wrong, or the power flow results are wrong.</p></div></div><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_testdata/">« Inspection of CGMES Test Data</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Thursday 21 August 2025 16:30">Thursday 21 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
