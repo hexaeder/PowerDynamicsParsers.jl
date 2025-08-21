@@ -6,4 +6,7 @@ using SafeTestsets
         @safetestset "CGMES Tests" begin include("CGMES/parsing_test.jl") end
         @safetestset "CGMES Powerflow Tests" begin include("CGMES/powerflow_test.jl") end
     end
+    @testset "PSSE Tests" begin
+        @safetestset "PSSE Tests" begin include("PSSE/parsing_test.jl") end
+    end
 end

@@ -250,7 +250,7 @@ function determine_branch_parameters(c)
     R = props["r"] / Zbase
     X = props["x"] / Zbase
 
-    md"""
+    out = md"""
     ## Branch Parameter Calculation from CGMES Data
 
     **Base Values:**
@@ -276,4 +276,6 @@ function determine_branch_parameters(c)
 
     *Note: G and B are divided by 2 because they represent total shunt values split equally between source and destination ends.*
     """
+    show(stdout, MIME"text/plain"(), out)
+    nothing
 end

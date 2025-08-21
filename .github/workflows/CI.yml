@@ -79,9 +79,9 @@ jobs:
         shell: julia --project=docs --color=yes {0}
         run: |
           using Documenter: DocMeta, doctest
-          using PowerDynamicsCGMES
-          DocMeta.setdocmeta!(PowerDynamicsCGMES, :DocTestSetup, :(using PowerDynamicsCGMES); recursive=true)
-          doctest(PowerDynamicsCGMES)
+          using PowerDynamicsParsers
+          DocMeta.setdocmeta!(PowerDynamicsParsers, :DocTestSetup, :(using PowerDynamicsParsers); recursive=true)
+          doctest(PowerDynamicsParsers)
       - name: Save Julia depot cache on cancel or failure
         id: julia-cache-save
         if: cancelled() || failure()

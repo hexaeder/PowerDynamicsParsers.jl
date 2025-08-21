@@ -1,6 +1,6 @@
 ```@meta
-CurrentModule = PowerDynamicsCGMES
+CurrentModule = PowerDynamicsParsers
 ```
-# PowerDynamicsCGMES Docs
+# PowerDynamicsParsers Docs
 
 Experimental package to explor options to create PowerDynamics models from CIM/CGMES files.

@@ -31,7 +31,7 @@ subg = discover_subgraph(topo; filter_out = is_lineend, maxdepth=10)
 
 dataset("ConformLoad")[1]
 dataset("SynchronousMachine")[1]
-dataset("SynchronousMachine")[3]
+dataset("SynchronousMachine")[2]
 
 dataset("ThermalGeneratingUnit")[1]
 dataset("FossilFuel")[1]
@@ -44,7 +44,7 @@ extensions(dataset[:SteadyStateHypothesis])[21] # Machine
 
 dataset[:Dynamics]("LoadAggregate")[1]
 dataset[:Dynamics]("LoadStatic")[1]
-dataset[:Dynamics]("Synchronous")[1]
+dataset[:Dynamics](r"Synchronous")[1]
 
 
 DATA = joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "1-EHVHV-mixed-all-2-sw-Ausschnitt")
