@@ -107,4 +107,9 @@ end
     # Test that all data is preserved correctly
     @test nrow(psse_data1.sections["BUS"]) == 39  # 39 buses
     @test all(busid -> busid in 30:39, keys(psse_data1.dynamic_devices))  # Generator buses 30-39
+
+    raw3 = joinpath(pkgdir(PowerDynamicsParsers), "test", "PSSE", "data", "Texas2k_series24_case1_2016summerPeak.RAW")
+    data = parse_psse(raw3)
+    data.dynamic_devices[7286][1]
+
 end

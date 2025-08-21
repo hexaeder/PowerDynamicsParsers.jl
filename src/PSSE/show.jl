@@ -52,13 +52,9 @@ function Base.show(io::IO, mime::MIME"text/plain", device::DynamicDevice)
         # Show first few parameters
         if length(device.parameters) > 0
             println(io, "  Parameter values:")
-            max_show = min(10, length(device.parameters))
-            for i in 1:max_show
-                param = device.parameters[i]
-                println(io, "    [", i, "]: ", param, " (", typeof(param), ")")
-            end
-            if length(device.parameters) > max_show
-                println(io, "    ... and ", length(device.parameters) - max_show, " more")
+            for (k, v) in pairs(device.parameters)
+                kstr = k isa Number ? "P$k" : string(k)
+                println(io, "    ", kstr, " = ", v)
             end
         end
     end
