@@ -110,7 +110,7 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
     resolve_references!(collection; warn)
 end
 
-function split_topologically(collection::CIMCollection; warn=true)
+function split_topologically(collection::AbstractCIMCollection; warn=true)
     # collection = CIMDataset(DATA)
     topnodes = collection("TopologicalNode")
     node_subgraphs = _discover_tpn_subgraph.(topnodes; warn)

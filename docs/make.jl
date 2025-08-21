@@ -37,6 +37,7 @@ kwargs = (;
         "Home" => "index.md",
         "Tutorials" => [
             "Inspection of CGMES Test Data" => "generated/cgmes_testdata.md",
+            "Wrong Powerflow data in CGMES Export/" => "generated/cgmes_linemodel.md",
         ]
     ],
     draft=false,

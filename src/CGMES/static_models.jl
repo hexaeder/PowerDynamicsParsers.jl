@@ -12,13 +12,13 @@ CONDUCTING_EQUIPMENT = [
     "PowerTransformer",
 ]
 
-function is_single_branch_subgraph(c::CIMCollection)
+function is_single_branch_subgraph(c::AbstractCIMCollection)
     nodes = collect(values(objects(c)))
     cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
     length(cond_idx) == 1
 end
 
-function get_components(::SingleBranchSubgraph, c::CIMCollection)
+function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     nodes = collect(values(objects(c)))
     cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
     segment = nodes[only(cond_idx)]
@@ -71,7 +71,7 @@ end
 | name                                      | String         | see IdentifiedObject                                                                                                                                                         |
 | shortName (Entsoe)                        | String         | see IdentifiedObject                                                                                                                                                         |
 """
-function get_edge_model(class::ACLineSegment, c::CIMCollection)
+function get_edge_model(class::ACLineSegment, c::AbstractCIMCollection)
     comp = CGMES.get_components(class, c)
 
     if !allequal(CGMES.get_base_voltage, (comp.src_node, comp.dst_node, comp.segment))
@@ -84,12 +84,13 @@ function get_edge_model(class::ACLineSegment, c::CIMCollection)
     Ybase = 1 / Zbase
 
     props = properties(comp.segment)
-    G_src = props["gch"]/2 / Ybase
+    G_src = props["gch"] / 2 / Ybase
     G_dst = G_src
-    B_src = props["bch"]/2 / Ybase
+    B_src = props["bch"] / 2 / Ybase
     B_dst = B_src
     R = props["r"] / Zbase
     X = props["x"] / Zbase
+
     piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name=:ACLineSegment)
 
     name = hasname(comp.segment) ? getname(comp.segment) : "ACLineSegment"
@@ -97,11 +98,11 @@ function get_edge_model(class::ACLineSegment, c::CIMCollection)
     Line(MTKLine(piline, name=Symbol(name)))
 end
 
-function get_edge_model(::PowerTransformer, c::CIMCollection)
+function get_edge_model(::PowerTransformer, c::AbstractCIMCollection)
     error("not implmeneted")
 end
 
-function classify_branch_subgraph(c::CIMCollection)
+function classify_branch_subgraph(c::AbstractCIMCollection)
     @assert is_abstract_branch_subgraph(c) "Expected a edge subgraph (two Topolocial nodes)!"
 
     if is_single_branch_subgraph(c)
@@ -141,7 +142,7 @@ function test_powerflow(e::EdgeModel)
         :src₊u_r => real(src_uc),
         :src₊u_i => imag(src_uc),
         :dst₊u_r => real(dst_uc),
-        :dst₊u_i => imag(dst_uc)
+        :dst₊u_i => imag(dst_uc),
     )
     guess_overrides = Dict{Symbol, Any}(
         :src₊i_r => 1.0,
@@ -154,14 +155,125 @@ function test_powerflow(e::EdgeModel)
     Sref = CGMES.get_injected_power_pu(comp.src_terminal)
     Pref = real(Sref)
     Qref = imag(Sref)
-    if !isapprox(P, Pref)
-        println("Powerflow result P=$P does not match reference P=$Pref")
+    if !isapprox(P, Pref; rtol=1e-4, atol=1e-6)
+        printstyled("✗ Powerflow result P=$P does not match reference P=$Pref\n", color=:red)
     else
-        println("Powerflow result P=$P matches reference P=$Pref")
+        printstyled("✓ Powerflow result P=$P matches reference P=$Pref\n", color=:green)
     end
-    if !isapprox(Q, Qref)
-        println("Powerflow result Q=$Q does not match reference Q=$Qref")
+    if !isapprox(Q, Qref; rtol=1e-4, atol=1e-6)
+        printstyled("✗ Powerflow result Q=$Q does not match reference Q=$Qref\n", color=:red)
     else
-        println("Powerflow result Q=$Q matches reference Q=$Qref")
+        printstyled("✓ Powerflow result Q=$Q matches reference Q=$Qref\n", color=:green)
     end
+end
+
+
+using Markdown
+using PowerDynamics
+using PowerDynamics.ModelingToolkit
+using PowerDynamics.ModelingToolkit: t_nounits as t, D_nounits as Dt
+@mtkmodel PiLineFreeP begin
+    @parameters begin
+        R, [description="Resistance of branch in pu", guess=0]
+        X, [description="Reactance of branch in pu", guess=0.1]
+        G, [description="Conductance of src shunt", guess=0]
+        B, [description="Susceptance of src shunt", guess=0]
+        r_src=1, [description="src end transformation ratio"]
+        r_dst=1, [description="dst end transformation ratio"]
+        active=1, [description="Line active or at fault"]
+    end
+    @components begin
+        src = Terminal()
+        dst = Terminal()
+    end
+    begin
+        Z = R + im*X
+        Ysrc = G + im*B
+        Ydst = G + im*B
+        Vsrc = src.u_r + im*src.u_i
+        Vdst = dst.u_r + im*dst.u_i
+        V₁ = r_src * Vsrc
+        V₂ = r_dst * Vdst
+        i₁ = Ysrc * V₁
+        i₂ = Ydst * V₂
+        iₘ = 1/Z * (V₁ - V₂)
+        isrc = (-iₘ - i₁)*r_src
+        idst = ( iₘ - i₂)*r_dst
+    end
+    @equations begin
+        src.i_r ~ active * simplify(real(isrc))
+        src.i_i ~ active * simplify(imag(isrc))
+        dst.i_r ~ active * simplify(real(idst))
+        dst.i_i ~ active * simplify(imag(idst))
+    end
+end
+function determine_branch_parameters(c)
+    @assert CGMES.is_single_branch_subgraph(c) "Expected a single branch subgraph (one Topological node)!"
+    comp = CGMES.get_components(CGMES.ACLineSegment(), c)
+
+    src_uc = CGMES.get_voltage_pu(comp.src_node)
+    dst_uc = CGMES.get_voltage_pu(comp.dst_node)
+    src_S = CGMES.get_injected_power_pu(comp.src_terminal)
+    dst_S = CGMES.get_injected_power_pu(comp.dst_terminal)
+    src_ic = conj(src_S / src_uc)
+    dst_ic = conj(dst_S / dst_uc)
+
+    default_overrides = Dict{Symbol, Any}(
+        :src₊u_r => real(src_uc),
+        :src₊u_i => imag(src_uc),
+        :dst₊u_r => real(dst_uc),
+        :dst₊u_i => imag(dst_uc),
+        :src₊i_r => real(src_ic),
+        :src₊i_i => imag(src_ic),
+        :dst₊i_r => real(dst_ic),
+        :dst₊i_i => imag(dst_ic)
+    )
+
+    @named branch = PiLineFreeP()
+    edgemodel = Line(MTKLine(branch))
+    state = initialize_component(edgemodel; default_overrides, verbose=false)
+
+    _R = state[:branch₊R]
+    _G = state[:branch₊G]
+    _B = state[:branch₊B]
+    _X = state[:branch₊X]
+
+    # compare to values from data
+    Vbase = CGMES.get_base_voltage(comp.segment) # kV
+    Zbase = Vbase^2 / SBASE
+    Ybase = 1 / Zbase
+    props = properties(comp.segment)
+    G_src = props["gch"] / 2 / Ybase
+    G_dst = G_src
+    B_src = props["bch"] / 2 / Ybase
+    B_dst = B_src
+    R = props["r"] / Zbase
+    X = props["x"] / Zbase
+
+    md"""
+    ## Branch Parameter Calculation from CGMES Data
+
+    **Base Values:**
+    - Vbase = $(Vbase) kV (from BaseVoltage.nominalVoltage)
+    - Zbase = Vbase² / SBASE = $(Zbase) Ω
+    - Ybase = 1 / Zbase = $(Ybase) S
+    - SBASE = $(SBASE) MVA
+
+    **CGMES Properties (ACLineSegment):**
+    - r = $(props["r"]) Ω (positive sequence series resistance)
+    - x = $(props["x"]) Ω (positive sequence series reactance)
+    - gch = $(props["gch"]) S (positive sequence shunt charging conductance)
+    - bch = $(props["bch"]) S (positive sequence shunt charging susceptance)
+
+    **Parameter Conversion to Per-Unit:**
+
+    |Parameter | CGMES Value | Calculation | Per-Unit Value | Calculated |
+    |----------|-------------|-------------|----------------|------------|
+    | R        | $(props["r"]) Ω | r / Zbase | $R  | $_R |
+    | X        | $(props["x"]) Ω | x / Zbase | $X  | $_X |
+    | G        | $(props["gch"]) S | gch / 2 / Ybase | $G_src  | $_G |
+    | B        | $(props["bch"]) S | bch / 2 / Ybase | $B_src  | $_B |
+
+    *Note: G and B are divided by 2 because they represent total shunt values split equally between source and destination ends.*
+    """
 end

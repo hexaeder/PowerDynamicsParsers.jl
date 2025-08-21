@@ -83,7 +83,13 @@ PowerDynamicsParsers.CGMES.add_property_hover(current_figure(), edges[2]) #hide
 - Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.
 - The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?
 =#
+
 e = CGMES.get_edge_model(edges[1])
 CGMES.test_powerflow(e)
 
-CGMES.get_edge_model(edges[2])
+dataset2 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "testdata1"))
+nodes2, edges2 = split_topologically(dataset2; warn=false)
+
+CGMES.determine_branch_parameters(edges2[1])
+CGMES.determine_branch_parameters(edges2[2])
+CGMES.determine_branch_parameters(edges2[3])
