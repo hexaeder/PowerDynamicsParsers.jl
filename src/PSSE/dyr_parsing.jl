@@ -1,9 +1,3 @@
-struct DynamicDevice
-    busid::Int
-    name::String
-    parameters::Union{NamedTuple, Tuple}
-end
-
 function parse_dyr_file(dyr_file::String)
     devices_by_bus = Dict{Int, Vector{DynamicDevice}}()
 

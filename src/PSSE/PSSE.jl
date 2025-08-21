@@ -7,6 +7,12 @@ using OrderedCollections
 export parse_psse, PSSEData, DynamicDevice, show_summary
 export parse_raw_file, parse_dyr_file  # Keep for backward compatibility
 
+struct DynamicDevice
+    busid::Int
+    name::String
+    parameters::Union{NamedTuple, Tuple}
+end
+
 struct PSSEData
     filename::String
     revision::Int

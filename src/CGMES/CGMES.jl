@@ -3,6 +3,8 @@ module CGMES
 using XML: XML, Node, nodetype, attributes, children, tag,
            is_simple, simple_value
 using OrderedCollections: OrderedDict
+using PowerDynamics: Library, Line, MTKLine
+using NetworkDynamics: EdgeModel, VertexModel, set_graphelement!, initialize_component, get_initial_state
 
 export rdf_node, CIMObject, CIMRef, CIMBackref, CIMCollection, CIMFile, CIMDataset
 export plain_name, is_reference, is_object, is_extension, parse_metadata
@@ -10,6 +12,8 @@ export resolve_references!
 export objects, extensions, hasname, getname, properties
 export inspect_collection, inspect_node
 export follow_ref
+
+SBASE = 100 # Base power in MVA
 
 abstract type CIMEntity end
 abstract type AbstractCIMReference end
@@ -77,6 +81,18 @@ end
 CIMCollection(ds::CIMDataset) = CIMCollection(objects(ds), extensions(ds))
 
 Base.getindex(o::CIMObject, key::String) = follow_ref(properties(o)[key])
+function Base.getindex(o::CIMObject, s::Regex)
+    props = properties(o)
+    allkeys = collect(keys(props))
+    keyidxs = findall(k -> contains(k, s), allkeys)
+    if isempty(keyidxs)
+        throw(KeyError("No property matching $s found in object $(o.id) of class $(o.class_name). Available properties: $(allkeys)"))
+    elseif length(keyidxs) == 1
+        return props[allkeys[only(keyidxs)]]
+    else
+        throw(KeyError("Multiple properties matching $s found in object $(o.id) of class $(o.class_name). Available properties: $(allkeys)"))
+    end
+end
 Base.getindex(c::CIMCollection, id::String) = c.objects[id]
 Base.getindex(c::CIMCollection, i::Int) = collect(values(c.objects))[i]
 Base.getindex(f::CIMFile, id::String) = f.collection.objects[id]
@@ -170,12 +186,19 @@ function resolve_references!(collection::AbstractCIMCollection; warn=true)
     collection
 end
 
-function (c::AbstractCIMCollection)(s)
-    filter(
-        obj -> contains(obj.class_name, s),
-        collect(values(objects(c)))
-    )
+function (c::AbstractCIMCollection)(s::Union{AbstractString, Regex})
+    _comparer = s isa AbstractString ? isequal : contains
+    Iterators.filter(
+        obj -> _comparer(obj.class_name, s),
+        values(objects(c))
+    ) |> collect
 end
+function (c::AbstractCIMCollection)(vec::AbstractVector)
+    mapreduce(vcat, vec) do pattern
+        c(pattern)
+    end |> union!
+end
+
 
 hasname(obj::Union{CIMObject, CIMExtension}) = haskey(obj.properties, "name")
 getname(obj::Union{CIMObject, CIMExtension}) = obj.properties["name"]
@@ -207,5 +230,6 @@ include("parsing.jl")
 include("inspect.jl")
 include("subgraph.jl")
 include("show.jl")
+include("static_models.jl")
 
 end

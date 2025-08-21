@@ -32,6 +32,7 @@ STOP_BACKREF = ["BaseVoltage", "VoltageLevel", "OperationalLimitType", "Substati
 
 keyword arguments
 - `nobackref = is_class(STOP_BACKREF)`: don't follow back references on those nodes
+   unless the backref is from a :StateVariables profile
 - `maxdepth = 100`: maximum depth to explore
 - `filter_out = x -> false`: filter out nodes that match this predicate
 """
@@ -76,14 +77,12 @@ function discover_subgraph(
         end
 
         # Explore backward references - stop for nobackref nodes
-        nobackref(node) && return
+        # unless it is a state variable profile! that we allways follow
 
         for backref in node.references
-            source = follow_ref(backref)
-            if source isa CIMObject
+            source = base_object(backref)
+            if !nobackref(node) || source.profile == :StateVariables
                 recursive_discover!(source, depth + 1)
-            elseif source isa CIMExtension
-                recursive_discover!(follow_ref(source.base), depth + 1)
             end
         end
     end
@@ -172,17 +171,7 @@ function reduce_complexity(collection)
 end
 
 function delete_unconnected(collection::CIMCollection, keep=collection("TopologicalNode"); warn=true)
-    nodes = collect(values(objects(collection)))
-    g = SimpleDiGraph(length(nodes))
-    for (source_idx, node) in enumerate(nodes)
-        for (k, v) in properties(node)
-            if v isa CIMRef && v.resolved
-                target = follow_ref(v)
-                target_idx = findfirst(n -> n.id == target.id, nodes)
-                !isnothing(target_idx) && add_edge!(g, source_idx, target_idx)
-            end
-        end
-    end
+    nodes, g = to_digraph(collection)
     components = connected_components(g)
 
     new_nodes = CIMObject[]
@@ -206,4 +195,19 @@ function delete_unconnected(collection::CIMCollection, keep=collection("Topologi
     end
     new_collection = CIMCollection(new_objects, new_extensions)
     resolve_references!(new_collection; warn)
+end
+
+function to_digraph(collection::CIMCollection)
+    nodes = collect(values(objects(collection)))
+    g = SimpleDiGraph(length(nodes))
+    for (source_idx, node) in enumerate(nodes)
+        for (k, v) in properties(node)
+            if v isa CIMRef && v.resolved
+                target = follow_ref(v)
+                target_idx = findfirst(n -> n.id == target.id, nodes)
+                !isnothing(target_idx) && add_edge!(g, source_idx, target_idx)
+            end
+        end
+    end
+    nodes, g
 end
