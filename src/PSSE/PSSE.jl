@@ -14,6 +14,14 @@ function parse_raw_file(file; verbose=true)
     for (name, lines) in raw_sections
         if  isempty(Iterators.filter(!iscomment, lines))
             verbose && printstyled("Skip empty $name section... \n", color=:blue)
+        elseif name == "TRANSFORMER"
+            verbose && printstyled("Try parsing $name section... \n", color=:blue)
+            try
+                df = PSSE.parse_transformer_section(rev, lines)
+                parsed_sections[name] = df
+            catch e
+                printstyled("Error parsing TRANSFORMER section: $e\n", color=:red)
+            end
         elseif PSSE.istable(lines)
             verbose && printstyled("Try parsing $name section... \n", color=:blue)
             df = PSSE.parse_table_section(rev, name, lines)
@@ -115,6 +123,30 @@ function find_raw_sections(file)
     sections
 end
 
+# Headers for each line of transformer data by version (single source of truth)
+TRANSFORMER_LINE_HEADERS = OrderedDict(
+    33 => [
+        # Line 1: General transformer data (21 columns for v33)
+        ["i", "j", "k", "ckt", "cw", "cz", "cm", "mag1", "mag2", "nmetr", "name", "stat", "o1", "f1", "o2", "f2", "o3", "f3", "o4", "f4", "vecgrp"],
+        # Line 2: Impedance data (3 columns)
+        ["r1_2", "x1_2", "sbase1_2"],
+        # Line 3: Winding 1 data (17 columns for v33)
+        ["windv1", "nomv1", "ang1", "rata1", "ratb1", "ratc1", "cod1", "cont1", "rma1", "rmi1", "vma1", "vmi1", "ntp1", "tab1", "cr1", "cx1", "cnxa1"],
+        # Line 4: Winding 2 data (2 columns)
+        ["windv2", "nomv2"]
+    ],
+    34 => [
+        # Line 1: General transformer data (21 columns for v34)
+        ["i", "j", "k", "ckt", "cw", "cz", "cm", "mag1", "mag2", "nmetr", "name", "stat", "o1", "f1", "o2", "f2", "o3", "f3", "o4", "f4", "vecgrp"],
+        # Line 2: Impedance data (3 columns)
+        ["r1_2", "x1_2", "sbase1_2"],
+        # Line 3: Winding 1 data (27 columns for v34 - 12 rating fields vs 3 in v33)
+        ["windv1", "nomv1", "ang1", "rate1_1", "rate1_2", "rate1_3", "rate1_4", "rate1_5", "rate1_6", "rate1_7", "rate1_8", "rate1_9", "rate1_10", "rate1_11", "rate1_12", "cod1", "cont1", "rma1", "rmi1", "vma1", "vmi1", "ntp1", "tab1", "cr1", "cx1", "cnxa1"],
+        # Line 4: Winding 2 data (2 columns)
+        ["windv2", "nomv2"]
+    ]
+)
+
 KNOWN_HEADERS = OrderedDict(
     30 => OrderedDict(
         "BUS" => ["i", "name", "basekv", "ide", "gl", "bl", "area", "zone", "vm", "va", "owner"],
@@ -190,5 +222,73 @@ function parse_header_commment(name, lines)
         return header_normalized
     end
 end
+
+function parse_transformer_section(rev, lines)
+    # Filter out comments and empty lines
+    data_lines = filter(line -> !iscomment(line) && !isempty(strip(line)), lines)
+
+    if length(data_lines) % 4 != 0
+        @warn "Transformer section has $(length(data_lines)) lines, not divisible by 4. Some transformers may be incomplete."
+    end
+
+    # Get expected column structure for this version from single source of truth
+    if !haskey(TRANSFORMER_LINE_HEADERS, rev)
+        error("Unsupported PSSE version $rev for transformer parsing")
+    end
+
+    line_headers = TRANSFORMER_LINE_HEADERS[rev]
+    # Derive expected column counts from headers
+    expected_cols_per_line = [length(line_header) for line_header in line_headers]
+    # Derive combined header by flattening all line headers
+    combined_header = vcat(line_headers...)
+
+    # Group lines into transformer records (4 lines each)
+    num_complete_transformers = div(length(data_lines), 4)
+    concatenated_transformers = String[]
+
+    for i in 1:num_complete_transformers
+        base_idx = (i-1) * 4
+        transformer_lines = data_lines[base_idx+1:base_idx+4]
+
+        # Check if it's a 2-winding transformer (K field = 0 in first line)
+        first_line_fields = split(transformer_lines[1], ',')
+        if length(first_line_fields) >= 3
+            k_field = tryparse(Int, strip(first_line_fields[3]))
+            if k_field !== nothing && k_field != 0
+                error("3-winding transformers not supported yet. Found K=$k_field in transformer $i")
+            end
+        end
+
+        # Pad each line to expected column count and concatenate
+        padded_lines = String[]
+        for (line_idx, line) in enumerate(transformer_lines)
+            expected_cols = expected_cols_per_line[line_idx]
+            padded_line = _pad_line_to_expected_columns(line, expected_cols)
+            push!(padded_lines, padded_line)
+        end
+
+        # Concatenate all 4 lines
+        concatenated_line = join(padded_lines, ",")
+        push!(concatenated_transformers, concatenated_line)
+    end
+
+    # Parse concatenated lines with combined header
+    io = IOBuffer()
+    for line in concatenated_transformers
+        println(io, line)
+    end
+    seekstart(io)
+
+    return CSV.read(io, DataFrame; header=combined_header, normalizenames=true, quotechar=''', comment="@!", silencewarnings=true)
+end
+function _pad_line_to_expected_columns(line, expected_cols)
+    actual_cols = count(',', line) + 1
+    if actual_cols < expected_cols
+        missing_cols = expected_cols - actual_cols
+        return line * "," * repeat("missing,", missing_cols-1) * "missing"
+    end
+    return line
+end
+
 
 end
