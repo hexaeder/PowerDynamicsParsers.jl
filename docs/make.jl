@@ -30,35 +30,43 @@ function preprocess_script(c)
 end
 
 function collapsible_code_cell(c)
-    new = replace(c, r"^````(.*)\n\s*@collapse_codeblock\s*\"(.*)\"\s*\n"m => s"""
-    ```@raw html
-    <script>
-    (function() {
-        const thisScript = document.currentScript;
-        setTimeout(function() {
-            let current = thisScript.nextElementSibling;
-            while (current) {
-                const code = current.querySelector('code');
-                if (code) {
-                    const details = document.createElement('details');
-                    const summary = document.createElement('summary');
-                    summary.textContent = '\2';
-                    const parent = code.parentNode;
-                    parent.parentNode.insertBefore(details, parent);
-                    details.appendChild(summary);
-                    details.appendChild(parent);
-                    break;
+    regex =  r"^````(.*)\n\s*@collapse_codeblock(?:\s*\"(.*)\")?\s*\n"m
+    new = replace(c, regex => function(full_match)
+        # need to match again becaus full match isa SubString
+        m = match(regex, full_match)
+        example = m[1]
+        summary = isnothing(m[2]) ? "Expand hidden code block" : m[2]
+        """
+        ````@raw html
+        <script>
+        (function() {
+            const thisScript = document.currentScript;
+            setTimeout(function() {
+                let current = thisScript.nextElementSibling;
+                while (current) {
+                    const code = current.querySelector('code');
+                    if (code) {
+                        const details = document.createElement('details');
+                        const summary = document.createElement('summary');
+                        summary.textContent = '$summary';
+                        const parent = code.parentNode;
+                        parent.parentNode.insertBefore(details, parent);
+                        details.appendChild(summary);
+                        details.appendChild(parent);
+                        break;
+                    }
+                    current = current.nextElementSibling;
                 }
-                current = current.nextElementSibling;
-            }
-        }, 100);
-    })();
-    </script>
-    ```
-    ````\1
-    """)
+            }, 100);
+        })();
+        </script>
+        ````
+        ````$example
+        """
+    end)
+
     if contains(new, "@collapse_codeblock")
-        error("Could not expande @collaps_codeblock, are you sure it is at the beginning of a code block?")
+        error("Could not expand @collapse_codeblock, are you sure it is at the beginning of a code block?")
     end
     new
 end

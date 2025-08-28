@@ -25,8 +25,9 @@ nodesB[1]("Topo")
 @hover inspect_collection(nodesB[3]; size=(900,900))
 #-
 #-
+@collapse_codeblock
 @hover inspect_collection(edgesB[1]; size=(900,900))
 #-
 
-@collapse_codeblock "Show plotting code"
+@collapse_codeblock "custom title"
 @hover inspect_collection(edgesB[2]; size=(900,900))
