@@ -15,7 +15,18 @@ reduced_datasetB = reduce_complexity(datasetB)
 nodesA, edgesA = split_topologically(datasetA; warn=false)
 nodesB, edgesB = split_topologically(datasetB; warn=false)
 
+nodesB[1]("Topo")
+
 #-
-# @hover inspect_collection(nodes[1]; size=(900,900))
+@hover inspect_collection(nodesB[1]; size=(900,900))
 #-
-# PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(nodesB[2]; size=(900,900))
+#-
+@hover inspect_collection(nodesB[3]; size=(900,900))
+#-
+#-
+@hover inspect_collection(edgesB[1]; size=(900,900))
+#-
+
+@collapse_codeblock "Show plotting code"
+@hover inspect_collection(edgesB[2]; size=(900,900))

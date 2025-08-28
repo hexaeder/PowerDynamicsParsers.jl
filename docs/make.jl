@@ -22,17 +22,54 @@ function preprocess_html_hover(c)
     #-
     """)
 end
-function preprocess_script_hover(c)
-    replace(c, r"^(\s*)@hover\s+(.*)$"m => s"""
+function preprocess_script(c)
+    no_hover = replace(c, r"^(\s*)@hover\s+(.*)$"m => s"""
     \1\2
     """)
+    replace(no_hover, r"^\s*@collapse_codeblock.*\n?"m => "")
+end
+
+function collapsible_code_cell(c)
+    new = replace(c, r"^````(.*)\n\s*@collapse_codeblock\s*\"(.*)\"\s*\n"m => s"""
+    ```@raw html
+    <script>
+    (function() {
+        const thisScript = document.currentScript;
+        setTimeout(function() {
+            let current = thisScript.nextElementSibling;
+            while (current) {
+                const code = current.querySelector('code');
+                if (code) {
+                    const details = document.createElement('details');
+                    const summary = document.createElement('summary');
+                    summary.textContent = '\2';
+                    const parent = code.parentNode;
+                    parent.parentNode.insertBefore(details, parent);
+                    details.appendChild(summary);
+                    details.appendChild(parent);
+                    break;
+                }
+                current = current.nextElementSibling;
+            }
+        }, 100);
+    })();
+    </script>
+    ```
+    ````\1
+    """)
+    if contains(new, "@collapse_codeblock")
+        error("Could not expande @collaps_codeblock, are you sure it is at the beginning of a code block?")
+    end
+    new
 end
 
 # Process any .jl files in examples directory
 if isdir(example_dir)
     for example in filter(contains(r".jl$"), readdir(example_dir, join=true))
-        Literate.markdown(example, outdir; preprocess=preprocess_html_hover)
-        Literate.script(example, outdir; preprocess=preprocess_script_hover, keep_comments=true)
+        Literate.markdown(example, outdir;
+            preprocess=preprocess_html_hover,
+            postprocess=collapsible_code_cell,)
+        Literate.script(example, outdir; preprocess=preprocess_script, keep_comments=true)
     end
 end
 
