@@ -15,9 +15,7 @@ nothing #hide
     Hover the nodes to inspect the properties!
 =#
 reduced_dataset = reduce_complexity(dataset)
-inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))
 #=
 Well, that's still a bit too much. Let's split the dataset topologically
 =#
@@ -26,9 +24,7 @@ nothing #hide
 #=
 ## Bus 1: Load
 =#
-inspect_collection(nodes[1]; size=(900,900))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(nodes[1]; size=(900,900))
 #=
 **Discussion:**
 Power of load and powerflow result match perfectly. I guess this is just a PQ node for the powerflow.
@@ -37,9 +33,7 @@ Power of load and powerflow result match perfectly. I guess this is just a PQ no
 #=
 ## Bus 2: Load + Machine
 =#
-inspect_collection(nodes[2]; size=(900,900))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(nodes[2]; size=(900,900))
 #=
 **Discussion:**
 - Synchronous machine has power P=Q=0, no voltage controller
@@ -49,9 +43,7 @@ PowerDynamicsParsers.CGMES.html_hover_map() #hide
 #=
 ## Bus 3: Three Machines
 =#
-inspect_collection(nodes[3]; size=(900,900))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(nodes[3]; size=(900,900))
 #=
 **Discussion:**
 - Why is the regulating control connected to a different terminal equipment than the machine?
@@ -64,9 +56,7 @@ PowerDynamicsParsers.CGMES.html_hover_map() #hide
 #=
 ## Powerline 1: AC Pi-Line
 =#
-inspect_collection(edges[1]; size=(900,900))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(edges[1]; size=(900,900))
 #=
 **Discussion:**
 Seems fine.
@@ -75,9 +65,7 @@ Seems fine.
 #=
 ## Powerline 2: Transformer
 =#
-inspect_collection(edges[2]; size=(900,900))
-#-
-PowerDynamicsParsers.CGMES.html_hover_map() #hide
+@hover inspect_collection(edges[2]; size=(900,900))
 #=
 **Discussion:**
 - Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.

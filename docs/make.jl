@@ -10,11 +10,29 @@ outdir = joinpath(@__DIR__, "src", "generated")
 isdir(outdir) && rm(outdir, recursive=true)
 mkpath(outdir)
 
+for example in filter(contains(r".jl$"), readdir(example_dir, join=true))
+    Literate.markdown(example, outdir;
+                      preprocess=c->replace(c, "@hover " => ""))
+end
+function preprocess_html_hover(c)
+    replace(c, r"^(\s*)@hover\s+(.*)$"m => s"""
+    \1\2
+    #-
+    PowerDynamicsParsers.CGMES.html_hover_map() #hide
+    #-
+    """)
+end
+function preprocess_script_hover(c)
+    replace(c, r"^(\s*)@hover\s+(.*)$"m => s"""
+    \1\2
+    """)
+end
+
 # Process any .jl files in examples directory
 if isdir(example_dir)
     for example in filter(contains(r".jl$"), readdir(example_dir, join=true))
-        Literate.markdown(example, outdir)
-        Literate.script(example, outdir; keep_comments=true)
+        Literate.markdown(example, outdir; preprocess=preprocess_html_hover)
+        Literate.script(example, outdir; preprocess=preprocess_script_hover, keep_comments=true)
     end
 end
 
