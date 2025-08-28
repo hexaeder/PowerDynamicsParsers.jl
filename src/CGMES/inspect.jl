@@ -1,6 +1,6 @@
 using Graphs
 using GraphMakie: GraphMakie, graphplot!
-using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!, Makie
+using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!, Makie, DataInspector
 using Base.Docs: HTML
 
 
@@ -158,9 +158,18 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         add_edge!(g, e.first, e.second)
     end
 
+    # Generate tooltip labels for native data inspector
+    tooltip_labels = generate_node_tooltips(nodes)
+
     # Create GraphMakie plot with legend
     fig = Figure(; size=size)
     ax = Axis(fig[2,1])
+
+    # Enable data inspector for interactive backends
+    if occursin("GL", string(Makie.current_backend()))
+        DataInspector(ax)
+    end
+
     graphplot!(
         ax,
         g;
@@ -175,6 +184,10 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         arrow_size = 15,
         elabels_fontsize = 8,
         nlabels_distance = 5,
+        # Add native tooltip support
+        node_attr = (; inspector_label = (self, i, pos) -> tooltip_labels[i]),
+        edge_attr = (; inspectable = false),
+        arrow_attr = (; inspectable = false),
     )
     hidedecorations!(ax)
     hidespines!(ax)
@@ -489,11 +502,8 @@ function html_hover_map(fig, labels)
     return HTML(html_string)
 end
 
-function add_property_hover(fig, collection::AbstractCIMCollection)
-    nodes = collect(values(objects(collection)))
-
-    # Generate hover labels with classname, name, and filtered properties
-    hover_labels = String[]
+function generate_node_tooltips(nodes::Vector{CIMObject})
+    tooltip_labels = String[]
     for node in nodes
         label_parts = []
 
@@ -530,8 +540,14 @@ function add_property_hover(fig, collection::AbstractCIMCollection)
             push!(label_parts, "no properties")
         end
 
-        push!(hover_labels, join(label_parts, "\n"))
+        push!(tooltip_labels, join(label_parts, "\n"))
     end
 
+    return tooltip_labels
+end
+
+function add_property_hover(fig, collection::AbstractCIMCollection)
+    nodes = collect(values(objects(collection)))
+    hover_labels = generate_node_tooltips(nodes)
     return html_hover_map(fig, hover_labels)
 end
