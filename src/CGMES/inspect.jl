@@ -317,7 +317,7 @@ function object_text(obj::CIMObject)
     end
 end
 
-function html_hover_map(fig, labels)
+function html_hover_map(fig=Makie.current_figure())
     sc = fig.scene;
 
     # Find all axes and filter for those with graphplots
@@ -333,6 +333,10 @@ function html_hover_map(fig, labels)
     gp = only(filter(plot -> isa(plot, GraphMakie.GraphPlot), ax.scene.plots))
     positions = gp[:node_pos][]
     markersize = gp[:nodeplot_markersize][]
+
+    # get the labels from the graphplot inspector function
+    labelf = gp[:node_attr][][:inspector_label][]
+    labels = [labelf(nothing, i, nothing) for i in eachindex(positions)]
 
     # Use the same approach as scratch.jl - much simpler!
     rel_px_pos = Makie.project.(Ref(ax.scene), positions)
@@ -544,10 +548,4 @@ function generate_node_tooltips(nodes::Vector{CIMObject})
     end
 
     return tooltip_labels
-end
-
-function add_property_hover(fig, collection::AbstractCIMCollection)
-    nodes = collect(values(objects(collection)))
-    hover_labels = generate_node_tooltips(nodes)
-    return html_hover_map(fig, hover_labels)
 end

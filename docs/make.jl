@@ -37,10 +37,11 @@ kwargs = (;
         "Home" => "index.md",
         "Tutorials" => [
             "Inspection of CGMES Test Data" => "generated/cgmes_testdata.md",
-            "Wrong Powerflow data in CGMES Export/" => "generated/cgmes_linemodel.md",
+            "Wrong Powerflow data in CGMES Export" => "generated/cgmes_linemodel.md",
+            "Reexported Dataset" => "generated/cgmes_testdata_reexport.md",
         ]
     ],
-    draft=false,
+    draft=haskey(ENV, "DOCUMENTER_DRAFT"),
     warnonly=[:missing_docs],
 )
 kwargs_warnonly = (; kwargs..., warnonly=true)
