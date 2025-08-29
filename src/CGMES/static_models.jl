@@ -105,8 +105,35 @@ function get_edge_model(class::ACLineSegment, c::AbstractCIMCollection)
     Line(MTKLine(piline, name=Symbol(name)))
 end
 
-function get_edge_model(::PowerTransformer, c::AbstractCIMCollection)
-    error("not implmeneted")
+function get_edge_model(class::PowerTransformer, c::AbstractCIMCollection)
+    comp = CGMES.get_components(class, c)
+    tends = c("PowerTransformerEnd")
+    @assert length(tends) == 2 "Expected exactly two PowerTransformerEnd, got $(length(tends))!"
+
+    tend_topo_names  = map(tends) do tend
+        getname(tend["TransformerEnd.Terminal"]["TopologicalNode"])
+    end
+    src_end = tends[only(findall(x -> x == c.metadata[:src_name], tend_topo_names))]
+    dst_end = tends[only(findall(x -> x == c.metadata[:dst_name], tend_topo_names))]
+
+    Vbase_src = CGMES.get_base_voltage(src_end) # kV
+    Zbase_src = Vbase_src^2 / SBASE
+    Ybase_src = 1 / Zbase_src
+
+    Vbase_dst = CGMES.get_base_voltage(dst_end) # kV
+    Zbase_dst = Vbase_dst^2 / SBASE
+    Ybase_dst = 1 / Zbase_dst
+
+    G_src = src_end["g"] / Ybase_src
+    B_src = src_end["b"] / Ybase_src
+    R = src_end["r"] / Zbase_src + dst_end["r"] / Zbase_dst
+    X = src_end["x"] / Zbase_src + dst_end["x"] / Zbase_dst
+    G_dst = dst_end["g"] / Ybase_dst
+    B_dst = dst_end["b"] / Ybase_dst
+
+    trafo = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name=:PowerTransformer)
+    name = hasname(comp.segment) ? getname(comp.segment) : "ACLineSegment"
+    Line(MTKLine(trafo, name=Symbol(name)))
 end
 
 function classify_branch_subgraph(c::AbstractCIMCollection)

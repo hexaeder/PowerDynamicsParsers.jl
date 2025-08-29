@@ -137,9 +137,16 @@ function split_topologically(collection::AbstractCIMCollection; warn=true)
     # sanity checks
     for subgraph in edge_subgraphs
         @assert length(subgraph("TopologicalNode")) == 2
+        # test that all terminals belong to the topological nodes
+        @assert all(subgraph("Terminal")) do t
+            getname(t["TopologicalNode"]) ∈ getname.(subgraph("TopologicalNode"))
+        end
     end
     for subgraph in node_subgraphs
         @assert length(subgraph("TopologicalNode")) == 1
+        @assert all(subgraph("Terminal")) do t
+            t["TopologicalNode"] == only(subgraph("TopologicalNode"))
+        end
     end
 
     @assert allunique(sg.metadata[:busname] for sg in node_subgraphs)
