@@ -39,6 +39,13 @@ function show_properties(io::IO, mime::MIME"text/plain", properties::AbstractDic
             print(io, "    ", key, " = ")
             if value isa AbstractCIMReference
                 show(IOContext(io, :compact => true), mime, value)
+            elseif value isa Vector{CIMRef}
+                print(io, "[")
+                for (i, ref) in enumerate(value)
+                    i > 1 && print(io, ", ")
+                    show(IOContext(io, :compact => true), mime, ref)
+                end
+                print(io, "]")
             else
                 printstyled(io, value, color=:light_black)
             end
@@ -253,7 +260,7 @@ function dump_properties(collection::AbstractCIMCollection)
         for obj in objects_of_class
             obj_props = properties(obj)
             for (prop_name, prop_value) in obj_props
-                if prop_name != "name" && !(prop_value isa AbstractCIMReference)
+                if prop_name != "name" && !(prop_value isa Union{AbstractCIMReference,Vector{CIMRef}})
                     push!(important_properties, prop_name)
                 end
             end

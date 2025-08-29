@@ -166,7 +166,11 @@ function _parseprops(el::Node, name::AbstractString)
 end
 function _add_property!(props, key, value)
     if haskey(props, key)
-        props[key] = vcat(props[key], value)
+        newvec = vcat(props[key], value)
+        if !(newvec isa Vector{CIMRef})
+            @warn "Multiple values for property $key which are *not* CIMRef, this is not handled yet."
+        end
+        props[key] = newvec
     else
         props[key] = value
     end

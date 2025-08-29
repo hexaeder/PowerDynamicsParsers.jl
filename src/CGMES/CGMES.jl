@@ -32,6 +32,8 @@ mutable struct CIMRef <: AbstractCIMReference
 end
 is_resolved(ref::CIMRef) = ref.resolved
 is_external_ref(ref::CIMRef) = startswith(ref.id, "http")
+Base.iterate(ref::CIMRef) = (ref, nothing)
+Base.iterate(ref::CIMRef, state) = nothing
 
 struct CIMBackref <: AbstractCIMReference
     source::CIMEntity
@@ -117,7 +119,13 @@ Base.copy(ref::CIMRef) = CIMRef(ref.id)
 function Base.copy(obj::CIMObject)
     props_copy = OrderedDict{String, Any}()
     for (key, val) in obj.properties
-        props_copy[key] = val isa CIMRef ? copy(val) : val
+        props_copy[key] = if val isa CIMRef
+            copy(val)
+        elseif val isa Vector{CIMRef}
+            copy.(val)
+        else
+            val
+        end
     end
     # Create new object with empty reference vectors (rebuilt by resolve_references!)
     CIMObject(obj.profile, obj.id, obj.class_name, props_copy)
@@ -127,7 +135,13 @@ function Base.copy(ext::CIMExtension)
     base_copy = copy(ext.base) # gets rid of resolve reference by copying
     props_copy = OrderedDict{String, Any}()
     for (key, val) in ext.properties
-        props_copy[key] = val isa CIMRef ? copy(val) : val
+        props_copy[key] = if val isa CIMRef
+            copy(val)
+        elseif val isa Vector{CIMRef}
+            copy.(val)
+        else
+            val
+        end
     end
     CIMExtension(ext.profile, base_copy, ext.class_name, props_copy)
 end
@@ -144,15 +158,19 @@ end
 
 function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, objectdict; warn)
     for (prop_name, prop_value) in source_object.properties
-        if prop_value isa CIMRef && !prop_value.resolved && !startswith(prop_value.id, "http://")
-            try
-                target_object = objectdict[prop_value.id]
-                prop_value.resolved = true
-                prop_value.target = target_object
-                _register_reference!(target_object, source_object)
-            catch e
-                warn && @warn "Failed to resolve reference for property $(prop_name) in object $(source_object): $e"
-                # rethrow(e)
+        if prop_value isa Union{CIMRef, Vector{CIMRef}}
+            for ref in prop_value
+                if !ref.resolved && !startswith(ref.id, "http://")
+                    try
+                        target_object = objectdict[ref.id]
+                        ref.resolved = true
+                        ref.target = target_object
+                        _register_reference!(target_object, source_object)
+                    catch e
+                        warn && @warn "Failed to resolve reference for property $(prop_name) in object $(source_object): $e"
+                        # rethrow(e)
+                    end
+                end
             end
         end
     end

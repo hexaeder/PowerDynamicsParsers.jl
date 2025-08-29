@@ -32,6 +32,7 @@ function equalproperties(a::CIMObject, b::CIMObject)
 end
 
 equal_property(a, b) = a == b
+equal_property(a::Vector, b::Vector) = length(a) == length(b) && all(equal_property.(a, b))
 function equal_property(a::CIMRef, b::CIMRef)
     !a.resolved && !b.resolved && return true # ingore unresolved references
     # true if point to same name

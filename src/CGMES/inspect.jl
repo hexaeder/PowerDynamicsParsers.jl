@@ -103,8 +103,10 @@ function generate_graphplot_args(nodes::Vector{CIMObject}; hl1=[], hl2=[], seed,
     for (source_idx, node) in enumerate(nodes)
         # First check base object properties
         for (key, value) in node.properties
-            if value isa CIMRef && !startswith(value.id, "http")
-                target_idx = findfirst(id -> id == value.id, ids)
+            value isa Union{CIMRef, Vector{CIMRef}} || continue
+            for ref in value
+                startswith(ref.id, "http") && continue  # Skip external references
+                target_idx = findfirst(id -> id == ref.id, ids)
                 if !isnothing(target_idx)
                     e = source_idx => target_idx
                     existing_edge = findfirst(isequal(e), edges)
@@ -122,8 +124,10 @@ function generate_graphplot_args(nodes::Vector{CIMObject}; hl1=[], hl2=[], seed,
         # Then check extension properties
         for ext in node.extension
             for (key, value) in ext.source.properties
-                if value isa CIMRef && !startswith(value.id, "http")
-                    target_idx = findfirst(id -> id == value.id, ids)
+                value isa Union{CIMRef, Vector{CIMRef}} || continue
+                for ref in value
+                    startswith(ref.id, "http") && continue  # Skip external references
+                    target_idx = findfirst(id -> id == ref.id, ids)
                     if !isnothing(target_idx)
                         e = source_idx => target_idx
                         existing_edge = findfirst(isequal(e), edges)
@@ -389,8 +393,11 @@ function discover_nodes(start_node::CIMObject, stop_classes; filter_out=String[]
         # Explore forward references (properties) - always continue even for stop nodes
         props = properties(node)
         for (key, value) in props
-            if value isa CIMRef && value.resolved && !startswith(value.id, "http")
-                recursive_discover!(value.target, depth + 1)
+            value isa Union{CIMRef, Vector{CIMRef}} || continue
+            for ref in value
+                startswith(ref.id, "http") && continue  # Skip external references
+                ref.resolved || continue
+                recursive_discover!(ref.target, depth + 1)
             end
         end
 
@@ -681,12 +688,17 @@ function generate_node_tooltips(nodes::Vector{CIMObject})
             # Include if it's not a name property and either:
             # - Not a CIMRef at all, or
             # - A CIMRef that's not resolved (external reference or filtered out object)
-            if !contains(lowercase(key), "name") &&
-               (!(value isa CIMRef) || !value.resolved)
-                # Display unresolved references as "unresolved ref" instead of printing the object
-                display_value = (value isa CIMRef && !value.resolved) ? "unresolved ref" : value
-                push!(filtered_props, "$key = $display_value")
+            contains(lowercase(key), "name") && continue
+            display_value = if value isa Union{CIMRef, Vector{CIMRef}}
+                if all(ref.resolved for ref in value)
+                    continue  # Skip fully resolved reference (lists)
+                else
+                    "unresolved ref"  # Indicate presence of unresolved refs
+                end
+            else
+                value
             end
+            push!(filtered_props, "$key = $display_value")
         end
 
         # Add filtered properties to label parts

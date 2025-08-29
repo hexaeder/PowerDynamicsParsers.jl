@@ -77,11 +77,13 @@ function discover_subgraph(
         end
 
         # Explore forward references (properties)
-        for (key, ref) in properties(node)
-            ref isa CIMRef || continue
-            is_external_ref(ref) && continue  # Skip external references
-            @assert is_resolved(ref) "CIMRef $ref should be resolved before discovery."
-            recursive_discover!(follow_ref(ref), depth + 1)
+        for (key, refs) in properties(node)
+            refs isa Union{CIMRef,Vector{CIMRef}} || continue
+            for ref in refs
+                is_external_ref(ref) && continue  # Skip external references
+                @assert is_resolved(ref) "CIMRef $ref should be resolved before discovery."
+                recursive_discover!(follow_ref(ref), depth + 1)
+            end
         end
 
         # Explore backward references - stop for nobackref nodes
@@ -238,10 +240,13 @@ function to_digraph(collection::CIMCollection)
     g = SimpleDiGraph(length(nodes))
     for (source_idx, node) in enumerate(nodes)
         for (k, v) in properties(node)
-            if v isa CIMRef && v.resolved
-                target = follow_ref(v)
-                target_idx = findfirst(n -> n.id == target.id, nodes)
-                !isnothing(target_idx) && add_edge!(g, source_idx, target_idx)
+            if v isa Union{CIMRef,Vector{CIMRef}}
+                for ref in v
+                    ref.resolved || continue
+                    target = follow_ref(ref)
+                    target_idx = findfirst(n -> n.id == target.id, nodes)
+                    !isnothing(target_idx) && add_edge!(g, source_idx, target_idx)
+                end
             end
         end
     end
