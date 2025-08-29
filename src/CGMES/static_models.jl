@@ -1,3 +1,4 @@
+using PowerDynamics
 using PowerDynamics.NetworkDynamics: str_significant
 using PowerDynamics: DataFrame
 
@@ -208,7 +209,7 @@ function get_static_vertex_model(c::CIMCollection)
     vm
 end
 powerdynamics_model(pq::PQType, name) = pfPQ(; P=pq.P, Q=pq.Q, name)
-powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.Q, name)
+powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.V, name)
 powerdynamics_model(s::SlackType, name) = pfSlack(; V=s.V, name)
 
 function PowerDynamics.Network(ds::AbstractCIMCollection; kwargs...)

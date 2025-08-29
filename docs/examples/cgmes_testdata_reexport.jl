@@ -19,6 +19,7 @@ comp = PowerDynamicsParsers.CGMES.CIMCollectionComparison(reduced_datasetA, redu
 
 nodesA, edgesA = split_topologically(datasetA; warn=false);
 nodesB, edgesB = split_topologically(datasetB; warn=false)
+nothing #hide
 
 #=
 ## Bus 1 Comparison
@@ -56,24 +57,11 @@ Single load bus. Load setpoint matches powerflor result so just plain PQ node
 comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[1], edgesB[1])
 @hover inspect_comparison(comparison1; size=(1000, 1500))
 
-only(edgesA[1]("PowerTransformer"))
-only(edgesB[1]("PowerTransformer"))
 #=
 ## Edge 2 Comparison
 =#
 comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[2], edgesB[2])
 @hover inspect_comparison(comparison2; size=(1000, 1500))
-
-#=
-## Calculate Powerflow for edge again
-=#
-#-
-emA = CGMES.get_edge_model(edgesA[2])
-CGMES.test_powerflow(emA)
-
-#-
-emB = CGMES.get_edge_model(edgesB[2])
-CGMES.test_powerflow(emB)
 
 #=
 ## Build full powerflow network
@@ -99,3 +87,27 @@ show_powerflow(pfs)
 **Powerflow from CGMES data**
 =#
 show_powerflow(datasetB)
+
+#=
+### Original Test dataset
+While we're at it let's also check the original test dataset
+=#
+first_dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "testdata1"))
+pfnw = Network(first_dataset)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
+#-
+show_powerflow(first_dataset)
+#=
+This does not match, which is weird. The differnece is on the third vertex where i used
+a PV model witn P=2 and V=1:
+=#
+pfnw[VIndex(3)]
+#=
+Which seems to match what we see in the graph:
+=#
+vertices, edges = split_topologically(first_dataset; warn=false)
+@hover inspect_collection(vertices[3]; size=(900,900))
+#=
+so no idea whats going wrong here...
+=#
