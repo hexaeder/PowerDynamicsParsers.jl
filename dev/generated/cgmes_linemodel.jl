@@ -8,12 +8,12 @@ using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
 dataset1 = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "1-EHVHV-mixed-all-2-sw-Ausschnitt"))
 nodes, edges = split_topologically(dataset1; warn=false)
-edges[1]
+nothing #hide
 
 # In this second dataset, the first line is an ACLineSegment with two terminals.
 # We go ahead and try to build a Power Dynamics line model for it:
 
-em = CGMES.get_edge_model(edges[1])
+em = CGMES.get_edge_model(edges[2])
 
 # I wrote a small function that takes the voltage steady state from the surrounding voltage nodes,
 # calculates the power at both ends of the line model, and compares it to the power flow result
@@ -25,7 +25,7 @@ CGMES.test_powerflow(em)
 # For debugging, I implemented another function: given the voltages and powers at both ends,
 # this function tries to calculate the correct R, X, G, B parameters for a pi-line model.
 
-CGMES.determine_branch_parameters(edges[1])
+CGMES.determine_branch_parameters(edges[2])
 
 # We see that the R and X values are different from the calculated ones. If we use the calculated
 # variables instead, the power flow result matches the values from the dataset:
@@ -61,7 +61,7 @@ CGMES.test_powerflow(em)
 
 # For this model, the backward calculation of R, X, G, and B can be validated too:
 
-CGMES.determine_branch_parameters(edges[1])
+CGMES.determine_branch_parameters(edges[3])
 
 # This confirms the results.
 #

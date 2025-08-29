@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Reexported Dataset · PowerDynamicsParsers.jl</title><meta name="title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="og:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../cgmes_testdata/">Inspection of CGMES Test Data</a></li><li><a class="tocitem" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export</a></li><li class="is-active"><a class="tocitem" href>Reexported Dataset</a><ul class="internal"><li><a class="tocitem" href="#Compare-the-two-datasets"><span>Compare the two datasets</span></a></li><li><a class="tocitem" href="#Bus-1-Comparison"><span>Bus 1 Comparison</span></a></li><li><a class="tocitem" href="#Bus-2-Comparison"><span>Bus 2 Comparison</span></a></li><li><a class="tocitem" href="#Bus-3-Comparison"><span>Bus 3 Comparison</span></a></li><li><a class="tocitem" href="#Edge-1-Comparison"><span>Edge 1 Comparison</span></a></li><li><a class="tocitem" href="#Edge-2-Comparison"><span>Edge 2 Comparison</span></a></li><li><a class="tocitem" href="#Calculate-Powerflow-for-edge-again"><span>Calculate Powerflow for edge again</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Reexported Dataset</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Reexported Dataset</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_testdata_reexport.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><pre><code class="language- hljs">using PowerDynamics
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
+using CairoMakie
+
+datasetA = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;reexport&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt&quot;))
+datasetB = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;reexport&quot;, &quot;1-EHVHV-mixed-all-2-sw-Ausschnitt_reexport&quot;))
+nothing #hide</code></pre><h2 id="Compare-the-two-datasets"><a class="docs-heading-anchor" href="#Compare-the-two-datasets">Compare the two datasets</a><a id="Compare-the-two-datasets-1"></a><a class="docs-heading-anchor-permalink" href="#Compare-the-two-datasets" title="Permalink"></a></h2><pre><code class="language- hljs">reduced_datasetA = reduce_complexity(datasetA)
+reduced_datasetB = reduce_complexity(datasetB)
+comp = PowerDynamicsParsers.CGMES.CIMCollectionComparison(reduced_datasetA, reduced_datasetB)
+inspect_comparison(comp; size=(1000, 1500), node_labels=:short, edge_labels=false)</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<pre><code class="language- hljs">nodesA, edgesA = split_topologically(datasetA; warn=false)
+nodesB, edgesB = split_topologically(datasetB; warn=false)</code></pre><h2 id="Bus-1-Comparison"><a class="docs-heading-anchor" href="#Bus-1-Comparison">Bus 1 Comparison</a><a id="Bus-1-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-1-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
+inspect_comparison(comparison1; size=(1000, 1500))</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h2 id="Bus-2-Comparison"><a class="docs-heading-anchor" href="#Bus-2-Comparison">Bus 2 Comparison</a><a id="Bus-2-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-2-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[2], nodesB[2])
+inspect_comparison(comparison2; size=(1000, 1500))</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h2 id="Bus-3-Comparison"><a class="docs-heading-anchor" href="#Bus-3-Comparison">Bus 3 Comparison</a><a id="Bus-3-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-3-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison3 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[3], nodesB[3])
+inspect_comparison(comparison3; size=(1000, 1500))</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h2 id="Edge-1-Comparison"><a class="docs-heading-anchor" href="#Edge-1-Comparison">Edge 1 Comparison</a><a id="Edge-1-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-1-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[1], edgesB[1])
+inspect_comparison(comparison1; size=(1000, 1500))</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h2 id="Edge-2-Comparison"><a class="docs-heading-anchor" href="#Edge-2-Comparison">Edge 2 Comparison</a><a id="Edge-2-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-2-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[2], edgesB[2])
+inspect_comparison(comparison2; size=(1000, 1500))</code></pre><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 42.52788338011263, y: 76.55025844047337, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 345\"\nACDCsequenceNumber = 2\nphases = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 57.06180267895298, y: 61.12970955287804, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"HV2 Line 112\"\nb0ch = 0\nbch = 7.7883e-6\ng0ch = 0\ngch = 0\nr = 0.301627\nr0 = 0\nshortCircuitEndTemperature = 80\nx = 0.815356\nx0 = 0\nConductor.length = 2.75458", node: 2},
+            {x: 42.16341662451478, y: 45.40626500133026, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"110.00 kV\"\nnominalVoltage = 110\ndescription = BaseVoltage 110.00 kV", node: 3},
+            {x: 75.1002844286209, y: 49.408127063384676, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"HV2 Bus 11\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 4},
+            {x: 60.150826054343135, y: 33.7281385252444, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 7\"\nno properties", node: 5},
+            {x: 42.957630671543704, y: 27.150149321824692, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 7-HV2 Bus 8\"\nSubstation = unresolved ref", node: 6},
+            {x: 65.5968563047646, y: 14.010104064862317, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00868266\nv = 117.504", node: 7},
+            {x: 92.59178984284924, y: 61.09201961608155, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 0.197183\nq = -0.119135", node: 8},
+            {x: 93.83838736055499, y: 40.10290772113454, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 9},
+            {x: 27.68168346333408, y: 60.78442036715113, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"HV2 Bus 339\"\nno properties", node: 10},
+            {x: 22.73837753257552, y: 43.99862201073487, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"HV2 Bus 339-HV2 Bus 340\"\nSubstation = unresolved ref", node: 11},
+            {x: 6.1616172456317155, y: 63.53762768710149, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = -0.00943165\nv = 117.503", node: 12},
+            {x: 52.847561040071945, y: 94.21212233837898, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -0.197182\nq = 0.0116045", node: 13},
+            {x: 30.475287215217627, y: 92.90917807598265, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for HV2 Line 112\"\nno properties", node: 14}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h2 id="Calculate-Powerflow-for-edge-again"><a class="docs-heading-anchor" href="#Calculate-Powerflow-for-edge-again">Calculate Powerflow for edge again</a><a id="Calculate-Powerflow-for-edge-again-1"></a><a class="docs-heading-anchor-permalink" href="#Calculate-Powerflow-for-edge-again" title="Permalink"></a></h2><pre><code class="language- hljs">emA = CGMES.get_edge_model(edgesA[2])
+CGMES.test_powerflow(emA)</code></pre><pre><code class="language- hljs">emB = CGMES.get_edge_model(edgesB[2])
+CGMES.test_powerflow(emB)</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_linemodel/">« Wrong Powerflow data in CGMES Export</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 29 August 2025 14:11">Friday 29 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
