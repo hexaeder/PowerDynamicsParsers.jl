@@ -25,6 +25,10 @@ function is_busbar_section_terminal(t)
     is_class(t["ConductingEquipment"], "BusbarSection")
 end
 
+STOP_FORWARD = [
+    "TopologicalIsland",
+]
+
 STOP_BACKREF = [
     "BaseVoltage",
     "VoltageLevel",
@@ -33,6 +37,7 @@ STOP_BACKREF = [
     "LoadAggregate",
     "ConformLoadGroup",
     "LoadResponseCharacteristic",
+    "TopologicalIsland",
 ]
 
 """
@@ -47,6 +52,7 @@ keyword arguments
 function discover_subgraph(
     root::CIMObject;
     nobackref = is_class(STOP_BACKREF),
+    noforward = is_class(STOP_FORWARD),
     maxdepth = 100,
     filter_out = x -> false,
     warn=true
@@ -77,12 +83,14 @@ function discover_subgraph(
         end
 
         # Explore forward references (properties)
-        for (key, refs) in properties(node)
-            refs isa Union{CIMRef,Vector{CIMRef}} || continue
-            for ref in refs
-                is_external_ref(ref) && continue  # Skip external references
-                @assert is_resolved(ref) "CIMRef $ref should be resolved before discovery."
-                recursive_discover!(follow_ref(ref), depth + 1)
+        if !noforward(node)
+            for (key, refs) in properties(node)
+                refs isa Union{CIMRef,Vector{CIMRef}} || continue
+                for ref in refs
+                    is_external_ref(ref) && continue  # Skip external references
+                    @assert is_resolved(ref) "CIMRef $ref should be resolved before discovery."
+                    recursive_discover!(follow_ref(ref), depth + 1)
+                end
             end
         end
 
@@ -173,7 +181,7 @@ function split_topologically(collection::AbstractCIMCollection; warn=true)
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation", "TopologicalIsland"])
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation"])
     sg = discover_subgraph(t; filter_out, warn)
     sg.metadata[:busname] = getname(t)
     sg

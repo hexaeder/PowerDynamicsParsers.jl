@@ -1,4 +1,5 @@
 using PowerDynamics.NetworkDynamics: str_significant
+using PowerDynamics: DataFrame
 
 abstract type AbstractBranchSubgraph end
 abstract type SingleBranchSubgraph <: AbstractBranchSubgraph end
@@ -148,7 +149,122 @@ function classify_branch_subgraph(c::AbstractCIMCollection)
     return nothing
 end
 
-get_base_voltage(ob::CIMObject) = follow_ref(ob[r"BaseVoltage$"])["nominalVoltage"]
+abstract type Injector end
+struct SlackType <: Injector
+    V::Float64
+    objs::Vector{CIMObject}
+end
+struct PVType <: Injector
+    P::Float64
+    V::Float64
+    objs::Vector{CIMObject}
+end
+struct PQType <: Injector
+    P::Float64
+    Q::Float64
+    objs::Vector{CIMObject}
+end
+# S + S
+combine(sA::SlackType, sB::SlackType) = SlackType(compatible_voltage(sA, sB), vcat(sA.objs, sB.objs))
+# S + PV
+combine(s::SlackType, pv::PVType) = SlackType(compatible_voltage(s, pv), vcat(s.objs, pv.objs))
+combine(pv::PVType, s::SlackType) = combine(s, pv)
+# S + PQ
+combine(s::SlackType, pq::PQType) = SlackType(s.V, vcat(s.objs, pq.objs))
+combine(pq::PQType, s::SlackType) = combine(s, pq)
+
+# PV + PV
+combine(pvA::PVType, pvB::PVType) = PVType(pvA.P + pvB.P, compatible_voltage(pvA, pvB), vcat(pvA.objs, pvB.objs))
+# PV + PQ
+combine(pv::PVType, pq::PQType) = PVType(pq.P + pv.P, pv.V, vcat(pq.objs, pv.objs))
+combine(pq::PQType, pv::PVType) = combine(pv, pq)
+
+compatible_voltage(v1::Injector, v2::Injector) = compatible_voltage(v1.V, v2.V)
+function compatible_voltage(v1, v2)
+    isnan(v1) && !isnan(v2) && return v2
+    !isnan(v1) && isnan(v2) && return v1
+    isapprox(v1, v2; rtol=1e-5, atol=1e-8) && return v1
+    error("Incompatible voltage setpoints: $(str_significant(v1)) vs $(str_significant(v2))!")
+end
+
+# PQ + PQ
+combine(pqA::PQType, pqB::PQType) = PQType(pqA.P + pqB.P, pqA.Q + pqB.Q, vcat(pqA.objs, pqB.objs))
+
+function get_static_vertex_model(c::CIMCollection)
+    injectors = []
+    tpn = only(c("TopologicalNode"))
+    is_slack(tpn) && push!(injectors, SlackType(NaN, [tpn]))
+
+    for t in c("Terminal")
+        inj = t["ConductingEquipment"]
+        type = injector_type(inj)
+        push!(injectors, type)
+    end
+    mod = reduce(combine, injectors)
+    name = Symbol(getname(tpn))
+    vm = powerdynamics_model(mod, name)
+    set_graphelement!(vm, c.metadata[:busidx])
+    vm.metadata[:cgmes_subgraph] = c
+    vm
+end
+powerdynamics_model(pq::PQType, name) = pfPQ(; P=pq.P, Q=pq.Q, name)
+powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.Q, name)
+powerdynamics_model(s::SlackType, name) = pfSlack(; V=s.V, name)
+
+function PowerDynamics.Network(ds::AbstractCIMCollection; kwargs...)
+    vertices, edges = split_topologically(ds; warn=false)
+    ems = get_edge_model.(edges)
+    vms = get_static_vertex_model.(vertices)
+    PowerDynamics.Network(vms, ems; kwargs...)
+end
+
+injector_type(o::CIMObject) = injector_type(Val(Symbol(o.class_name)), o)
+function injector_type(::Val{:SynchronousMachine}, o::CIMObject)
+    props = properties(o)
+
+    # get p and q from SSH
+    P = -props["RotatingMachine.p"]/SBASE
+    Q = -props["RotatingMachine.q"]/SBASE
+
+    if haskey(props, "RegulatingCondEq.RegulatingControl")
+        baseV = get_base_voltage(get_connecting_terminal(o))
+        controller = follow_ref(props["RegulatingCondEq.RegulatingControl"])
+        is_class(controller, "RegulatingControl") || error("Expected RegulatingControl, got $(controller.class_name)")
+        V = controller["targetValue"]/baseV
+        return PVType(P, V, [o])
+    else
+        return PQType(P, Q, [o])
+    end
+end
+function injector_type(::Val{:ConformLoad}, o::CIMObject)
+    props = properties(o)
+    P = -props["EnergyConsumer.p"]/SBASE
+    Q = -props["EnergyConsumer.q"]/SBASE
+    return PQType(P, Q, [o])
+end
+
+function is_slack(o::CIMObject)
+    @assert is_class(o, "TopologicalNode") "Expected TopologicalNode, got $(o.class_name)"
+    islands = filter(is_class("TopologicalIsland"), follow_ref.(o.references))
+    @assert allequal(islands)
+    island = first(islands)
+    island["AngleRefTopologicalNode"] == o
+end
+
+function get_base_voltage(ob::CIMObject)
+    if is_class(ob, ["TopologicalNode", "PowerTransformerEnd", "ACLineSegment"])
+        return follow_ref(ob[r"BaseVoltage$"])["nominalVoltage"]
+    elseif is_class(ob, "Terminal")
+        return get_base_voltage(ob["TopologicalNode"])
+    end
+    error("Don't know how to get base voltage for object of class $(ob.class_name)!")
+end
+
+function get_connecting_terminal(injector::CIMObject)
+    ts = filter(is_class("Terminal"), follow_ref.(injector.references))
+    length(ts) == 1 || error("Expected exactly one Terminal for injector, got $(length(ts))!")
+    only(ts)
+end
 
 function get_voltage_pu(o::CIMObject)
     sv = only(filter(is_class("SvVoltage"), CGMES.base_object.(o.references)))
@@ -330,4 +446,34 @@ function determine_branch_parameters(c)
     """
     show(stdout, MIME"text/plain"(), out)
     nothing
+end
+
+function PowerDynamics.show_powerflow(ds::AbstractCIMCollection)
+    vertices, edges = split_topologically(ds; warn=false)
+
+    dict = OrderedDict()
+    dict["N"] = Int[]
+    dict["Bus Names"] = String[]
+    dict["vm [pu]"] = Float64[]
+    dict["varg [deg]"] = Float64[]
+    dict["P [pu]"] = Float64[]
+    dict["Q [pu]"] = Float64[]
+
+    df = DataFrame
+    for (i, v) in enumerate(vertices)
+        # i = 1
+        # v = first(vertices)
+        tpn = only(v("TopologicalNode"))
+        V = CGMES.get_voltage_pu(tpn)
+        S = sum(CGMES.get_injected_power_pu.(v("Terminal")))
+
+        push!(dict["N"], i)
+        push!(dict["Bus Names"], getname(tpn))
+        push!(dict["vm [pu]"], abs(V))
+        push!(dict["varg [deg]"], rad2deg(angle(V)))
+        push!(dict["P [pu]"], real(S))
+        push!(dict["Q [pu]"], imag(S))
+    end
+
+    DataFrame(dict)
 end

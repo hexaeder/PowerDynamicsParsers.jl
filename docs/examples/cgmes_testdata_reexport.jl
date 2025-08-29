@@ -1,4 +1,5 @@
 using PowerDynamics
+using PowerDynamics.Library
 using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
 using CairoMakie
@@ -16,7 +17,7 @@ comp = PowerDynamicsParsers.CGMES.CIMCollectionComparison(reduced_datasetA, redu
 @hover inspect_comparison(comp; size=(1000, 1500), node_labels=:short, edge_labels=false)
 #-
 
-nodesA, edgesA = split_topologically(datasetA; warn=false)
+nodesA, edgesA = split_topologically(datasetA; warn=false);
 nodesB, edgesB = split_topologically(datasetB; warn=false)
 
 #=
@@ -54,6 +55,9 @@ Single load bus. Load setpoint matches powerflor result so just plain PQ node
 =#
 comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[1], edgesB[1])
 @hover inspect_comparison(comparison1; size=(1000, 1500))
+
+only(edgesA[1]("PowerTransformer"))
+only(edgesB[1]("PowerTransformer"))
 #=
 ## Edge 2 Comparison
 =#
@@ -70,3 +74,28 @@ CGMES.test_powerflow(emA)
 #-
 emB = CGMES.get_edge_model(edgesB[2])
 CGMES.test_powerflow(emB)
+
+#=
+## Build full powerflow network
+### Dataset A (pre reexport)
+**Powerflow from PowerDynamics.jl**
+=#
+pfnw = Network(datasetA)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
+#=
+**Powerflow from CGMES data**
+=#
+show_powerflow(datasetA)
+
+#=
+### Dataset B (post reexport)
+**Powerflow from PowerDynamics.jl**
+=#
+pfnw = Network(datasetB)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
+#=
+**Powerflow from CGMES data**
+=#
+show_powerflow(datasetB)
