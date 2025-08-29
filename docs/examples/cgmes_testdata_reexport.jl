@@ -46,11 +46,15 @@ Reexported dataset
 =#
 @hover inspect_collection(nodesB[3]; size=(900,900))
 
-A = nodesA[1]
-B = nodesB[1]
+#-
+comparison = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
 
-comparison = CIMCollectionComparison(A, B)
+
+
 
 # Create side-by-side comparison plot
-fig = @hover inspect_comparison(comparison; size=(1600, 800))
-get_grpahplot(fig)
+@hover inspect_comparison(comparison; size=(1600, 800))
+
+# CGMES.get_graphplots(fig)
+
+# CGMES.html_hover_map(fig)

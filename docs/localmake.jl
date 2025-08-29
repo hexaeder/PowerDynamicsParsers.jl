@@ -61,7 +61,7 @@ function full_serving()
         printstyled("\n\nDocs are served at http://localhost:$port\n\n", color=:blue, bold=true)
         println("Run again? Enter! Exit with 'q'.")
         if readline() == "q"
-            global run = false
+            run = false
         end
     end
 end

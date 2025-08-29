@@ -230,10 +230,10 @@ base_object(x::CIMObject) = x
 base_object(x::CIMExtension) = follow_ref(x.base)
 
 include("parsing.jl")
+include("compare.jl")
 include("inspect.jl")
 include("subgraph.jl")
 include("show.jl")
 include("static_models.jl")
-include("compare.jl")
 
 end
