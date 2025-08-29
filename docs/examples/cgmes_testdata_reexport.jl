@@ -51,9 +51,8 @@ comparison = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodes
 
 
 
-
 # Create side-by-side comparison plot
-@hover inspect_comparison(comparison; size=(1600, 800))
+@hover inspect_comparison(comparison; size=(2000, 1000))
 
 # CGMES.get_graphplots(fig)
 
