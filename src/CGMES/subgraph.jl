@@ -25,7 +25,15 @@ function is_busbar_section_terminal(t)
     is_class(t["ConductingEquipment"], "BusbarSection")
 end
 
-STOP_BACKREF = ["BaseVoltage", "VoltageLevel", "OperationalLimitType", "Substation", "LoadAggregate", "ConformLoadGroup", "LoadResponseCharacteristic"]
+STOP_BACKREF = [
+    "BaseVoltage",
+    "VoltageLevel",
+    "OperationalLimitType",
+    "Substation",
+    "LoadAggregate",
+    "ConformLoadGroup",
+    "LoadResponseCharacteristic",
+]
 
 """
     discover_subgraph(root; kwargs)::CIMCollection
@@ -134,19 +142,39 @@ function split_topologically(collection::AbstractCIMCollection; warn=true)
         @assert length(subgraph("TopologicalNode")) == 1
     end
 
+    @assert allunique(sg.metadata[:busname] for sg in node_subgraphs)
+    sort!(node_subgraphs, by = sg->sg.metadata[:busname])
+    for (i, ng) in enumerate(node_subgraphs)
+        ng.metadata[:busidx] = i
+    end
+
+    for eg in edge_subgraphs
+        tns = eg("TopologicalNode")
+        src_name, dst_name = sort!([getname(tn) for tn in tns])
+        src_idx = findfirst(sg -> sg.metadata[:busname] == src_name, node_subgraphs)
+        dst_idx = findfirst(sg -> sg.metadata[:busname] == dst_name, node_subgraphs)
+        eg.metadata[:src_name] = src_name
+        eg.metadata[:dst_name] = dst_name
+        eg.metadata[:src_idx] = src_idx
+        eg.metadata[:dst_idx] = dst_idx
+    end
+    sort!(edge_subgraphs; by=eg->(eg.metadata[:src_idx], eg.metadata[:dst_idx]))
+
     (; node_subgraphs, edge_subgraphs)
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation"])
-    discover_subgraph(t; filter_out, warn)
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation", "TopologicalIsland"])
+    sg = discover_subgraph(t; filter_out, warn)
+    sg.metadata[:busname] = getname(t)
+    sg
 end
 function _discover_linened_subgraph(t; warn)
     @assert is_lineend(t) "Expected LineEnd, got $(t.class_name)"
 
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
-    filter_out = is_class([r"Diagram", "Substation"])
-    discover_subgraph(t; nobackref, filter_out, warn)
+    filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland"])
+    sg = discover_subgraph(t; nobackref, filter_out, warn)
 end
 
 
@@ -163,7 +191,8 @@ function reduce_complexity(collection)
             "Substation",
             "BaseVoltage",
             "PositionPoint",
-            "Location"
+            "Location",
+            "TopologicalIsland",
         ]),
         collection; warn=false
     )

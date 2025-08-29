@@ -10,8 +10,9 @@ export rdf_node, CIMObject, CIMRef, CIMBackref, CIMCollection, CIMFile, CIMDatas
 export plain_name, is_reference, is_object, is_extension, parse_metadata
 export resolve_references!
 export objects, extensions, hasname, getname, properties
-export inspect_collection, inspect_node
+export inspect_collection, inspect_node, inspect_comparison
 export follow_ref
+export CIMCollectionComparison
 
 SBASE = 100 # Base power in MVA
 
@@ -56,6 +57,8 @@ end
 struct CIMCollection <: AbstractCIMCollection
     objects::OrderedDict{String, CIMObject}
     extensions::Vector{CIMExtension}
+    metadata::OrderedDict{Symbol,Any}
+    CIMCollection(objs, exts) = new(objs, exts, OrderedDict{Symbol,Any}())
 end
 
 struct CIMFile <: AbstractCIMCollection
@@ -231,5 +234,6 @@ include("inspect.jl")
 include("subgraph.jl")
 include("show.jl")
 include("static_models.jl")
+include("compare.jl")
 
 end

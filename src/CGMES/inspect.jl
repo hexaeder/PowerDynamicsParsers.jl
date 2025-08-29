@@ -46,7 +46,7 @@ function inspect_node(node::CIMObject; stop_classes=String[], filter_out=String[
     return _plot_nodelist(nodes; size=size, hl1=[node], hl2=stop_nodes, seed, edge_labels, node_labels)
 end
 
-function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[], seed, edge_labels=true, node_labels=:long)
+function generate_graphplot_args(nodes::Vector{CIMObject}; hl1=[], hl2=[], seed, edge_labels=true, node_labels=:long)
     if isempty(nodes)
         @warn "No nodes found to plot"
         return nothing
@@ -161,18 +161,8 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
     # Generate tooltip labels for native data inspector
     tooltip_labels = generate_node_tooltips(nodes)
 
-    # Create GraphMakie plot with legend
-    fig = Figure(; size=size)
-    ax = Axis(fig[2,1])
-
-    # Enable data inspector for interactive backends
-    if occursin("GL", string(Makie.current_backend()))
-        DataInspector(ax)
-    end
-
-    graphplot!(
-        ax,
-        g;
+    # Create graphplot arguments
+    args = (
         layout = GraphMakie.Stress(; seed),
         nlabels = node_label_data,
         elabels = edge_label_data,
@@ -184,13 +174,46 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         arrow_size = 15,
         elabels_fontsize = 8,
         nlabels_distance = 5,
-        # Add native tooltip support
         node_attr = (; inspector_label = (self, i, pos) -> tooltip_labels[i]),
         edge_attr = (; inspectable = false),
         arrow_attr = (; inspectable = false),
     )
+
+    # Return graph and arguments
+    return g, args
+end
+
+function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2=[], seed, edge_labels=true, node_labels=:long)
+    result = generate_graphplot_args(nodes; hl1, hl2, seed, edge_labels, node_labels)
+    if result === nothing
+        return nothing
+    end
+
+    g, args = result
+
+    # Create GraphMakie plot with legend
+    fig = Figure(; size=size)
+    ax = Axis(fig[2,1])
+
+    # Enable data inspector for interactive backends
+    if occursin("GL", string(Makie.current_backend()))
+        DataInspector(ax)
+    end
+
+    graphplot!(ax, g; args...)
     hidedecorations!(ax)
     hidespines!(ax)
+
+    # Recreate legend data locally
+    profiles = [obj.profile for obj in nodes]
+    profile_color_map = Dict(
+        :DiagramLayout => :red,
+        :Dynamics => :blue,
+        :GeographicalLocation => :green,
+        :StateVariables => :orange,
+        :Topology => :purple,
+        :Equipment => :brown
+    )
 
     # Add profile color legend below the axis
     unique_profiles_in_data = unique(profiles)
@@ -207,6 +230,130 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
         tellheight=true,
         tellwidth=false,
         )
+
+    return fig
+end
+
+function inspect_comparison(comparison::CIMCollectionComparison; size=(2000, 1000), seed=1, edge_labels=true, node_labels=:long, filter_out=String[])
+    # Extract nodes from both collections
+    nodesA = collect(values(objects(comparison.A)))
+    nodesB = collect(values(objects(comparison.B)))
+
+    # Apply filtering to both collections
+    if !isempty(filter_out)
+        filter!(n -> !any(s -> contains(n.class_name, s), filter_out), nodesA)
+        filter!(n -> !any(s -> contains(n.class_name, s), filter_out), nodesB)
+    end
+
+    # Generate graphplot arguments for both collections
+    resultA = generate_graphplot_args(nodesA; seed, edge_labels, node_labels)
+    resultB = generate_graphplot_args(nodesB; seed, edge_labels, node_labels)
+
+    if resultA === nothing || resultB === nothing
+        @warn "No nodes found to plot in one or both collections"
+        return nothing
+    end
+
+    gA, argsA = resultA
+    gB, argsB = resultB
+
+    # Calculate positions for collection A
+    positionsA = argsA.layout(gA)
+
+    # Create node ID to index mapping for both graphs
+    idsA = [n.id for n in nodesA]
+    idsB = [n.id for n in nodesB]
+
+    # Identify matched nodes using concise findall approach
+    matched_indices_A = findall(n -> n.id ∈ keys(comparison.matches_a_to_b), nodesA)
+    matched_indices_B = findall(n -> n.id ∈ keys(comparison.matches_b_to_a), nodesB)
+
+    # Build pin dictionary for collection B
+    pin_dict = Dict{Int, Tuple{Float64, Float64}}()
+    for (idA, idB) in comparison.matches_a_to_b
+        idxA = findfirst(==(idA), idsA)
+        idxB = findfirst(==(idB), idsB)
+
+        if !isnothing(idxA) && !isnothing(idxB) && idxA <= length(positionsA)
+            pin_dict[idxB] = (positionsA[idxA][1], positionsA[idxA][2])
+        end
+    end
+
+    # Override colors for matched nodes (gray them out)
+    argsA.node_color[matched_indices_A] .= :lightgray
+    argsB.node_color[matched_indices_B] .= :lightgray
+
+    for (i, e) in enumerate(edges(gA))
+        if e.src ∈ matched_indices_A && e.dst ∈ matched_indices_A
+            argsA.edge_color[i] = :lightgray
+        end
+    end
+    for (i, e) in enumerate(edges(gB))
+        if e.src ∈ matched_indices_B && e.dst ∈ matched_indices_B
+            argsB.edge_color[i] = :lightgray
+        end
+    end
+
+
+    # Create updated layout for collection B with pinned positions
+    layoutB = GraphMakie.Stress(; seed, pin=pin_dict)
+    argsB = merge(argsB, (; layout = layoutB))
+
+    # Create side-by-side figure
+    fig = Figure(; size=size)
+
+    # Left axis for collection A
+    axA = Axis(fig[2,1], title="Collection A")
+    # Right axis for collection B
+    axB = Axis(fig[2,2], title="Collection B")
+
+    # Enable data inspector for interactive backends
+    if occursin("GL", string(Makie.current_backend()))
+        DataInspector(axA)
+        DataInspector(axB)
+    end
+
+    # Plot both graphs
+    graphplot!(axA, gA; argsA...)
+    graphplot!(axB, gB; argsB...)
+
+    hidedecorations!.([axA, axB])
+    hidespines!.([axA, axB])
+
+    # Recreate legend data locally
+    profilesA = [obj.profile for obj in nodesA]
+    profilesB = [obj.profile for obj in nodesB]
+    profile_color_map = Dict(
+        :DiagramLayout => :red,
+        :Dynamics => :blue,
+        :GeographicalLocation => :green,
+        :StateVariables => :orange,
+        :Topology => :purple,
+        :Equipment => :brown
+    )
+
+    # Add combined profile legend
+    all_profiles = unique([profilesA; profilesB])
+    legend_colors = [profile_color_map[profile] for profile in all_profiles]
+    legend_labels = [string(profile) for profile in all_profiles]
+
+    Legend(fig[1, 1:2],
+        [scatter!(axA, Float64[], Float64[], color=color, markersize=15) for color in legend_colors],
+        legend_labels,
+        "CGMES Profiles",
+        orientation = :horizontal,
+        framevisible=false,
+        tellheight=true,
+        tellwidth=false,
+        )
+
+    # Add comparison info
+    match_count = length(comparison.matches_a_to_b)
+    total_a = length(nodesA)
+    total_b = length(nodesB)
+    info_text = "Matched: $match_count | A: $total_a nodes | B: $total_b nodes"
+
+    Label(fig[3, 1:2], info_text, fontsize=12)
 
     return fig
 end
@@ -317,7 +464,7 @@ function object_text(obj::CIMObject)
     end
 end
 
-function html_hover_map(fig=Makie.current_figure())
+function get_graphplot(fig)
     sc = fig.scene;
 
     # Find all axes and filter for those with graphplots
@@ -331,6 +478,11 @@ function html_hover_map(fig=Makie.current_figure())
 
     ax = axes_with_graphplots[1]
     gp = only(filter(plot -> isa(plot, GraphMakie.GraphPlot), ax.scene.plots))
+    ax, gp
+end
+
+function html_hover_map(fig=Makie.current_figure())
+    ax, gp = get_graphplot(fig)
     positions = gp[:node_pos][]
     markersize = gp[:nodeplot_markersize][]
 
@@ -343,7 +495,7 @@ function html_hover_map(fig=Makie.current_figure())
     px_pos = Ref(ax.scene.viewport[].origin) .+ rel_px_pos
 
     # Get figure dimensions
-    width, height = sc.viewport[].widths
+    width, height = fig.scene.viewport[].widths
 
     # Calculate relative positions as fractions (0-1) then convert to percentages
     hover_zones = []

@@ -22,9 +22,10 @@ Well, that's still a bit too much. Let's split the dataset topologically
 nodes, edges = split_topologically(dataset; warn=false)
 nothing #hide
 #=
-## Bus 1: Load
+## Bus 3: Load
 =#
-@hover inspect_collection(nodes[1]; size=(900,900))
+@hover inspect_collection(nodes[3]; size=(900,900))
+
 #=
 **Discussion:**
 Power of load and powerflow result match perfectly. I guess this is just a PQ node for the powerflow.
@@ -41,9 +42,9 @@ Power of load and powerflow result match perfectly. I guess this is just a PQ no
 =#
 
 #=
-## Bus 3: Three Machines
+## Bus 1: Three Machines
 =#
-@hover inspect_collection(nodes[3]; size=(900,900))
+@hover inspect_collection(nodes[1]; size=(900,900))
 #=
 **Discussion:**
 - Why is the regulating control connected to a different terminal equipment than the machine?
@@ -54,20 +55,20 @@ Power of load and powerflow result match perfectly. I guess this is just a PQ no
 =#
 
 #=
-## Powerline 1: AC Pi-Line
+## Powerline 1: Transformer
 =#
 @hover inspect_collection(edges[1]; size=(900,900))
 #=
 **Discussion:**
-Seems fine.
+- Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.
+- The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?
 =#
 
 #=
-## Powerline 2: Transformer
+## Powerline 2: AC Pi-Line
 =#
 @hover inspect_collection(edges[2]; size=(900,900))
 #=
 **Discussion:**
-- Both transformer ends have b/g and r/x, so this can be interpreted as a pi-line with two bases and r1+r2 / x1+x2 impedance.
-- The RatioTapChanger points at one transformer end but regulates the voltage at the other transformer end. Does it mean it acts on one end to control voltage on the other end?
+Seems fine.
 =#

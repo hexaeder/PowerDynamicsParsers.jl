@@ -1,6 +1,7 @@
 using PowerDynamics
 using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
+using CairoMakie
 
 datasetA = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "reexport", "1-EHVHV-mixed-all-2-sw-Ausschnitt"))
 datasetB = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "reexport", "1-EHVHV-mixed-all-2-sw-Ausschnitt_reexport"))
@@ -15,19 +16,41 @@ reduced_datasetB = reduce_complexity(datasetB)
 nodesA, edgesA = split_topologically(datasetA; warn=false)
 nodesB, edgesB = split_topologically(datasetB; warn=false)
 
-nodesB[1]("Topo")
-
-#-
+#=
+## Bus 1 Comparison
+Normal dataset
+=#
+@hover inspect_collection(nodesA[1]; size=(900,900))
+#=
+Reexported dataset
+=#
 @hover inspect_collection(nodesB[1]; size=(900,900))
-#-
-@hover inspect_collection(nodesB[2]; size=(900,900))
-#-
-@hover inspect_collection(nodesB[3]; size=(900,900))
-#-
-#-
-@collapse_codeblock
-@hover inspect_collection(edgesB[1]; size=(900,900))
-#-
 
-@collapse_codeblock "custom title"
-@hover inspect_collection(edgesB[2]; size=(900,900))
+#=
+## Bus 2 Comparison
+Normal dataset
+=#
+@hover inspect_collection(nodesA[2]; size=(900,900))
+#=
+Reexported dataset
+=#
+@hover inspect_collection(nodesB[2]; size=(900,900))
+
+#=
+## Bus 3 Comparison
+Normal dataset
+=#
+@hover inspect_collection(nodesA[3]; size=(900,900))
+#=
+Reexported dataset
+=#
+@hover inspect_collection(nodesB[3]; size=(900,900))
+
+A = nodesA[1]
+B = nodesB[1]
+
+comparison = CIMCollectionComparison(A, B)
+
+# Create side-by-side comparison plot
+fig = @hover inspect_comparison(comparison; size=(1600, 800))
+get_grpahplot(fig)
