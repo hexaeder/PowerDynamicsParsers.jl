@@ -22,15 +22,24 @@ nodesB, edgesB = split_topologically(datasetB; warn=false)
 comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
 inspect_comparison(comparison1; size=(1000, 1500))
 
+# Data looks better now!
+# - $\delta=0$ implies slack node
+# - slack voltage now matches the regulating control!
 # ## Bus 2 Comparison
 
 comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[2], nodesB[2])
 inspect_comparison(comparison2; size=(1000, 1500))
 
+# Bus has load + SynchornousMachine
+# - "Sgen" implies PQ-Machine (no dynamic)
+# - load is PQ
+# - bus P/Q is what we would expect from a PQ bus with P=Pload+PSgen and Q=Qload+QSgen
 # ## Bus 3 Comparison
 
 comparison3 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[3], nodesB[3])
 inspect_comparison(comparison3; size=(1000, 1500))
+
+# Single load bus. Load setpoint matches powerflor result so just plain PQ node
 
 # ## Edge 1 Comparison
 
