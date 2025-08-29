@@ -155,14 +155,21 @@ function _parseprops(el::Node, name::AbstractString)
             else
                 stringvalue
             end
-            props[key] = value
+            _add_property!(props, key, value)
         elseif is_reference(p)
-            props[key] = CIMRef(p)
+            _add_property!(props, key, CIMRef(p))
         else
             @warn "Skipping property $p, no parser defined yet."
         end
     end
     props
+end
+function _add_property!(props, key, value)
+    if haskey(props, key)
+        props[key] = vcat(props[key], value)
+    else
+        props[key] = value
+    end
 end
 
 function CIMFile(filepath::String)
