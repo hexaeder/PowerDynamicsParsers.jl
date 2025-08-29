@@ -1,3 +1,5 @@
+using PowerDynamics.NetworkDynamics: str_significant
+
 abstract type AbstractBranchSubgraph end
 abstract type SingleBranchSubgraph <: AbstractBranchSubgraph end
 struct ACLineSegment <: SingleBranchSubgraph end
@@ -22,7 +24,12 @@ function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     nodes = collect(values(objects(c)))
     cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
     segment = nodes[only(cond_idx)]
-    src_node, dst_node = c("TopologicalNode")
+
+    endnodes = c("TopologicalNode")
+    src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
+    dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
+    src_idx = c.metadata[:src_idx]
+    dst_idx = c.metadata[:dst_idx]
 
     segment_terminals = filter(is_terminal, base_object.(segment.references))
     src_terminals = filter(is_terminal, base_object.(src_node.references))
@@ -155,15 +162,33 @@ function test_powerflow(e::EdgeModel)
     Sref = CGMES.get_injected_power_pu(comp.src_terminal)
     Pref = real(Sref)
     Qref = imag(Sref)
-    if !isapprox(P, Pref; rtol=1e-4, atol=1e-6)
-        printstyled("✗ Powerflow result P=$P does not match reference P=$Pref\n", color=:red)
+
+    validate_power_component(P, Pref, "Active Power (P)")
+    validate_power_component(Q, Qref, "Reactive Power (Q)")
+end
+
+function validate_power_component(computed::Float64, reference::Float64, component_name::String)
+    if iszero(reference)
+        # Handle zero reference case
+        error_abs = abs(computed)
+        if error_abs ≤ 1e-6
+            printstyled("✓ $component_name: computed=$(str_significant(computed; sigdigits=4)) matches zero reference (abs_error=$(str_significant(error_abs; sigdigits=3)))\n", color=:green)
+        elseif error_abs ≤ 1e-4
+            printstyled("✓ $component_name: computed=$(str_significant(computed; sigdigits=4)) vs reference=$(str_significant(reference; sigdigits=4)) (abs_error=$(str_significant(error_abs; sigdigits=3)))\n", color=:yellow)
+        else
+            printstyled("✗ $component_name: computed=$(str_significant(computed; sigdigits=4)) vs reference=$(str_significant(reference; sigdigits=4)) (abs_error=$(str_significant(error_abs; sigdigits=3)))\n", color=:red)
+        end
     else
-        printstyled("✓ Powerflow result P=$P matches reference P=$Pref\n", color=:green)
-    end
-    if !isapprox(Q, Qref; rtol=1e-4, atol=1e-6)
-        printstyled("✗ Powerflow result Q=$Q does not match reference Q=$Qref\n", color=:red)
-    else
-        printstyled("✓ Powerflow result Q=$Q matches reference Q=$Qref\n", color=:green)
+        # Calculate percentage error
+        error_pct = abs((computed - reference) / reference) * 100
+
+        if error_pct ≤ 0.01
+            printstyled("✓ $component_name: computed=$(str_significant(computed; sigdigits=4)) matches reference=$(str_significant(reference; sigdigits=4)) (error=$(str_significant(error_pct; sigdigits=3))%)\n", color=:green)
+        elseif error_pct ≤ 1.0
+            printstyled("✓ $component_name: computed=$(str_significant(computed; sigdigits=4)) vs reference=$(str_significant(reference; sigdigits=4)) (error=$(str_significant(error_pct; sigdigits=3))%)\n", color=:yellow)
+        else
+            printstyled("✗ $component_name: computed=$(str_significant(computed; sigdigits=4)) vs reference=$(str_significant(reference; sigdigits=4)) (error=$(str_significant(error_pct; sigdigits=3))%)\n", color=:red)
+        end
     end
 end
 

@@ -305,7 +305,7 @@ function inspect_comparison(comparison::CIMCollectionComparison; size=(2000, 100
     # Left axis for collection A
     axA = Axis(fig[2,1], title="Collection A")
     # Right axis for collection B
-    axB = Axis(fig[2,2], title="Collection B")
+    axB = Axis(fig[3,1], title="Collection B")
 
     # Enable data inspector for interactive backends
     if occursin("GL", string(Makie.current_backend()))
@@ -334,10 +334,10 @@ function inspect_comparison(comparison::CIMCollectionComparison; size=(2000, 100
 
     # Add combined profile legend
     all_profiles = unique([profilesA; profilesB])
-    legend_colors = [profile_color_map[profile] for profile in all_profiles]
-    legend_labels = [string(profile) for profile in all_profiles]
+    legend_colors = vcat([profile_color_map[profile] for profile in all_profiles], :lightgray)
+    legend_labels = vcat([string(profile) for profile in all_profiles], "same data in both sets")
 
-    Legend(fig[1, 1:2],
+    Legend(fig[1, 1],
         [scatter!(axA, Float64[], Float64[], color=color, markersize=15) for color in legend_colors],
         legend_labels,
         "CGMES Profiles",
@@ -353,7 +353,7 @@ function inspect_comparison(comparison::CIMCollectionComparison; size=(2000, 100
     total_b = length(nodesB)
     info_text = "Matched: $match_count | A: $total_a nodes | B: $total_b nodes"
 
-    Label(fig[3, 1:2], info_text, fontsize=12)
+    Label(fig[4, 1], info_text, fontsize=12, tellwidth=false)
 
     return fig
 end

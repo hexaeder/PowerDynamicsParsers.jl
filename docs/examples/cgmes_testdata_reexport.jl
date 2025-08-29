@@ -5,12 +5,15 @@ using CairoMakie
 
 datasetA = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "reexport", "1-EHVHV-mixed-all-2-sw-Ausschnitt"))
 datasetB = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "reexport", "1-EHVHV-mixed-all-2-sw-Ausschnitt_reexport"))
+nothing #hide
 
+#=
+## Compare the two datasets
+=#
 reduced_datasetA = reduce_complexity(datasetA)
-@hover inspect_collection(reduced_datasetA; edge_labels=false, node_labels=:short, size=(1000,1000))
-#-
 reduced_datasetB = reduce_complexity(datasetB)
-@hover inspect_collection(reduced_datasetB; edge_labels=false, node_labels=:short, size=(1000,1000))
+comp = PowerDynamicsParsers.CGMES.CIMCollectionComparison(reduced_datasetA, reduced_datasetB)
+@hover inspect_comparison(comp; size=(1000, 1500), node_labels=:short, edge_labels=false)
 #-
 
 nodesA, edgesA = split_topologically(datasetA; warn=false)
@@ -18,42 +21,39 @@ nodesB, edgesB = split_topologically(datasetB; warn=false)
 
 #=
 ## Bus 1 Comparison
-Normal dataset
 =#
-@hover inspect_collection(nodesA[1]; size=(900,900))
-#=
-Reexported dataset
-=#
-@hover inspect_collection(nodesB[1]; size=(900,900))
-
+comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
+@hover inspect_comparison(comparison1; size=(1000, 1500))
 #=
 ## Bus 2 Comparison
-Normal dataset
 =#
-@hover inspect_collection(nodesA[2]; size=(900,900))
-#=
-Reexported dataset
-=#
-@hover inspect_collection(nodesB[2]; size=(900,900))
-
+comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[2], nodesB[2])
+@hover inspect_comparison(comparison2; size=(1000, 1500))
 #=
 ## Bus 3 Comparison
-Normal dataset
 =#
-@hover inspect_collection(nodesA[3]; size=(900,900))
+comparison3 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[3], nodesB[3])
+@hover inspect_comparison(comparison3; size=(1000, 1500))
+
+
 #=
-Reexported dataset
+## Edge 1 Comparison
 =#
-@hover inspect_collection(nodesB[3]; size=(900,900))
+comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[1], edgesB[1])
+@hover inspect_comparison(comparison1; size=(1000, 1500))
+#=
+## Edge 2 Comparison
+=#
+comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[2], edgesB[2])
+@hover inspect_comparison(comparison2; size=(1000, 1500))
+
+#=
+## Calculate Powerflow for edge again
+=#
+#-
+emA = CGMES.get_edge_model(edgesA[2])
+CGMES.test_powerflow(emA)
 
 #-
-comparison = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
-
-
-
-# Create side-by-side comparison plot
-@hover inspect_comparison(comparison; size=(2000, 1000))
-
-# CGMES.get_graphplots(fig)
-
-# CGMES.html_hover_map(fig)
+emB = CGMES.get_edge_model(edgesB[2])
+CGMES.test_powerflow(emB)

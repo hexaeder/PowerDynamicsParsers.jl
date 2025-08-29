@@ -12,7 +12,7 @@ export resolve_references!
 export objects, extensions, hasname, getname, properties
 export inspect_collection, inspect_node, inspect_comparison
 export follow_ref
-export CIMCollectionComparison
+export CIMCollectionComparison, compare_objects
 
 SBASE = 100 # Base power in MVA
 
