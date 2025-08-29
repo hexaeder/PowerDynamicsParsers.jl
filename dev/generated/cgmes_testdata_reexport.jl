@@ -1,4 +1,5 @@
 using PowerDynamics
+using PowerDynamics.Library
 using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
 using CairoMakie
@@ -14,8 +15,9 @@ reduced_datasetB = reduce_complexity(datasetB)
 comp = PowerDynamicsParsers.CGMES.CIMCollectionComparison(reduced_datasetA, reduced_datasetB)
 inspect_comparison(comp; size=(1000, 1500), node_labels=:short, edge_labels=false)
 
-nodesA, edgesA = split_topologically(datasetA; warn=false)
+nodesA, edgesA = split_topologically(datasetA; warn=false);
 nodesB, edgesB = split_topologically(datasetB; warn=false)
+nothing #hide
 
 # ## Bus 1 Comparison
 
@@ -51,12 +53,49 @@ inspect_comparison(comparison1; size=(1000, 1500))
 comparison2 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(edgesA[2], edgesB[2])
 inspect_comparison(comparison2; size=(1000, 1500))
 
-# ## Calculate Powerflow for edge again
+# ## Build full powerflow network
+# ### Dataset A (pre reexport)
+# **Powerflow from PowerDynamics.jl**
 
-emA = CGMES.get_edge_model(edgesA[2])
-CGMES.test_powerflow(emA)
+pfnw = Network(datasetA)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
 
-emB = CGMES.get_edge_model(edgesB[2])
-CGMES.test_powerflow(emB)
+# **Powerflow from CGMES data**
+
+show_powerflow(datasetA)
+
+# ### Dataset B (post reexport)
+# **Powerflow from PowerDynamics.jl**
+
+pfnw = Network(datasetB)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
+
+# **Powerflow from CGMES data**
+
+show_powerflow(datasetB)
+
+# ### Original Test dataset
+# While we're at it let's also check the original test dataset
+
+first_dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data", "testdata1"))
+pfnw = Network(first_dataset)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)
+
+show_powerflow(first_dataset)
+
+# This does not match, which is weird. The differnece is on the third vertex where i used
+# a PV model witn P=2 and V=1:
+
+pfnw[VIndex(3)]
+
+# Which seems to match what we see in the graph:
+
+vertices, edges = split_topologically(first_dataset; warn=false)
+inspect_collection(vertices[3]; size=(900,900))
+
+# so no idea whats going wrong here...
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Reexported Dataset · PowerDynamicsParsers.jl</title><meta name="title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="og:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../cgmes_testdata/">Inspection of CGMES Test Data</a></li><li><a class="tocitem" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export</a></li><li class="is-active"><a class="tocitem" href>Reexported Dataset</a><ul class="internal"><li><a class="tocitem" href="#Compare-the-two-datasets"><span>Compare the two datasets</span></a></li><li><a class="tocitem" href="#Bus-1-Comparison"><span>Bus 1 Comparison</span></a></li><li><a class="tocitem" href="#Bus-2-Comparison"><span>Bus 2 Comparison</span></a></li><li><a class="tocitem" href="#Bus-3-Comparison"><span>Bus 3 Comparison</span></a></li><li><a class="tocitem" href="#Edge-1-Comparison"><span>Edge 1 Comparison</span></a></li><li><a class="tocitem" href="#Edge-2-Comparison"><span>Edge 2 Comparison</span></a></li><li><a class="tocitem" href="#Calculate-Powerflow-for-edge-again"><span>Calculate Powerflow for edge again</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Reexported Dataset</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Reexported Dataset</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_testdata_reexport.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><pre><code class="language- hljs">using PowerDynamics
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Reexported Dataset · PowerDynamicsParsers.jl</title><meta name="title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="og:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="Reexported Dataset · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_testdata_reexport/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../cgmes_testdata/">Inspection of CGMES Test Data</a></li><li><a class="tocitem" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export</a></li><li class="is-active"><a class="tocitem" href>Reexported Dataset</a><ul class="internal"><li><a class="tocitem" href="#Compare-the-two-datasets"><span>Compare the two datasets</span></a></li><li><a class="tocitem" href="#Bus-1-Comparison"><span>Bus 1 Comparison</span></a></li><li><a class="tocitem" href="#Bus-2-Comparison"><span>Bus 2 Comparison</span></a></li><li><a class="tocitem" href="#Bus-3-Comparison"><span>Bus 3 Comparison</span></a></li><li><a class="tocitem" href="#Edge-1-Comparison"><span>Edge 1 Comparison</span></a></li><li><a class="tocitem" href="#Edge-2-Comparison"><span>Edge 2 Comparison</span></a></li><li><a class="tocitem" href="#Build-full-powerflow-network"><span>Build full powerflow network</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Reexported Dataset</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Reexported Dataset</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_testdata_reexport.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><pre><code class="language- hljs">using PowerDynamics
+using PowerDynamics.Library
 using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
 using CairoMakie
@@ -144,8 +145,9 @@ img.addEventListener('load', setupHoverZones);
 }
 })();
 </script>
-<pre><code class="language- hljs">nodesA, edgesA = split_topologically(datasetA; warn=false)
-nodesB, edgesB = split_topologically(datasetB; warn=false)</code></pre><h2 id="Bus-1-Comparison"><a class="docs-heading-anchor" href="#Bus-1-Comparison">Bus 1 Comparison</a><a id="Bus-1-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-1-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
+<pre><code class="language- hljs">nodesA, edgesA = split_topologically(datasetA; warn=false);
+nodesB, edgesB = split_topologically(datasetB; warn=false)
+nothing #hide</code></pre><h2 id="Bus-1-Comparison"><a class="docs-heading-anchor" href="#Bus-1-Comparison">Bus 1 Comparison</a><a id="Bus-1-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-1-Comparison" title="Permalink"></a></h2><pre><code class="language- hljs">comparison1 = PowerDynamicsParsers.CGMES.CIMCollectionComparison(nodesA[1], nodesB[1])
 inspect_comparison(comparison1; size=(1000, 1500))</code></pre><script>
 // Find the previous image element and wrap it with hover functionality
 (function() {
@@ -825,6 +827,144 @@ img.addEventListener('load', setupHoverZones);
 }
 })();
 </script>
-<h2 id="Calculate-Powerflow-for-edge-again"><a class="docs-heading-anchor" href="#Calculate-Powerflow-for-edge-again">Calculate Powerflow for edge again</a><a id="Calculate-Powerflow-for-edge-again-1"></a><a class="docs-heading-anchor-permalink" href="#Calculate-Powerflow-for-edge-again" title="Permalink"></a></h2><pre><code class="language- hljs">emA = CGMES.get_edge_model(edgesA[2])
-CGMES.test_powerflow(emA)</code></pre><pre><code class="language- hljs">emB = CGMES.get_edge_model(edgesB[2])
-CGMES.test_powerflow(emB)</code></pre><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_linemodel/">« Wrong Powerflow data in CGMES Export</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 29 August 2025 14:17">Friday 29 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<h2 id="Build-full-powerflow-network"><a class="docs-heading-anchor" href="#Build-full-powerflow-network">Build full powerflow network</a><a id="Build-full-powerflow-network-1"></a><a class="docs-heading-anchor-permalink" href="#Build-full-powerflow-network" title="Permalink"></a></h2><h3 id="Dataset-A-(pre-reexport)"><a class="docs-heading-anchor" href="#Dataset-A-(pre-reexport)">Dataset A (pre reexport)</a><a id="Dataset-A-(pre-reexport)-1"></a><a class="docs-heading-anchor-permalink" href="#Dataset-A-(pre-reexport)" title="Permalink"></a></h3><p><strong>Powerflow from PowerDynamics.jl</strong></p><pre><code class="language- hljs">pfnw = Network(datasetA)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)</code></pre><p><strong>Powerflow from CGMES data</strong></p><pre><code class="language- hljs">show_powerflow(datasetA)</code></pre><h3 id="Dataset-B-(post-reexport)"><a class="docs-heading-anchor" href="#Dataset-B-(post-reexport)">Dataset B (post reexport)</a><a id="Dataset-B-(post-reexport)-1"></a><a class="docs-heading-anchor-permalink" href="#Dataset-B-(post-reexport)" title="Permalink"></a></h3><p><strong>Powerflow from PowerDynamics.jl</strong></p><pre><code class="language- hljs">pfnw = Network(datasetB)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)</code></pre><p><strong>Powerflow from CGMES data</strong></p><pre><code class="language- hljs">show_powerflow(datasetB)</code></pre><h3 id="Original-Test-dataset"><a class="docs-heading-anchor" href="#Original-Test-dataset">Original Test dataset</a><a id="Original-Test-dataset-1"></a><a class="docs-heading-anchor-permalink" href="#Original-Test-dataset" title="Permalink"></a></h3><p>While we&#39;re at it let&#39;s also check the original test dataset</p><pre><code class="language- hljs">first_dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;testdata1&quot;))
+pfnw = Network(first_dataset)
+pfs = find_fixpoint(pfnw)
+show_powerflow(pfs)</code></pre><pre><code class="language-julia hljs">show_powerflow(first_dataset)</code></pre><div><div style = "float: left;"><span>3×6 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">N</th><th style = "text-align: left;">Bus Names</th><th style = "text-align: left;">vm [pu]</th><th style = "text-align: left;">varg [deg]</th><th style = "text-align: left;">P [pu]</th><th style = "text-align: left;">Q [pu]</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Int64" style = "text-align: left;">Int64</th><th title = "String" style = "text-align: left;">String</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">1</td><td style = "text-align: left;">EHV Bus 325</td><td style = "text-align: right;">0.995621</td><td style = "text-align: right;">-0.496094</td><td style = "text-align: right;">-4.0</td><td style = "text-align: right;">-2.0</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">2</td><td style = "text-align: left;">EHV Bus 41</td><td style = "text-align: right;">1.0</td><td style = "text-align: right;">0.0</td><td style = "text-align: right;">0.318952</td><td style = "text-align: right;">0.417047</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">3</td><td style = "text-align: left;">EHV Bus 69</td><td style = "text-align: right;">1.0</td><td style = "text-align: right;">0.353859</td><td style = "text-align: right;">3.6873</td><td style = "text-align: right;">-0.588916</td></tr></tbody></table></div><p>This does not match, which is weird. The differnece is on the third vertex where i used a PV model witn P=2 and V=1:</p><pre><code class="language- hljs">pfnw[VIndex(3)]</code></pre><p>Which seems to match what we see in the graph:</p><pre><code class="language-julia hljs">vertices, edges = split_topologically(first_dataset; warn=false)
+inspect_collection(vertices[3]; size=(900,900))</code></pre><img src="0c1291ee.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 25.971586203620024, y: 52.77280604394045, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"EHV Bus 69\"\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 10.337878492293335, y: 73.58651115952766, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV", node: 2},
+            {x: 46.38515995022849, y: 64.38821049678106, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Feld_2\"\nACDCsequenceNumber = 1\nphases = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 68.23645177803495, y: 55.68954859360433, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachine\n\"EHV Gen 256-2\"\nEquipment.EquipmentContainer = unresolved ref\ndescription = pp_263\nRotatingMachine.ratedPowerFactor = 0.95\nRotatingMachine.ratedS = 18.2105\nRotatingMachine.ratedU = 380\nearthing = true\nearthingStarPointR = 0\nearthingStarPointX = 0\nmaxQ = 5.68624\nminQ = -5.68624\nqPercent = 100\nr = 0\nr0 = 0\nr2 = 0\nsatDirectSubtransX = 0.2\nsatDirectSyncX = 1.2\nshortCircuitRotorType = unresolved ref\ntype = unresolved ref\nx0 = 0.1\nx2 = 0.2\nRegulatingCondEq.controlEnabled = true\nRotatingMachine.p = -200\nRotatingMachine.q = -40\noperatingMode = unresolved ref\nreferencePriority = 0", node: 4},
+            {x: 61.81560293804185, y: 77.13053591038552, width: 2.2222222222222223, height: 2.2222222222222223, label: "RegulatingControl\n\"EHV Gen 256-2\"\nmode = unresolved ref\ndiscrete = false\nenabled = true\ntargetValue = 380\ntargetValueUnitMultiplier = unresolved ref", node: 5},
+            {x: 79.79831347353644, y: 32.726500093214305, width: 2.2222222222222223, height: 2.2222222222222223, label: "ThermalGeneratingUnit\n\"EHV Gen 256-2\"\nEquipment.EquipmentContainer = unresolved ref\nGeneratingUnit.initialP = 200\nGeneratingUnit.maxOperatingP = 17.3\nGeneratingUnit.minOperatingP = 1\nGeneratingUnit.normalPF = 0", node: 6},
+            {x: 93.83838510191208, y: 14.010099755235784, width: 2.2222222222222223, height: 2.2222222222222223, label: "FossilFuel\n\"EHV Gen 256-2\"\nfossilFuelType = unresolved ref", node: 7},
+            {x: 86.89583865091211, y: 72.50485006802047, width: 2.2222222222222223, height: 2.2222222222222223, label: "SynchronousMachineTimeConstantReactance\n\"EHV Gen 256-2\"\nDynamicsFunctionBlock.enabled = true\nRotatingMachineDynamics.damping = 0\nRotatingMachineDynamics.inertia = 4.75\nRotatingMachineDynamics.saturationFactor = 0\nRotatingMachineDynamics.saturationFactor120 = 0\nRotatingMachineDynamics.statorLeakageReactance = 0.172\nRotatingMachineDynamics.statorResistance = 0\nSynchronousMachineDetailed.efdBaseRatio = 1\nSynchronousMachineDetailed.ifdBaseType = unresolved ref\nmodelType = unresolved ref\nrotorType = unresolved ref\ntpdo = 6.66667\ntppdo = 0.075\ntppqo = 0.075\ntpqo = 6.66667\nxDirectSubtrans = 0.2\nxDirectSync = 2\nxDirectTrans = 0.3\nxQuadSubtrans = 0.2\nxQuadSync = 2\nxQuadTrans = 0.3", node: 8},
+            {x: 42.21702166968032, y: 94.21212229826234, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -368.73\nq = 58.8916", node: 9},
+            {x: 23.354319031913803, y: 24.199362504740996, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0.353859\nv = 380", node: 10},
+            {x: 6.161614937951277, y: 43.64345080177417, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalIsland\n\"Island_001\"\nAngleRefTopologicalNode = unresolved ref\nTopologicalNodes = unresolved ref", node: 11}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<p>so no idea whats going wrong here...</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_linemodel/">« Wrong Powerflow data in CGMES Export</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Friday 29 August 2025 18:26">Friday 29 August 2025</span>. Using Julia version 1.11.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
