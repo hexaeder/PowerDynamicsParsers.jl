@@ -16,7 +16,7 @@ this will use updated `*.md` and source files, keeping the Julia session alive f
 =#
 
 BUILD_DIR = joinpath(@__DIR__, "build")
-mkpath(BUILD_DIR) # make sure path exits, otherwise the serve might fail
+mkpath(BUILD_DIR) # make sure path exists, otherwise the serve might fail
 
 function readline_timeout(prompt, default, timeout)
     msg = Channel{String}(1)
