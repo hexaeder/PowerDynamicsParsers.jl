@@ -128,60 +128,80 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
     resolve_references!(collection; warn)
 end
 
-function split_topologically(collection::AbstractCIMCollection; warn=true)
+function split_topologically(collection::AbstractCIMCollection; verbose=false, warn=true)
     # collection = CIMDataset(DATA)
     topnodes = collection("TopologicalNode")
+    verbose && @info "Found $(length(topnodes)) topological nodes. Discovering subgraphs..."
     node_subgraphs = _discover_tpn_subgraph.(topnodes; warn)
-
-    undiscovered_lineends = filter(is_lineend, collection("Terminal"))
-    edge_subgraphs = CIMCollection[]
-    while !isempty(undiscovered_lineends)
-        lineend = popfirst!(undiscovered_lineends)
-        subgraph = _discover_linened_subgraph(lineend; warn)
-        push!(edge_subgraphs, subgraph)
-
-        discovered_ids = [n.id for n in filter(is_lineend, subgraph("Terminal"))]
-        foundidx = findall(n -> n.id ∈ discovered_ids, undiscovered_lineends)
-        !isnothing(foundidx) && deleteat!(undiscovered_lineends, foundidx)
-    end
     # sanity checks
-    for subgraph in edge_subgraphs
-        @assert length(subgraph("TopologicalNode")) == 2
-        # test that all terminals belong to the topological nodes
-        @assert all(subgraph("Terminal")) do t
-            getname(t["TopologicalNode"]) ∈ getname.(subgraph("TopologicalNode"))
-        end
-    end
     for subgraph in node_subgraphs
         @assert length(subgraph("TopologicalNode")) == 1
         @assert all(subgraph("Terminal")) do t
             t["TopologicalNode"] == only(subgraph("TopologicalNode"))
         end
     end
-
     @assert allunique(sg.metadata[:busname] for sg in node_subgraphs)
-    sort!(node_subgraphs, by = sg->sg.metadata[:busname])
+    # attach metadata
     for (i, ng) in enumerate(node_subgraphs)
         ng.metadata[:busidx] = i
     end
+    # sort
+    sort!(node_subgraphs, by = sg->sg.metadata[:busname])
 
-    for eg in edge_subgraphs
-        tns = eg("TopologicalNode")
+    undiscovered_lineends = filter(is_lineend, collection("Terminal"))
+    verbose && @info "Found $(length(undiscovered_lineends)) line ends. Discovering line end subgraphs..."
+    branch_subgraphs = CIMCollection[]
+    while !isempty(undiscovered_lineends)
+        lineend = popfirst!(undiscovered_lineends)
+        subgraph = _discover_linened_subgraph(lineend; warn)
+        push!(branch_subgraphs, subgraph)
+
+        discovered_ids = [n.id for n in filter(is_lineend, subgraph("Terminal"))]
+        foundidx = findall(n -> n.id ∈ discovered_ids, undiscovered_lineends)
+        !isnothing(foundidx) && deleteat!(undiscovered_lineends, foundidx)
+    end
+    for subgraph in branch_subgraphs
+        @assert length(subgraph("TopologicalNode")) == 2
+        # test that all terminals belong to the topological nodes
+        @assert all(subgraph("Terminal")) do t
+            getname(t["TopologicalNode"]) ∈ getname.(subgraph("TopologicalNode"))
+        end
+    end
+    # attach metadta
+    for branch in branch_subgraphs
+        tns = branch("TopologicalNode")
         src_name, dst_name = sort!([getname(tn) for tn in tns])
         src_idx = findfirst(sg -> sg.metadata[:busname] == src_name, node_subgraphs)
         dst_idx = findfirst(sg -> sg.metadata[:busname] == dst_name, node_subgraphs)
-        eg.metadata[:src_name] = src_name
-        eg.metadata[:dst_name] = dst_name
-        eg.metadata[:src_idx] = src_idx
-        eg.metadata[:dst_idx] = dst_idx
+        branch.metadata[:src_name] = src_name
+        branch.metadata[:dst_name] = dst_name
+        branch.metadata[:src_idx] = src_idx
+        branch.metadata[:dst_idx] = dst_idx
     end
+
+    # merge lineend subgraphs that connect the same topological nodes
+    edge_dict = Dict{Pair{String,String}, CIMCollection}()
+    for branch in branch_subgraphs
+        tpns = branch("TopologicalNode")
+        @assert length(tpns) == 2
+        srcdst = [tp.id for tp in tpns]
+        src, dst = sort(srcdst)
+        if haskey(edge_dict, src => dst)
+            merged = merge_collection(edge_dict[src => dst], branch; warn, metadatakey=:branches)
+            edge_dict[src => dst] = merged
+        else
+            edge_dict[src => dst] = branch
+        end
+    end
+    edge_subgraphs = collect(values(edge_dict))
+
     sort!(edge_subgraphs; by=eg->(eg.metadata[:src_idx], eg.metadata[:dst_idx]))
 
     (; node_subgraphs, edge_subgraphs)
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, ["VoltageLevel", "Substation"])
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation"])
     sg = discover_subgraph(t; filter_out, warn)
     sg.metadata[:busname] = getname(t)
     sg
@@ -192,6 +212,8 @@ function _discover_linened_subgraph(t; warn)
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
     filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland"])
     sg = discover_subgraph(t; nobackref, filter_out, warn)
+    sg.metadata[:discovered_from_lineend] = getname(t)
+    sg
 end
 
 

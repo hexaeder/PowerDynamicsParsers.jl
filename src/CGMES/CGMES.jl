@@ -60,8 +60,8 @@ struct CIMCollection <: AbstractCIMCollection
     objects::OrderedDict{String, CIMObject}
     extensions::Vector{CIMExtension}
     metadata::OrderedDict{Symbol,Any}
-    CIMCollection(objs, exts) = new(objs, exts, OrderedDict{Symbol,Any}())
 end
+CIMCollection(objs, exts) = CIMCollection(objs, exts, OrderedDict{Symbol,Any}())
 
 struct CIMFile <: AbstractCIMCollection
     collection::CIMCollection
@@ -247,11 +247,63 @@ base_object(x::AbstractCIMReference) = base_object(follow_ref(x))
 base_object(x::CIMObject) = x
 base_object(x::CIMExtension) = follow_ref(x.base)
 
+function merge_collection(c1::CIMCollection, c2::CIMCollection; warn=true, metadatakey=:merger_of)
+    merged_objects = Dict{String, CIMObject}()
+    for (k, v) in objects(c1)
+        merged_objects[k] = copy(v)
+    end
+    for (k, v) in objects(c2)
+        merged_objects[k] = copy(v)
+    end
+
+    ext1 = copy.(extensions(c1))
+    ext2 = copy.(extensions(c2))
+    merged_extensions = vcat(ext1, ext2)
+
+    # sanity checks
+    full_extensions = Dict{String, Dict{Symbol, Any}}()
+    for ex in merged_extensions
+        key = ex.base.id
+        subdict = get(full_extensions, key, Dict{Symbol, Any}())
+        for (k,v) in ex.properties
+            if haskey(subdict, Symbol(k))
+                @warn "Merging collections with overlapping extension properties for object $key property $k"
+            else
+                subdict[Symbol(k)] = v
+            end
+        end
+    end
+    mt1 = c1.metadata
+    mt2 = c2.metadata
+    merged_metadata = copy(mt1)
+    for (k,v) in mt2
+        if haskey(merged_metadata, k) && merged_metadata[k] != v
+            @warn "Merging collections with overlapping metadata key $k: $(merged_metadata[k]) vs $v"
+        else
+            merged_metadata[k] = v
+        end
+    end
+
+    col = CIMCollection(merged_objects, merged_extensions, merged_metadata)
+    resolve_references!(col; warn)
+
+    merger_of = get!(col.metadata, metadatakey, CIMCollection[])
+    push!(merger_of, c1)
+    push!(merger_of, c2)
+
+    col
+end
+
 include("parsing.jl")
 include("compare.jl")
 include("inspect.jl")
 include("subgraph.jl")
 include("show.jl")
 include("static_models.jl")
+
+function symbolify(s::String)
+    s = replace(s, r"\s" => "_")
+    Symbol(s)
+end
 
 end

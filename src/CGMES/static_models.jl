@@ -2,12 +2,13 @@ using PowerDynamics
 using PowerDynamics.NetworkDynamics: str_significant
 using PowerDynamics: DataFrame
 
-abstract type AbstractBranchSubgraph end
-abstract type SingleBranchSubgraph <: AbstractBranchSubgraph end
+abstract type AbstractEdgeSubgraph end
+abstract type SingleBranchSubgraph <: AbstractEdgeSubgraph end
 struct ACLineSegment <: SingleBranchSubgraph end
 struct PowerTransformer <: SingleBranchSubgraph end
+struct MultiBranchSubgraph <: AbstractEdgeSubgraph end
 
-function is_abstract_branch_subgraph(c::CIMCollection)
+function is_abstract_edge_subgraph(c::CIMCollection)
     length(c("TopologicalNode")) == 2
 end
 
@@ -17,9 +18,13 @@ CONDUCTING_EQUIPMENT = [
 ]
 
 function is_single_branch_subgraph(c::AbstractCIMCollection)
-    nodes = collect(values(objects(c)))
-    cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
-    length(cond_idx) == 1
+    length(c(CONDUCTING_EQUIPMENT)) == 1 && length(c("Terminal")) == 2
+end
+
+function is_multi_branch_subgraph(c::AbstractCIMCollection)
+    haskey(c.metadata, :branches) || return false
+    branches = c.metadata[:branches]
+    all(is_single_branch_subgraph, branches) || return false
 end
 
 function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
@@ -49,11 +54,10 @@ function get_edge_model(c)
 
     model = get_edge_model(class, c)
 
-    comp = get_components(class, c)
     model.metadata[:cgmes_subgraph] = c
     model.metadata[:cgmes_class] = class
-    model.metadata[:cgmes_components] = comp
-    set_graphelement!(model, Symbol(getname(comp.src_node)) => Symbol(getname(comp.dst_node)))
+
+    set_graphelement!(model, symbolify(c.metadata[:src_name]) => symbolify(c.metadata[:dst_name]))
 
     return model
 end
@@ -80,11 +84,12 @@ end
 | name                                      | String         | see IdentifiedObject                                                                                                                                                         |
 | shortName (Entsoe)                        | String         | see IdentifiedObject                                                                                                                                                         |
 """
-function get_edge_model(class::ACLineSegment, c::AbstractCIMCollection)
+function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection)
     comp = CGMES.get_components(class, c)
 
     if !allequal(CGMES.get_base_voltage, (comp.src_node, comp.dst_node, comp.segment))
-        throw(ArgumentError("ACLineSegment must have the same base voltage on both ends!"))
+        # throw(ArgumentError("ACLineSegment must have the same base voltage on both ends!"))
+        @warn "ACLineSegment has multiple base voltages! src=$(CGMES.get_base_voltage(comp.src_node)), dst=$(CGMES.get_base_voltage(comp.dst_node)), segment=$(CGMES.get_base_voltage(comp.segment))"
     end
 
     # Sbase is just 100 because Vbase is in kv!
@@ -100,14 +105,11 @@ function get_edge_model(class::ACLineSegment, c::AbstractCIMCollection)
     R = props["r"] / Zbase
     X = props["x"] / Zbase
 
-    piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name=:ACLineSegment)
-
-    name = hasname(comp.segment) ? getname(comp.segment) : "ACLineSegment"
-
-    Line(MTKLine(piline, name=Symbol(name)))
+    name = symbolify(getname(comp.segment))
+    piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name)
 end
 
-function get_edge_model(class::PowerTransformer, c::AbstractCIMCollection)
+function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection)
     comp = CGMES.get_components(class, c)
     tends = c("PowerTransformerEnd")
     @assert length(tends) == 2 "Expected exactly two PowerTransformerEnd, got $(length(tends))!"
@@ -133,18 +135,34 @@ function get_edge_model(class::PowerTransformer, c::AbstractCIMCollection)
     G_dst = dst_end["g"] / Ybase_dst
     B_dst = dst_end["b"] / Ybase_dst
 
-    trafo = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name=:PowerTransformer)
-    name = hasname(comp.segment) ? getname(comp.segment) : "ACLineSegment"
-    Line(MTKLine(trafo, name=Symbol(name)))
+    name = symbolify(getname(comp.segment))
+    trafo = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name)
+end
+
+function get_edge_model(class::SingleBranchSubgraph, c::AbstractCIMCollection)
+    bm = get_branch_model(class, c)
+    compile_line(MTKLine(bm, name=:SingleBranchEdge))
+end
+
+function get_edge_model(class::MultiBranchSubgraph, c::AbstractCIMCollection)
+    branches = c.metadata[:branches]
+    branch_models = map(branches) do b
+        get_branch_model(CGMES.classify_branch_subgraph(b), b)
+    end
+    c = branches[1]
+    compile_line(MTKLine(branch_models...; name=:MultiBranchEdge))
 end
 
 function classify_branch_subgraph(c::AbstractCIMCollection)
-    @assert is_abstract_branch_subgraph(c) "Expected a edge subgraph (two Topolocial nodes)!"
+    @assert is_abstract_edge_subgraph(c) "Expected a edge subgraph (two Topolocial nodes)!"
 
     if is_single_branch_subgraph(c)
         segment = only(c(CONDUCTING_EQUIPMENT))
         is_class(segment, "ACLineSegment") && return ACLineSegment()
         is_class(segment, "PowerTransformer") && return PowerTransformer()
+    end
+    if is_multi_branch_subgraph(c)
+        return MultiBranchSubgraph()
     end
 
     return nothing
@@ -201,8 +219,8 @@ function get_static_vertex_model(c::CIMCollection)
         type = injector_type(inj)
         push!(injectors, type)
     end
-    mod = reduce(combine, injectors)
-    name = Symbol(getname(tpn))
+    mod = reduce(combine, injectors, init=PQType(0.0, 0.0, CIMObject[]))
+    name = symbolify(getname(tpn))
     vm = powerdynamics_model(mod, name)
     set_graphelement!(vm, c.metadata[:busidx])
     vm.metadata[:cgmes_subgraph] = c
@@ -212,10 +230,18 @@ powerdynamics_model(pq::PQType, name) = pfPQ(; P=pq.P, Q=pq.Q, name)
 powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.V, name)
 powerdynamics_model(s::SlackType, name) = pfSlack(; V=s.V, name)
 
-function PowerDynamics.Network(ds::AbstractCIMCollection; kwargs...)
+function PowerDynamics.Network(ds::AbstractCIMCollection; verbose=true, kwargs...)
     vertices, edges = split_topologically(ds; warn=false)
-    ems = get_edge_model.(edges)
-    vms = get_static_vertex_model.(vertices)
+    ems = map(enumerate(edges)) do (i, e)
+        verbose && println("Processing edge $i")
+        get_edge_model(e)
+    end
+    vms = map(enumerate(vertices)) do (i, v)
+        verbose && println("Processing vertex $i")
+        get_static_vertex_model(v)
+    end
+    # ems = get_edge_model.(edges)
+    # vms = get_static_vertex_model.(vertices)
     PowerDynamics.Network(vms, ems; kwargs...)
 end
 
@@ -399,7 +425,7 @@ function determine_branch_parameters(c)
     )
 
     @named branch = PiLineFreeP()
-    edgemodel = Line(MTKLine(branch))
+    edgemodel = compile_line(MTKLine(branch))
     state = initialize_component(edgemodel; default_overrides, verbose=false)
 
     _R = state[:branch₊R]
