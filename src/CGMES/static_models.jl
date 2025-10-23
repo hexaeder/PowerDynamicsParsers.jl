@@ -27,6 +27,7 @@ function is_multi_branch_subgraph(c::AbstractCIMCollection)
     all(is_single_branch_subgraph, branches) || return false
 end
 
+
 function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     nodes = collect(values(objects(c)))
     cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
@@ -45,7 +46,22 @@ function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     src_terminal = only(src_terminals ∩ segment_terminals)
     dst_terminal = only(dst_terminals ∩ segment_terminals)
 
-    (; src_node, src_terminal, dst_node, dst_terminal, segment)
+    (; src_node, src_terminals, src_terminal, dst_node, dst_terminals, dst_terminal, segment)
+end
+
+function get_components(::MultiBranchSubgraph, c::AbstractCIMCollection)
+    nodes = collect(values(objects(c)))
+
+    endnodes = c("TopologicalNode")
+    src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
+    dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
+    src_idx = c.metadata[:src_idx]
+    dst_idx = c.metadata[:dst_idx]
+
+    src_terminals = filter(is_terminal, base_object.(src_node.references))
+    dst_terminals = filter(is_terminal, base_object.(dst_node.references))
+
+    (; src_node, src_terminals, dst_node, dst_terminals)
 end
 
 function get_edge_model(c)
@@ -84,13 +100,8 @@ end
 | name                                      | String         | see IdentifiedObject                                                                                                                                                         |
 | shortName (Entsoe)                        | String         | see IdentifiedObject                                                                                                                                                         |
 """
-function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection)
+function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection; i=nothing)
     comp = CGMES.get_components(class, c)
-
-    if !allequal(CGMES.get_base_voltage, (comp.src_node, comp.dst_node, comp.segment))
-        # throw(ArgumentError("ACLineSegment must have the same base voltage on both ends!"))
-        @warn "ACLineSegment has multiple base voltages! src=$(CGMES.get_base_voltage(comp.src_node)), dst=$(CGMES.get_base_voltage(comp.dst_node)), segment=$(CGMES.get_base_voltage(comp.segment))"
-    end
 
     # Sbase is just 100 because Vbase is in kv!
     Vbase = CGMES.get_base_voltage(comp.segment) # kV
@@ -105,11 +116,15 @@ function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection)
     R = props["r"] / Zbase
     X = props["x"] / Zbase
 
-    name = symbolify(getname(comp.segment))
-    piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name)
+    r_src = CGMES.get_base_voltage(comp.src_node) / Vbase
+    r_dst = CGMES.get_base_voltage(comp.dst_node) / Vbase
+
+    name = isnothing(i) ? :ACLineSegment : Symbol("ACLineSegment_Branch$i")
+    # name = symbolify(getname(comp.segment))
+    piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, r_src, r_dst, name)
 end
 
-function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection)
+function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection; i=nothing)
     comp = CGMES.get_components(class, c)
     tends = c("PowerTransformerEnd")
     @assert length(tends) == 2 "Expected exactly two PowerTransformerEnd, got $(length(tends))!"
@@ -135,22 +150,31 @@ function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection)
     G_dst = dst_end["g"] / Ybase_dst
     B_dst = dst_end["b"] / Ybase_dst
 
-    name = symbolify(getname(comp.segment))
+    # specific naming leads to non-egal models (generated function contains name)
+    # name = symbolify(getname(comp.segment))
+    name = isnothing(i) ? :PowerTransformer : Symbol("PowerTransformer_Branch$i")
     trafo = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name)
 end
 
 function get_edge_model(class::SingleBranchSubgraph, c::AbstractCIMCollection)
     bm = get_branch_model(class, c)
-    compile_line(MTKLine(bm, name=:SingleBranchEdge))
+    name = symbolify(getname(CGMES.get_components(class, c).segment))
+    compile_line(MTKLine(bm; name))
 end
 
 function get_edge_model(class::MultiBranchSubgraph, c::AbstractCIMCollection)
     branches = c.metadata[:branches]
-    branch_models = map(branches) do b
-        get_branch_model(CGMES.classify_branch_subgraph(b), b)
+    branch_models = Any[]
+    branch_names = Symbol[]
+    for (i, bm) in enumerate(branches)
+        bclass = CGMES.classify_branch_subgraph(bm)
+        bmodel = get_branch_model(bclass, bm; i)
+        bname = symbolify(getname(CGMES.get_components(bclass, bm).segment))
+        push!(branch_models, bmodel)
+        push!(branch_names, bname)
     end
-    c = branches[1]
-    compile_line(MTKLine(branch_models...; name=:MultiBranchEdge))
+    name = Symbol(join(branch_names, "__"))
+    compile_line(MTKLine(branch_models...; name))
 end
 
 function classify_branch_subgraph(c::AbstractCIMCollection)
@@ -242,7 +266,7 @@ function PowerDynamics.Network(ds::AbstractCIMCollection; verbose=true, kwargs..
     end
     # ems = get_edge_model.(edges)
     # vms = get_static_vertex_model.(vertices)
-    PowerDynamics.Network(vms, ems; kwargs...)
+    PowerDynamics.Network(vms, ems; warn_order=false, kwargs...)
 end
 
 injector_type(o::CIMObject) = injector_type(Val(Symbol(o.class_name)), o)
@@ -309,11 +333,33 @@ function get_injected_power_pu(o::CIMObject)
     return -P - im * Q
 end
 
+function get_src_voltage_pu(c::CIMCollection)
+    class = classify_branch_subgraph(c)
+    comp = CGMES.get_components(class, c)
+    get_voltage_pu(comp.src_node)
+end
+function get_dst_voltage_pu(c::CIMCollection)
+    class = classify_branch_subgraph(c)
+    comp = CGMES.get_components(class, c)
+    get_voltage_pu(comp.dst_node)
+end
+function get_src_power_pu(c::CIMCollection)
+    class = classify_branch_subgraph(c)
+    comp = CGMES.get_components(class, c)
+    Sref = sum(CGMES.get_injected_power_pu.(comp.src_terminals))
+end
+function get_dst_power_pu(c::CIMCollection)
+    class = classify_branch_subgraph(c)
+    comp = CGMES.get_components(class, c)
+    Sref = sum(CGMES.get_injected_power_pu.(comp.dst_terminals))
+end
+
+
 
 function test_powerflow(e::EdgeModel)
-    comp = e.metadata[:cgmes_components]
-    src_uc = CGMES.get_voltage_pu(comp.src_node)
-    dst_uc = CGMES.get_voltage_pu(comp.dst_node)
+    subgraph = e.metadata[:cgmes_subgraph]
+    src_uc = CGMES.get_src_voltage_pu(subgraph)
+    dst_uc = CGMES.get_dst_voltage_pu(subgraph)
 
     default_overrides = Dict{Symbol, Any}(
         :src₊u_r => real(src_uc),
@@ -329,7 +375,7 @@ function test_powerflow(e::EdgeModel)
     )
     state = initialize_component(e; default_overrides, guess_overrides, verbose=false)
     P, Q = get_initial_state(e, state, [:src₊P, :src₊Q])
-    Sref = CGMES.get_injected_power_pu(comp.src_terminal)
+    Sref = CGMES.get_src_power_pu(subgraph)
     Pref = real(Sref)
     Qref = imag(Sref)
 
@@ -492,7 +538,9 @@ function PowerDynamics.show_powerflow(ds::AbstractCIMCollection)
         # v = first(vertices)
         tpn = only(v("TopologicalNode"))
         V = CGMES.get_voltage_pu(tpn)
-        S = sum(CGMES.get_injected_power_pu.(v("Terminal")))
+
+        terminals = v("Terminal")
+        S = isempty(terminals) ? 0 : sum(CGMES.get_injected_power_pu.(terminals))
 
         push!(dict["N"], i)
         push!(dict["Bus Names"], getname(tpn))

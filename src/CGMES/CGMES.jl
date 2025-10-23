@@ -273,10 +273,10 @@ function merge_collection(c1::CIMCollection, c2::CIMCollection; warn=true, metad
             end
         end
     end
-    mt1 = c1.metadata
-    mt2 = c2.metadata
-    merged_metadata = copy(mt1)
-    for (k,v) in mt2
+    merged_metadata = copy(c1.metadata)
+    delete!(merged_metadata, metadatakey)
+    for (k,v) in c2.metadata
+        k == metadatakey && continue
         if haskey(merged_metadata, k) && merged_metadata[k] != v
             @warn "Merging collections with overlapping metadata key $k: $(merged_metadata[k]) vs $v"
         else
@@ -287,9 +287,10 @@ function merge_collection(c1::CIMCollection, c2::CIMCollection; warn=true, metad
     col = CIMCollection(merged_objects, merged_extensions, merged_metadata)
     resolve_references!(col; warn)
 
-    merger_of = get!(col.metadata, metadatakey, CIMCollection[])
-    push!(merger_of, c1)
-    push!(merger_of, c2)
+    # if one collection is alrleady a merger, take its components, else take it self
+    c1merger = get!(c1.metadata, metadatakey, CIMCollection[c1])
+    c2merger = get!(c2.metadata, metadatakey, CIMCollection[c2])
+    col.metadata[metadatakey] = vcat(c1merger, c2merger)
 
     col
 end

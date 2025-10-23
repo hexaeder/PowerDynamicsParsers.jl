@@ -141,12 +141,12 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         end
     end
     @assert allunique(sg.metadata[:busname] for sg in node_subgraphs)
+    # sort
+    sort!(node_subgraphs, by = sg->sg.metadata[:busname])
     # attach metadata
     for (i, ng) in enumerate(node_subgraphs)
         ng.metadata[:busidx] = i
     end
-    # sort
-    sort!(node_subgraphs, by = sg->sg.metadata[:busname])
 
     undiscovered_lineends = filter(is_lineend, collection("Terminal"))
     verbose && @info "Found $(length(undiscovered_lineends)) line ends. Discovering line end subgraphs..."
@@ -157,17 +157,25 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         push!(branch_subgraphs, subgraph)
 
         discovered_ids = [n.id for n in filter(is_lineend, subgraph("Terminal"))]
+
         foundidx = findall(n -> n.id ∈ discovered_ids, undiscovered_lineends)
         !isnothing(foundidx) && deleteat!(undiscovered_lineends, foundidx)
     end
+    # sanity checks
     for subgraph in branch_subgraphs
         @assert length(subgraph("TopologicalNode")) == 2
+        @assert length(subgraph("Terminal")) == 2
         # test that all terminals belong to the topological nodes
         @assert all(subgraph("Terminal")) do t
             getname(t["TopologicalNode"]) ∈ getname.(subgraph("TopologicalNode"))
         end
     end
-    # attach metadta
+    # check, that all linenends are covered
+    all_linend_ids = mapreduce(branch -> map(t -> t.id, filter(is_lineend, branch("Terminal"))), vcat, branch_subgraphs)
+    linend_ids_in_collection = map(t -> t.id, filter(is_lineend, collection("Terminal")))
+    @assert sort(all_linend_ids) == sort(linend_ids_in_collection) "Not all lineends covered in subgraphs discovery!"
+
+    # attach metadata
     for branch in branch_subgraphs
         tns = branch("TopologicalNode")
         src_name, dst_name = sort!([getname(tn) for tn in tns])
@@ -212,7 +220,6 @@ function _discover_linened_subgraph(t; warn)
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
     filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland"])
     sg = discover_subgraph(t; nobackref, filter_out, warn)
-    sg.metadata[:discovered_from_lineend] = getname(t)
     sg
 end
 

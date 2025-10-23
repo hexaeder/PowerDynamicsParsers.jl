@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with PowerFactory 2025 SP2 (x64) (digcimdb.dll ServicePack 0) -->
+<rdf:RDF xmlns:cim="http://iec.ch/TC57/2013/CIM-schema-cim16#" xmlns:entsoe="http://entsoe.eu/CIM/SchemaExtension/3/1#" xmlns:md="http://iec.ch/TC57/61970-552/ModelDescription/1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <md:FullModel rdf:about="urn:uuid:ea050826-55d7-484a-8fba-54bdaf603ede">
+    <md:Model.DependentOn rdf:resource="urn:uuid:5b3bc22e-5dc1-42f1-bcd9-54c2eaaf5cd7" />
+    <md:Model.created>2025-09-29T10:16:47Z</md:Model.created>
+    <md:Model.description />
+    <md:Model.modelingAuthoritySet>dummyURI</md:Model.modelingAuthoritySet>
+    <md:Model.profile>http://entsoe.eu/CIM/Dynamics/3/1</md:Model.profile>
+    <md:Model.scenarioTime>2016-04-30T22:00:00Z</md:Model.scenarioTime>
+    <md:Model.version />
+  </md:FullModel>
+  <cim:EnergyConsumer rdf:about="#_12ca82d2-3a9f-49a5-bb94-cdb5557d25c6">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_a1cd37e1-0d73-d01b-af7e-4c1a2d2b6fbf" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_472301fd-8b02-43c4-b4d9-98c44a7a2cda">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_48152923-7eb3-4965-777c-91b6b47fb387" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_64660b95-50f2-4bd3-8f14-8a3adea13dc9">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_a1cd37e1-0d73-d01b-af7e-4c1a2d2b6fbf" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_6706848c-65f7-4b60-b166-64bdb1611fa8">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_d4c1479a-305d-e533-d631-3b13d53a924a" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_76d006f1-9195-4ffd-abf6-dce1474ae4f8">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_caec38ad-7c5f-8d01-88ef-33b976326ba8" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_8322dc04-c443-4971-a78c-cebfa4ecddb6">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_caec38ad-7c5f-8d01-88ef-33b976326ba8" />
+  </cim:EnergyConsumer>
+  <cim:EnergyConsumer rdf:about="#_b414a0e6-d446-4dbf-ac77-f84c2f6853ac">
+    <cim:EnergyConsumer.LoadDynamics rdf:resource="#_da17d35c-3969-7277-4199-c63e9bb8497f" />
+  </cim:EnergyConsumer>
+  <cim:LoadAggregate rdf:ID="_d4c1479a-305d-e533-d631-3b13d53a924a">
+  </cim:LoadAggregate>
+  <cim:LoadAggregate rdf:ID="_caec38ad-7c5f-8d01-88ef-33b976326ba8">
+  </cim:LoadAggregate>
+  <cim:LoadAggregate rdf:ID="_a1cd37e1-0d73-d01b-af7e-4c1a2d2b6fbf">
+  </cim:LoadAggregate>
+  <cim:LoadAggregate rdf:ID="_48152923-7eb3-4965-777c-91b6b47fb387">
+  </cim:LoadAggregate>
+  <cim:LoadAggregate rdf:ID="_da17d35c-3969-7277-4199-c63e9bb8497f">
+  </cim:LoadAggregate>
+  <cim:LoadStatic rdf:ID="_20482b01-330b-e643-766d-c857eaeae235">
+    <cim:LoadStatic.LoadAggregate rdf:resource="#_a1cd37e1-0d73-d01b-af7e-4c1a2d2b6fbf" />
+    <cim:LoadStatic.staticLoadModelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#StaticLoadModelKind.constantZ" />
+  </cim:LoadStatic>
+  <cim:LoadStatic rdf:ID="_b965c118-2cb3-68cc-b890-bd1eaeccaebc">
+    <cim:LoadStatic.LoadAggregate rdf:resource="#_d4c1479a-305d-e533-d631-3b13d53a924a" />
+    <cim:LoadStatic.staticLoadModelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#StaticLoadModelKind.constantZ" />
+  </cim:LoadStatic>
+  <cim:LoadStatic rdf:ID="_62506aba-7119-d899-0ff1-8e2394b14076">
+    <cim:LoadStatic.LoadAggregate rdf:resource="#_48152923-7eb3-4965-777c-91b6b47fb387" />
+    <cim:LoadStatic.staticLoadModelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#StaticLoadModelKind.constantZ" />
+  </cim:LoadStatic>
+  <cim:LoadStatic rdf:ID="_7215d4b6-46b7-1833-7ab6-fccdad4df51e">
+    <cim:LoadStatic.LoadAggregate rdf:resource="#_caec38ad-7c5f-8d01-88ef-33b976326ba8" />
+    <cim:LoadStatic.staticLoadModelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#StaticLoadModelKind.constantZ" />
+  </cim:LoadStatic>
+  <cim:LoadStatic rdf:ID="_2028fe57-2abd-d73c-3ef1-c1556b75c45e">
+    <cim:LoadStatic.LoadAggregate rdf:resource="#_da17d35c-3969-7277-4199-c63e9bb8497f" />
+    <cim:LoadStatic.staticLoadModelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#StaticLoadModelKind.constantZ" />
+  </cim:LoadStatic>
+  <cim:SynchronousMachineTimeConstantReactance rdf:ID="_9e4de26f-7dfe-a02f-f6bc-a116ca798252">
+    <cim:DynamicsFunctionBlock.enabled>true</cim:DynamicsFunctionBlock.enabled>
+    <cim:IdentifiedObject.name>EHV Gen 77</cim:IdentifiedObject.name>
+    <cim:RotatingMachineDynamics.damping>0</cim:RotatingMachineDynamics.damping>
+    <cim:RotatingMachineDynamics.inertia>4.75</cim:RotatingMachineDynamics.inertia>
+    <cim:RotatingMachineDynamics.saturationFactor>0</cim:RotatingMachineDynamics.saturationFactor>
+    <cim:RotatingMachineDynamics.saturationFactor120>0</cim:RotatingMachineDynamics.saturationFactor120>
+    <cim:RotatingMachineDynamics.statorLeakageReactance>0.172</cim:RotatingMachineDynamics.statorLeakageReactance>
+    <cim:RotatingMachineDynamics.statorResistance>0</cim:RotatingMachineDynamics.statorResistance>
+    <cim:SynchronousMachineDetailed.efdBaseRatio>1</cim:SynchronousMachineDetailed.efdBaseRatio>
+    <cim:SynchronousMachineDetailed.ifdBaseType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#IfdBaseKind.ifag" />
+    <cim:SynchronousMachineDynamics.SynchronousMachine rdf:resource="#_cd561fed-a2b6-4207-bef0-5123bf5a6025" />
+    <cim:SynchronousMachineTimeConstantReactance.ks>0</cim:SynchronousMachineTimeConstantReactance.ks>
+    <cim:SynchronousMachineTimeConstantReactance.modelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineModelKind.subtransient" />
+    <cim:SynchronousMachineTimeConstantReactance.rotorType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RotorKind.roundRotor" />
+    <cim:SynchronousMachineTimeConstantReactance.tc>0</cim:SynchronousMachineTimeConstantReactance.tc>
+    <cim:SynchronousMachineTimeConstantReactance.tpdo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppdo>0.075</cim:SynchronousMachineTimeConstantReactance.tppdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppqo>0.075</cim:SynchronousMachineTimeConstantReactance.tppqo>
+    <cim:SynchronousMachineTimeConstantReactance.tpqo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpqo>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSync>2</cim:SynchronousMachineTimeConstantReactance.xDirectSync>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xDirectTrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSync>2</cim:SynchronousMachineTimeConstantReactance.xQuadSync>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xQuadTrans>
+  </cim:SynchronousMachineTimeConstantReactance>
+  <cim:SynchronousMachineTimeConstantReactance rdf:ID="_b1d2e028-3b29-0e33-2d5c-c713ae674740">
+    <cim:DynamicsFunctionBlock.enabled>true</cim:DynamicsFunctionBlock.enabled>
+    <cim:IdentifiedObject.name>EHV Gen 200</cim:IdentifiedObject.name>
+    <cim:RotatingMachineDynamics.damping>0</cim:RotatingMachineDynamics.damping>
+    <cim:RotatingMachineDynamics.inertia>4.75</cim:RotatingMachineDynamics.inertia>
+    <cim:RotatingMachineDynamics.saturationFactor>0</cim:RotatingMachineDynamics.saturationFactor>
+    <cim:RotatingMachineDynamics.saturationFactor120>0</cim:RotatingMachineDynamics.saturationFactor120>
+    <cim:RotatingMachineDynamics.statorLeakageReactance>0.172</cim:RotatingMachineDynamics.statorLeakageReactance>
+    <cim:RotatingMachineDynamics.statorResistance>0</cim:RotatingMachineDynamics.statorResistance>
+    <cim:SynchronousMachineDetailed.efdBaseRatio>1</cim:SynchronousMachineDetailed.efdBaseRatio>
+    <cim:SynchronousMachineDetailed.ifdBaseType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#IfdBaseKind.ifag" />
+    <cim:SynchronousMachineDynamics.SynchronousMachine rdf:resource="#_b056f176-81af-43bf-bf85-2e824bf1f55a" />
+    <cim:SynchronousMachineTimeConstantReactance.ks>0</cim:SynchronousMachineTimeConstantReactance.ks>
+    <cim:SynchronousMachineTimeConstantReactance.modelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineModelKind.subtransient" />
+    <cim:SynchronousMachineTimeConstantReactance.rotorType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RotorKind.roundRotor" />
+    <cim:SynchronousMachineTimeConstantReactance.tc>0</cim:SynchronousMachineTimeConstantReactance.tc>
+    <cim:SynchronousMachineTimeConstantReactance.tpdo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppdo>0.075</cim:SynchronousMachineTimeConstantReactance.tppdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppqo>0.075</cim:SynchronousMachineTimeConstantReactance.tppqo>
+    <cim:SynchronousMachineTimeConstantReactance.tpqo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpqo>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSync>2</cim:SynchronousMachineTimeConstantReactance.xDirectSync>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xDirectTrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSync>2</cim:SynchronousMachineTimeConstantReactance.xQuadSync>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xQuadTrans>
+  </cim:SynchronousMachineTimeConstantReactance>
+  <cim:SynchronousMachineTimeConstantReactance rdf:ID="_658b240c-f78c-cbe3-ce0c-548f5b90a26f">
+    <cim:DynamicsFunctionBlock.enabled>true</cim:DynamicsFunctionBlock.enabled>
+    <cim:IdentifiedObject.name>EHV Gen 295</cim:IdentifiedObject.name>
+    <cim:RotatingMachineDynamics.damping>0</cim:RotatingMachineDynamics.damping>
+    <cim:RotatingMachineDynamics.inertia>4.75</cim:RotatingMachineDynamics.inertia>
+    <cim:RotatingMachineDynamics.saturationFactor>0</cim:RotatingMachineDynamics.saturationFactor>
+    <cim:RotatingMachineDynamics.saturationFactor120>0</cim:RotatingMachineDynamics.saturationFactor120>
+    <cim:RotatingMachineDynamics.statorLeakageReactance>0.172</cim:RotatingMachineDynamics.statorLeakageReactance>
+    <cim:RotatingMachineDynamics.statorResistance>0</cim:RotatingMachineDynamics.statorResistance>
+    <cim:SynchronousMachineDetailed.efdBaseRatio>1</cim:SynchronousMachineDetailed.efdBaseRatio>
+    <cim:SynchronousMachineDetailed.ifdBaseType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#IfdBaseKind.ifag" />
+    <cim:SynchronousMachineDynamics.SynchronousMachine rdf:resource="#_e2688a83-ffdb-4474-bfae-a33452a21d55" />
+    <cim:SynchronousMachineTimeConstantReactance.ks>0</cim:SynchronousMachineTimeConstantReactance.ks>
+    <cim:SynchronousMachineTimeConstantReactance.modelType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#SynchronousMachineModelKind.subtransient" />
+    <cim:SynchronousMachineTimeConstantReactance.rotorType rdf:resource="http://iec.ch/TC57/2013/CIM-schema-cim16#RotorKind.roundRotor" />
+    <cim:SynchronousMachineTimeConstantReactance.tc>0</cim:SynchronousMachineTimeConstantReactance.tc>
+    <cim:SynchronousMachineTimeConstantReactance.tpdo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppdo>0.075</cim:SynchronousMachineTimeConstantReactance.tppdo>
+    <cim:SynchronousMachineTimeConstantReactance.tppqo>0.075</cim:SynchronousMachineTimeConstantReactance.tppqo>
+    <cim:SynchronousMachineTimeConstantReactance.tpqo>6.66667</cim:SynchronousMachineTimeConstantReactance.tpqo>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xDirectSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectSync>2</cim:SynchronousMachineTimeConstantReactance.xDirectSync>
+    <cim:SynchronousMachineTimeConstantReactance.xDirectTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xDirectTrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>0.2</cim:SynchronousMachineTimeConstantReactance.xQuadSubtrans>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadSync>2</cim:SynchronousMachineTimeConstantReactance.xQuadSync>
+    <cim:SynchronousMachineTimeConstantReactance.xQuadTrans>0.3</cim:SynchronousMachineTimeConstantReactance.xQuadTrans>
+  </cim:SynchronousMachineTimeConstantReactance>
+</rdf:RDF>
