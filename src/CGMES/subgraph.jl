@@ -124,6 +124,17 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
 end
 
 function split_topologically(collection::AbstractCIMCollection; verbose=false, warn=true)
+    # sanity checks in presence of connectivity node
+    for cn in collection("ConnectivityNode")
+        tn = descend(cn, byprop("TopologicalNode"))
+
+        cn_terms = Set(ascendants(cn, byclass("Terminal")))
+        tn_terms = Set(ascendants(tn, byclass("Terminal")))
+        if cn_terms != tn_terms
+            @warn "There seems to be a missmatch between ConnectivityNode and TopologicalNode terminals! This is not expected in might lead to wrong topological splits."
+        end
+    end
+
     # collection = CIMDataset(DATA)
     topnodes = collection("TopologicalNode")
     verbose && @info "Found $(length(topnodes)) topological nodes. Discovering subgraphs..."
@@ -204,7 +215,7 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation"])
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation", "ConnectivityNode"])
     sg = discover_subgraph(t; filter_out, warn)
     sg.metadata[:busname] = getname(t)
     sg
@@ -213,7 +224,7 @@ function _discover_linened_subgraph(t; warn)
     @assert is_lineend(t) "Expected LineEnd, got $(t.class_name)"
 
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
-    filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland"])
+    filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland", "ConnectivityNode"])
     sg = discover_subgraph(t; nobackref, filter_out, warn)
     sg
 end

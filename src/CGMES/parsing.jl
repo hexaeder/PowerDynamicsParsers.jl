@@ -1,14 +1,16 @@
 # strip thos prefixs from names
 KNOWN_PREFIXES = ["cim", "entsoe", "eu"]
 KNOWN_PROFILES = [
-    :Equipment,
+    :EquipmentCore,
+    :CoreEquipment,
+    :EquipmentShortCircuit,
+    :ShortCircuit,
     :Topology,
     :StateVariables,
     :DiagramLayout,
     :SteadyStateHypothesis,
     :GeographicalLocation,
     :Dynamics,
-    :ShortCircuit,
 ]
 
 """
@@ -113,18 +115,60 @@ function parse_metadata(md_node::Node)
     return (uuid=uuid, profile=profile, dependencies=dependencies,
             created=created, scenario_time=scenario_time, modeling_authority=modeling_authority)
 end
+
+"""
+    _extract_profile_name(profile_url::String)::String
+
+Extract the profile name from a CGMES profile URL.
+Supports multiple URL formats: ENTSO-E, IEC, and UCAIUG.
+"""
+function _extract_profile_name(profile_url::String)::String
+    # Try ENTSO-E format: http://entsoe.eu/CIM/{ProfileName}/X/Y
+    m = match(r"http://entsoe\.eu/CIM/([A-Za-z]+)/\d+/\d+", profile_url)
+    if !isnothing(m)
+        return m[1]
+    end
+
+    # Try IEC format: http://iec.ch/TC57/ns/CIM/{ProfileName}-EU/X.Y
+    m = match(r"http://iec\.ch/TC57/ns/CIM/([A-Za-z]+)(?:-EU)?/\d+\.\d+", profile_url)
+    if !isnothing(m)
+        return m[1]
+    end
+
+    # Try UCAIUG format: http://cim-profile.ucaiug.io/grid/{ProfileName}/X.Y
+    m = match(r"http://cim-profile\.ucaiug\.io/grid/([A-Za-z]+)/\d+\.\d+", profile_url)
+    if !isnothing(m)
+        return m[1]
+    end
+
+    error("Unknown profile URL format: $profile_url")
+end
+
 function _determine_profile(profiles)
-    keys = KNOWN_PROFILES
-    candidates = map(profiles) do profile
-        keyidx = findall(k -> occursin(string(k), profile), keys)
-        if !(length(keyidx) == 1)
-            error("Profile $profile does not contain exactly one of the expected keys: $keys")
+    # Extract profile names from URLs
+    profile_names = map(_extract_profile_name, profiles)
+
+    # Convert to symbols and match against KNOWN_PROFILES
+    candidates = map(profile_names) do name
+        sym = Symbol(name)
+        if sym in KNOWN_PROFILES
+            return sym
+        else
+            error("Unknown profile: $name (from URL). Expected one of: $KNOWN_PROFILES")
         end
-        keys[only(keyidx)]
     end
+
+    # If multiple profiles are present (e.g., EquipmentCore + EquipmentShortCircuit),
+    # return the first one that appears in KNOWN_PROFILES order (primary profile)
     if !allequal(candidates)
-        error("Profiles $profiles do not match (got $candidates), expected all to be the same.")
+        # Find the first profile in KNOWN_PROFILES that appears in candidates
+        for known_profile in KNOWN_PROFILES
+            if known_profile in candidates
+                return known_profile
+            end
+        end
     end
+
     first(candidates)
 end
 

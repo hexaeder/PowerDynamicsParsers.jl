@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with PowerFactory 2025 SP3 (x64) (digcimdb.dll ServicePack 0) -->
+<rdf:RDF xmlns:cim="http://iec.ch/TC57/CIM100#" xmlns:eu="http://iec.ch/TC57/CIM100-European#" xmlns:md="http://iec.ch/TC57/61970-552/ModelDescription/1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <md:FullModel rdf:about="urn:uuid:a32e490c-ee4e-4c8a-a0d2-a1e6e84c03f1">
+    <md:Model.DependentOn rdf:resource="urn:uuid:86f00e60-e8c6-4c28-88d6-73e30ea1e53b" />
+    <md:Model.created>2025-10-30T15:18:49Z</md:Model.created>
+    <md:Model.description />
+    <md:Model.modelingAuthoritySet>Authority1</md:Model.modelingAuthoritySet>
+    <md:Model.profile>http://iec.ch/TC57/ns/CIM/ShortCircuit-EU/3.0</md:Model.profile>
+    <md:Model.scenarioTime>1970-01-02T06:56:59Z</md:Model.scenarioTime>
+    <md:Model.version />
+  </md:FullModel>
+  <cim:ACLineSegment rdf:about="#_49e687d6-e297-433c-8606-964ff738de67">
+    <cim:ACLineSegment.b0ch>0</cim:ACLineSegment.b0ch>
+    <cim:ACLineSegment.g0ch>0</cim:ACLineSegment.g0ch>
+    <cim:ACLineSegment.r0>0</cim:ACLineSegment.r0>
+    <cim:ACLineSegment.shortCircuitEndTemperature>80</cim:ACLineSegment.shortCircuitEndTemperature>
+    <cim:ACLineSegment.x0>0</cim:ACLineSegment.x0>
+  </cim:ACLineSegment>
+  <cim:EnergySource rdf:about="#_d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e">
+    <cim:EnergySource.r>0</cim:EnergySource.r>
+    <cim:EnergySource.r0>0</cim:EnergySource.r0>
+    <cim:EnergySource.rn>0</cim:EnergySource.rn>
+    <cim:EnergySource.x>0</cim:EnergySource.x>
+    <cim:EnergySource.x0>0</cim:EnergySource.x0>
+    <cim:EnergySource.xn>0</cim:EnergySource.xn>
+  </cim:EnergySource>
+</rdf:RDF>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with PowerFactory 2025 SP3 (x64) (digcimdb.dll ServicePack 0) -->
+<rdf:RDF xmlns:cim="http://iec.ch/TC57/CIM100#" xmlns:eu="http://iec.ch/TC57/CIM100-European#" xmlns:md="http://iec.ch/TC57/61970-552/ModelDescription/1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <md:FullModel rdf:about="urn:uuid:2db8c011-9df8-4413-b2e8-e9b033d9b432">
+    <md:Model.DependentOn rdf:resource="urn:uuid:86f00e60-e8c6-4c28-88d6-73e30ea1e53b" />
+    <md:Model.created>2025-10-30T15:18:49Z</md:Model.created>
+    <md:Model.description />
+    <md:Model.modelingAuthoritySet>Authority1</md:Model.modelingAuthoritySet>
+    <md:Model.profile>http://iec.ch/TC57/ns/CIM/SteadyStateHypothesis-EU/3.0</md:Model.profile>
+    <md:Model.scenarioTime>1970-01-02T06:56:59Z</md:Model.scenarioTime>
+    <md:Model.version />
+  </md:FullModel>
+  <cim:CurrentLimit rdf:about="#_f619db45-4bf7-7c2e-ca65-d3cc40e0f5bc">
+    <cim:CurrentLimit.value>1300</cim:CurrentLimit.value>
+  </cim:CurrentLimit>
+  <cim:CurrentLimit rdf:about="#_006b99e2-d297-9c11-3beb-1349f4dd4212">
+    <cim:CurrentLimit.value>1300</cim:CurrentLimit.value>
+  </cim:CurrentLimit>
+  <cim:VoltageLimit rdf:about="#_3078e434-d7f5-32b2-563f-7f258c4a2990">
+    <cim:VoltageLimit.value>399</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:about="#_d00d9d1f-4d87-ace2-c326-d40fe9eebc6d">
+    <cim:VoltageLimit.value>399</cim:VoltageLimit.value>
+  </cim:VoltageLimit>
+  <cim:Terminal rdf:about="#_b678a1a8-2abe-0073-caf4-14d2b4f3dfdc">
+    <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
+  </cim:Terminal>
+  <cim:Terminal rdf:about="#_90e91117-5f1d-fa71-1ba6-60790bd15588">
+    <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
+  </cim:Terminal>
+  <cim:Terminal rdf:about="#_2602c371-0c88-9811-aefc-4416ec2e4067">
+    <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
+  </cim:Terminal>
+  <cim:Terminal rdf:about="#_5934b02e-d18f-7cac-5054-a7e89ffc9e1e">
+    <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
+  </cim:Terminal>
+  <cim:Terminal rdf:about="#_9ac3cf5f-e279-b5a7-bbab-96deac6065ff">
+    <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
+  </cim:Terminal>
+  <cim:Equipment rdf:ID="_49e687d6-e297-433c-8606-964ff738de67">
+    <cim:Equipment.inService>true</cim:Equipment.inService>
+  </cim:Equipment>
+  <cim:Equipment rdf:ID="_100947d5-fba3-968f-6b98-301c0dbcc395">
+    <cim:Equipment.inService>true</cim:Equipment.inService>
+  </cim:Equipment>
+  <cim:Equipment rdf:ID="_370c23a4-63ab-3bda-f12a-cd3e17cb7323">
+    <cim:Equipment.inService>true</cim:Equipment.inService>
+  </cim:Equipment>
+  <cim:EnergySource rdf:about="#_d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e">
+    <cim:EnergySource.activePower>0</cim:EnergySource.activePower>
+    <cim:EnergySource.reactivePower>0</cim:EnergySource.reactivePower>
+    <cim:EnergySource.voltageAngle>0</cim:EnergySource.voltageAngle>
+    <cim:EnergySource.voltageMagnitude>380</cim:EnergySource.voltageMagnitude>
+    <cim:Equipment.inService>true</cim:Equipment.inService>
+  </cim:EnergySource>
+</rdf:RDF>

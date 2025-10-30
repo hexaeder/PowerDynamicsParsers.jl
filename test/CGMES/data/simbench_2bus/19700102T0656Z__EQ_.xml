@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with PowerFactory 2025 SP3 (x64) (digcimdb.dll ServicePack 0) -->
+<rdf:RDF xmlns:cim="http://iec.ch/TC57/CIM100#" xmlns:eu="http://iec.ch/TC57/CIM100-European#" xmlns:md="http://iec.ch/TC57/61970-552/ModelDescription/1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <md:FullModel rdf:about="urn:uuid:86f00e60-e8c6-4c28-88d6-73e30ea1e53b">
+    <md:Model.created>2025-10-30T15:18:49Z</md:Model.created>
+    <md:Model.description />
+    <md:Model.modelingAuthoritySet>Authority1</md:Model.modelingAuthoritySet>
+    <md:Model.profile>http://iec.ch/TC57/ns/CIM/CoreEquipment-EU/3.0</md:Model.profile>
+    <md:Model.scenarioTime>1970-01-02T06:56:59Z</md:Model.scenarioTime>
+    <md:Model.version />
+  </md:FullModel>
+  <cim:CurrentLimit rdf:ID="_f619db45-4bf7-7c2e-ca65-d3cc40e0f5bc">
+    <cim:CurrentLimit.normalValue>1300</cim:CurrentLimit.normalValue>
+    <cim:IdentifiedObject.mRID>f619db45-4bf7-7c2e-ca65-d3cc40e0f5bc</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>patl for Line</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_6ad28c68-2d1d-a65f-540b-10184c652f94" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_b7d77869-70d9-2b77-4a68-c3d2fbb579f5" />
+  </cim:CurrentLimit>
+  <cim:CurrentLimit rdf:ID="_006b99e2-d297-9c11-3beb-1349f4dd4212">
+    <cim:CurrentLimit.normalValue>1300</cim:CurrentLimit.normalValue>
+    <cim:IdentifiedObject.mRID>006b99e2-d297-9c11-3beb-1349f4dd4212</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>patl for Line</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_1940dcc3-71f6-9d82-9ed1-2281ebf303cb" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_b7d77869-70d9-2b77-4a68-c3d2fbb579f5" />
+  </cim:CurrentLimit>
+  <cim:ConnectivityNode rdf:ID="_43eccc80-ffdf-49e4-b681-4bd32e63d523">
+    <cim:ConnectivityNode.ConnectivityNodeContainer rdf:resource="#_38c2b876-41ef-7633-9258-859d25e8c31a" />
+    <cim:IdentifiedObject.mRID>43eccc80-ffdf-49e4-b681-4bd32e63d523</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus DUT</cim:IdentifiedObject.name>
+  </cim:ConnectivityNode>
+  <cim:ConnectivityNode rdf:ID="_6c8da124-9a78-4a65-be41-dc4e494c50e5">
+    <cim:ConnectivityNode.ConnectivityNodeContainer rdf:resource="#_b6af8866-fee5-d345-8cbb-b69f9bdee7dd" />
+    <cim:IdentifiedObject.mRID>6c8da124-9a78-4a65-be41-dc4e494c50e5</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus Slack</cim:IdentifiedObject.name>
+  </cim:ConnectivityNode>
+  <cim:Terminal rdf:ID="_b678a1a8-2abe-0073-caf4-14d2b4f3dfdc">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.mRID>b678a1a8-2abe-0073-caf4-14d2b4f3dfdc</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus Slack</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_100947d5-fba3-968f-6b98-301c0dbcc395" />
+    <cim:Terminal.ConnectivityNode rdf:resource="#_6c8da124-9a78-4a65-be41-dc4e494c50e5" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_90e91117-5f1d-fa71-1ba6-60790bd15588">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.mRID>90e91117-5f1d-fa71-1ba6-60790bd15588</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Cub_1(1)</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_49e687d6-e297-433c-8606-964ff738de67" />
+    <cim:Terminal.ConnectivityNode rdf:resource="#_43eccc80-ffdf-49e4-b681-4bd32e63d523" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_5934b02e-d18f-7cac-5054-a7e89ffc9e1e">
+    <cim:ACDCTerminal.sequenceNumber>2</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.mRID>5934b02e-d18f-7cac-5054-a7e89ffc9e1e</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Cub_3</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_49e687d6-e297-433c-8606-964ff738de67" />
+    <cim:Terminal.ConnectivityNode rdf:resource="#_6c8da124-9a78-4a65-be41-dc4e494c50e5" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_2602c371-0c88-9811-aefc-4416ec2e4067">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.mRID>2602c371-0c88-9811-aefc-4416ec2e4067</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Cub_2</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e" />
+    <cim:Terminal.ConnectivityNode rdf:resource="#_6c8da124-9a78-4a65-be41-dc4e494c50e5" />
+  </cim:Terminal>
+  <cim:Terminal rdf:ID="_9ac3cf5f-e279-b5a7-bbab-96deac6065ff">
+    <cim:ACDCTerminal.sequenceNumber>1</cim:ACDCTerminal.sequenceNumber>
+    <cim:IdentifiedObject.mRID>9ac3cf5f-e279-b5a7-bbab-96deac6065ff</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus DUT</cim:IdentifiedObject.name>
+    <cim:Terminal.ConductingEquipment rdf:resource="#_370c23a4-63ab-3bda-f12a-cd3e17cb7323" />
+    <cim:Terminal.ConnectivityNode rdf:resource="#_43eccc80-ffdf-49e4-b681-4bd32e63d523" />
+  </cim:Terminal>
+  <cim:VoltageLimit rdf:ID="_3078e434-d7f5-32b2-563f-7f258c4a2990">
+    <cim:IdentifiedObject.mRID>3078e434-d7f5-32b2-563f-7f258c4a2990</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>high limit for Bus Slack</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_937e53cb-f7e5-0f2a-624a-38691091b600" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_58234e5b-56b2-8848-1b17-48a62acabede" />
+    <cim:VoltageLimit.normalValue>399</cim:VoltageLimit.normalValue>
+  </cim:VoltageLimit>
+  <cim:VoltageLimit rdf:ID="_d00d9d1f-4d87-ace2-c326-d40fe9eebc6d">
+    <cim:IdentifiedObject.mRID>d00d9d1f-4d87-ace2-c326-d40fe9eebc6d</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>high limit for Bus DUT</cim:IdentifiedObject.name>
+    <cim:OperationalLimit.OperationalLimitSet rdf:resource="#_3efc7041-a4bd-2c2d-64bd-ec1e34b96812" />
+    <cim:OperationalLimit.OperationalLimitType rdf:resource="#_58234e5b-56b2-8848-1b17-48a62acabede" />
+    <cim:VoltageLimit.normalValue>399</cim:VoltageLimit.normalValue>
+  </cim:VoltageLimit>
+  <cim:OperationalLimitType rdf:ID="_b7d77869-70d9-2b77-4a68-c3d2fbb579f5">
+    <cim:IdentifiedObject.mRID>b7d77869-70d9-2b77-4a68-c3d2fbb579f5</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>patl</cim:IdentifiedObject.name>
+    <cim:OperationalLimitType.direction rdf:resource="http://iec.ch/TC57/CIM100#OperationalLimitDirectionKind.absoluteValue" />
+    <cim:OperationalLimitType.isInfiniteDuration>true</cim:OperationalLimitType.isInfiniteDuration>
+    <eu:OperationalLimitType.kind rdf:resource="http://iec.ch/TC57/CIM100-European#LimitKind.patl" />
+  </cim:OperationalLimitType>
+  <cim:OperationalLimitType rdf:ID="_58234e5b-56b2-8848-1b17-48a62acabede">
+    <cim:IdentifiedObject.mRID>58234e5b-56b2-8848-1b17-48a62acabede</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>highVoltage</cim:IdentifiedObject.name>
+    <cim:OperationalLimitType.direction rdf:resource="http://iec.ch/TC57/CIM100#OperationalLimitDirectionKind.high" />
+    <cim:OperationalLimitType.isInfiniteDuration>true</cim:OperationalLimitType.isInfiniteDuration>
+    <eu:OperationalLimitType.kind rdf:resource="http://iec.ch/TC57/CIM100-European#LimitKind.highVoltage" />
+  </cim:OperationalLimitType>
+  <cim:ACLineSegment rdf:ID="_49e687d6-e297-433c-8606-964ff738de67">
+    <cim:ACLineSegment.bch>0.000180641</cim:ACLineSegment.bch>
+    <cim:ACLineSegment.gch>0</cim:ACLineSegment.gch>
+    <cim:ACLineSegment.r>4</cim:ACLineSegment.r>
+    <cim:ACLineSegment.x>16</cim:ACLineSegment.x>
+    <cim:ConductingEquipment.BaseVoltage rdf:resource="#_67a6efe6-e1db-21ee-c0fd-bef847b76c3a" />
+    <cim:Conductor.length>50</cim:Conductor.length>
+    <cim:Equipment.EquipmentContainer rdf:resource="#_6d0d8941-92b4-9c43-e7d6-77bc41109258" />
+    <cim:IdentifiedObject.mRID>49e687d6-e297-433c-8606-964ff738de67</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Line</cim:IdentifiedObject.name>
+  </cim:ACLineSegment>
+  <cim:Line rdf:ID="_6d0d8941-92b4-9c43-e7d6-77bc41109258">
+    <cim:IdentifiedObject.mRID>6d0d8941-92b4-9c43-e7d6-77bc41109258</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Line</cim:IdentifiedObject.name>
+  </cim:Line>
+  <cim:VoltageLevel rdf:ID="_38c2b876-41ef-7633-9258-859d25e8c31a">
+    <cim:IdentifiedObject.mRID>38c2b876-41ef-7633-9258-859d25e8c31a</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus DUT</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_67a6efe6-e1db-21ee-c0fd-bef847b76c3a" />
+    <cim:VoltageLevel.Substation rdf:resource="#_f4668b59-875b-95f1-8a18-d35a60441a47" />
+  </cim:VoltageLevel>
+  <cim:VoltageLevel rdf:ID="_b6af8866-fee5-d345-8cbb-b69f9bdee7dd">
+    <cim:IdentifiedObject.mRID>b6af8866-fee5-d345-8cbb-b69f9bdee7dd</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus Slack</cim:IdentifiedObject.name>
+    <cim:VoltageLevel.BaseVoltage rdf:resource="#_67a6efe6-e1db-21ee-c0fd-bef847b76c3a" />
+    <cim:VoltageLevel.Substation rdf:resource="#_f4668b59-875b-95f1-8a18-d35a60441a47" />
+  </cim:VoltageLevel>
+  <cim:OperationalLimitSet rdf:ID="_1940dcc3-71f6-9d82-9ed1-2281ebf303cb">
+    <cim:IdentifiedObject.mRID>1940dcc3-71f6-9d82-9ed1-2281ebf303cb</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Current rating for Line</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_5934b02e-d18f-7cac-5054-a7e89ffc9e1e" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_6ad28c68-2d1d-a65f-540b-10184c652f94">
+    <cim:IdentifiedObject.mRID>6ad28c68-2d1d-a65f-540b-10184c652f94</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Current rating for Line</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_90e91117-5f1d-fa71-1ba6-60790bd15588" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_3efc7041-a4bd-2c2d-64bd-ec1e34b96812">
+    <cim:IdentifiedObject.mRID>3efc7041-a4bd-2c2d-64bd-ec1e34b96812</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Voltage limits for Bus DUT</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_9ac3cf5f-e279-b5a7-bbab-96deac6065ff" />
+  </cim:OperationalLimitSet>
+  <cim:OperationalLimitSet rdf:ID="_937e53cb-f7e5-0f2a-624a-38691091b600">
+    <cim:IdentifiedObject.mRID>937e53cb-f7e5-0f2a-624a-38691091b600</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Voltage limits for Bus Slack</cim:IdentifiedObject.name>
+    <cim:OperationalLimitSet.Terminal rdf:resource="#_b678a1a8-2abe-0073-caf4-14d2b4f3dfdc" />
+  </cim:OperationalLimitSet>
+  <cim:BusbarSection rdf:ID="_100947d5-fba3-968f-6b98-301c0dbcc395">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_b6af8866-fee5-d345-8cbb-b69f9bdee7dd" />
+    <cim:IdentifiedObject.mRID>100947d5-fba3-968f-6b98-301c0dbcc395</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus Slack</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BusbarSection rdf:ID="_370c23a4-63ab-3bda-f12a-cd3e17cb7323">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_38c2b876-41ef-7633-9258-859d25e8c31a" />
+    <cim:IdentifiedObject.mRID>370c23a4-63ab-3bda-f12a-cd3e17cb7323</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Bus DUT</cim:IdentifiedObject.name>
+  </cim:BusbarSection>
+  <cim:BaseVoltage rdf:ID="_67a6efe6-e1db-21ee-c0fd-bef847b76c3a">
+    <cim:BaseVoltage.nominalVoltage>380</cim:BaseVoltage.nominalVoltage>
+    <cim:IdentifiedObject.description>BaseVoltage 380.00 kV</cim:IdentifiedObject.description>
+    <cim:IdentifiedObject.mRID>67a6efe6-e1db-21ee-c0fd-bef847b76c3a</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>380.00 kV</cim:IdentifiedObject.name>
+    <eu:IdentifiedObject.shortName>380.00 kV</eu:IdentifiedObject.shortName>
+  </cim:BaseVoltage>
+  <cim:EnergySource rdf:ID="_d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e">
+    <cim:Equipment.EquipmentContainer rdf:resource="#_b6af8866-fee5-d345-8cbb-b69f9bdee7dd" />
+    <cim:IdentifiedObject.mRID>d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>VS NAP</cim:IdentifiedObject.name>
+  </cim:EnergySource>
+  <cim:Substation rdf:ID="_f4668b59-875b-95f1-8a18-d35a60441a47">
+    <cim:IdentifiedObject.mRID>f4668b59-875b-95f1-8a18-d35a60441a47</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Grid</cim:IdentifiedObject.name>
+    <cim:Substation.Region rdf:resource="#_daed9135-2b9f-d5a8-fd78-73675d0f6286" />
+  </cim:Substation>
+  <cim:SubGeographicalRegion rdf:ID="_daed9135-2b9f-d5a8-fd78-73675d0f6286">
+    <cim:IdentifiedObject.mRID>daed9135-2b9f-d5a8-fd78-73675d0f6286</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Grid</cim:IdentifiedObject.name>
+    <cim:SubGeographicalRegion.Region rdf:resource="#_d4a891c0-badd-1891-3c58-e22ff388b164" />
+  </cim:SubGeographicalRegion>
+  <cim:GeographicalRegion rdf:ID="_d4a891c0-badd-1891-3c58-e22ff388b164">
+    <cim:IdentifiedObject.mRID>d4a891c0-badd-1891-3c58-e22ff388b164</cim:IdentifiedObject.mRID>
+    <cim:IdentifiedObject.name>Grid</cim:IdentifiedObject.name>
+  </cim:GeographicalRegion>
+</rdf:RDF>

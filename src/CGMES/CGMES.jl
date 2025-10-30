@@ -284,11 +284,12 @@ end
 function byprop(prop::Regex)
     (rel::Relation) -> contains(rel.property, prop)
 end
-function byclass(class)
-    (rel::Relation) -> is_class(rel.other, class)
-end
-function byclass(class; via)
-    (rel::Relation) -> is_class(rel.other, class) && rel.property == via
+function byclass(class; via=nothing)
+    if via != nothing
+        (rel::Relation) -> is_class(rel.other, class) && rel.property == via
+    else
+        (rel::Relation) -> is_class(rel.other, class)
+    end
 end
 
 """

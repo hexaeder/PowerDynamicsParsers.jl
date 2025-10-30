@@ -102,6 +102,7 @@ kwargs = (;
             "Inspection of CGMES Test Data" => "generated/cgmes_testdata.md",
             "Wrong Powerflow data in CGMES Export" => "generated/cgmes_linemodel.md",
             "Reexported Dataset" => "generated/cgmes_testdata_reexport.md",
+            "2 Bus Example Export" => "generated/cgmes_simbench2bus.md",
         ]
     ],
     draft=haskey(ENV, "DOCUMENTER_DRAFT"),
