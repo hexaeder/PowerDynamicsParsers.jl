@@ -1,3 +1,16 @@
+# strip thos prefixs from names
+KNOWN_PREFIXES = ["cim", "entsoe", "eu"]
+KNOWN_PROFILES = [
+    :Equipment,
+    :Topology,
+    :StateVariables,
+    :DiagramLayout,
+    :SteadyStateHypothesis,
+    :GeographicalLocation,
+    :Dynamics,
+    :ShortCircuit,
+]
+
 """
 Extract the "Rescource Description Framework" (RDF) node from the XML document.
 """
@@ -101,16 +114,7 @@ function parse_metadata(md_node::Node)
             created=created, scenario_time=scenario_time, modeling_authority=modeling_authority)
 end
 function _determine_profile(profiles)
-    keys = [
-        :Equipment,
-        :Topology,
-        :StateVariables,
-        :DiagramLayout,
-        :SteadyStateHypothesis,
-        :GeographicalLocation,
-        :Dynamics,
-        :ShortCircuit,
-    ]
+    keys = KNOWN_PROFILES
     candidates = map(profiles) do profile
         keyidx = findall(k -> occursin(string(k), profile), keys)
         if !(length(keyidx) == 1)
@@ -123,8 +127,6 @@ function _determine_profile(profiles)
     end
     first(candidates)
 end
-
-KNOWN_PREFIXES = ["cim", "entsoe", "eu"]
 
 # parser function
 function CIMObject(el::Node, profile)
@@ -258,7 +260,38 @@ function CIMDataset(directory::String)
         end
     end
 
-    dataset = CIMDataset(files, directory)
+    # reorder files acorrind got KNOWN_PROFILES
+    files_ordered = OrderedDict{Symbol, CIMFile}()
+    for profile in KNOWN_PROFILES
+        if haskey(files, profile)
+            files_ordered[profile] = files[profile]
+        end
+    end
+
+    # handle duplicate ids
+    allkeys = Set{String}()
+    for (profile, file) in files_ordered
+        filekeys = keys(objects(file))
+        duplicatekeys = intersect(allkeys, filekeys)
+
+        if !isempty(duplicatekeys)
+            for key in duplicatekeys
+                obj = objects(file)[key]
+                printstyled("Duplicate key! Transforming \"$(obj.class_name)\"-object from $profile into extension.\n"; color=:yellow)
+
+                # move to extension
+                base = CIMRef(obj.id)
+                ext = CIMExtension(file.profile, base, obj.class_name, obj.properties)
+                push!(file.collection.extensions, ext)
+                # remove from objects
+                delete!(objects(file), key)
+            end
+        end
+
+        union!(allkeys, keys(objects(file)))
+    end
+
+    dataset = CIMDataset(files_ordered, directory)
     resolve_references!(dataset)
     return dataset
 end
