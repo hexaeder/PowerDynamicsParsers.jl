@@ -7,18 +7,19 @@ using WGLMakie
 
 dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data","1-EHVHV-mixed-all-2-sw-minimal-komplex"))
 
+
 reduced_dataset = reduce_complexity(dataset)
 @hover inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))
 
 nodes, edges = split_topologically(dataset; warn=false, verbose=true);
-nodes[1].metadata
 
 #=
 Bus 1
 =#
-@hover inspect_collection(edges[10]; size=(900,900), hl1=edges[10]("PowerTransformer"), hl2=edges[10]("Terminal"))
+@hover inspect_collection(edges[2]; size=(900,900))
 
-@hover inspect_collection(nodes[7]; size=(900,900))
+@hover inspect_collection(nodes[6]; size=(900,900))
+
 
 @hover inspect_collection(edges[10].metadata[:branches][1]; size=(900,900))
 @hover inspect_collection(edges[10].metadata[:branches][2]; size=(900,900))
@@ -37,6 +38,7 @@ b4.metadata[:discovered_from_lineend]
 filter(CGMES.is_lineend, e("Terminal"))
 
 findfirst(t->getname(t) == "HV Bus 15", dataset("Terminal"))
+dataset(r"Load")[2]
 
 
 
@@ -45,11 +47,21 @@ CGMES.is_single_branch_subgraph(edges[10].metadata[:branches][4])
 CGMES.is_multi_branch_subgraph(edges[10].metadata[:branches][2])
 
 pfnw = Network(dataset)
-pfs = find_fixpoint(pfnw)
-show_powerflow(pfs)
+pfs0 = NWState(pfnw)
+pfs0.v[6][:pv₊P] = 0.330231
+pfs = find_fixpoint(pfnw, pfs0)
 
+show_powerflow(pfs)
 show_powerflow(dataset)
-pfnw[VIndex(2)]
+
+for i in 1:14
+    println("Edge $i")
+    CGMES.test_powerflow(pfnw[EIndex(i)])
+end
+
+pfnw[VIndex(1)].metadata
+
+pfnw[EIndex(2)]
 pfnw
 
 

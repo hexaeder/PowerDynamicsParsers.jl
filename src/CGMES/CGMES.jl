@@ -13,6 +13,7 @@ export objects, extensions, hasname, getname, properties
 export inspect_collection, inspect_node, inspect_comparison
 export follow_ref
 export CIMCollectionComparison, compare_objects
+export descend, ascend, byprop, byclass
 
 SBASE = 100 # Base power in MVA
 
@@ -37,7 +38,9 @@ Base.iterate(ref::CIMRef, state) = nothing
 
 struct CIMBackref <: AbstractCIMReference
     source::CIMEntity
+    prop::Union{Nothing,String}
 end
+CIMBackref(source) = CIMBackref(source, nothing)
 
 struct CIMObject <: CIMEntity
     profile::Symbol
@@ -147,7 +150,7 @@ function Base.copy(ext::CIMExtension)
 end
 
 function _register_backref!(target::CIMObject, source::Union{CIMObject,CIMExtension}, prop)
-    backref = CIMBackref(source)
+    backref = CIMBackref(source, prop)
     push!(target.backrefs, backref)
 end
 
@@ -257,6 +260,94 @@ is_class(x, class::String) = (typeof(x) <: CIMObject) && (x.class_name == class)
 is_class(x, class::Regex) = (typeof(x) <: CIMObject) && (contains(x.class_name, class))
 is_class(x, classes) = any(class -> is_class(x, class), classes)
 is_class(class_es) = Base.Fix2(is_class, class_es)
+
+"""
+    Relation(this, other, property)
+
+Models a relationship between two CIMObjects via a property.
+This works for both forward and backward references!
+
+Forward ref:  this[property] -> other
+Backward ref: this <- other[property]
+
+It is used as collections for this to follow to other.
+"""
+struct Relation
+    this::CIMObject
+    other::CIMObject
+    property::String
+end
+
+function byprop(prop::String)
+    (rel::Relation) -> rel.property == prop
+end
+function byprop(prop::Regex)
+    (rel::Relation) -> contains(rel.property, prop)
+end
+function byclass(class)
+    (rel::Relation) -> is_class(rel.other, class)
+end
+
+"""
+    descend(obj, matcher)
+    descend(matcher) # obj |> descend(matcher)
+
+Follow forward references to the next CIMObject by matcher.
+Matcher can by `byprop` or `byclass`
+"""
+function descend(obj, matcher)
+    relations = forward_relations(obj)
+    matching = filter(matcher, relations)
+    if length(matching) == 1
+        return only(matching).other
+    else
+        return getproperty.(matching, :other)
+    end
+end
+descend(matcher) = Base.Fix2(descend, matcher)
+
+"""
+    ascend(obj, matcher)
+    ascend(matcher) # obj |> ascend(matcher)
+
+Follow backward references to the next CIMObject by matcher.
+Matcher can by `byprop` or `byclass`
+"""
+function ascend(obj, matcher)
+    relations = backward_relations(obj)
+    matching = filter(matcher, relations)
+    if length(matching) == 1
+        return only(matching).other
+    else
+        return getproperty.(matching, :other)
+    end
+end
+ascend(matcher) = Base.Fix2(ascend, matcher)
+
+function forward_relations(this)
+    relations = Relation[]
+    for (key, val) in properties(this)
+        if val isa Union{CIMRef, Vector{CIMRef}}
+            for ref in val
+                is_resolved(ref) || continue
+                other = follow_ref(ref)
+                push!(relations, Relation(this, other, key))
+            end
+        end
+    end
+    relations
+end
+function backward_relations(this)
+    relations = Relation[]
+    for backref in this.backrefs
+        other = base_object(backref)
+        property = backref.prop
+        push!(relations, Relation(this, other, property))
+    end
+    relations
+end
+
+ascend(obj::CIMObject) = Base.Fix1(ascend, obj)
 
 function merge_collection(c1::CIMCollection, c2::CIMCollection; warn=true, metadatakey=:merger_of)
     merged_objects = Dict{String, CIMObject}()
