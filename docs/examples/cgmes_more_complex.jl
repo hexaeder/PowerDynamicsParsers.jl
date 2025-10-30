@@ -7,6 +7,10 @@ using WGLMakie
 
 dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), "test", "CGMES", "data","1-EHVHV-mixed-all-2-sw-minimal-komplex"))
 
+o = dataset("TopologicalNode")[2]
+
+dataset("TopologicalIsland")[1]
+
 
 reduced_dataset = reduce_complexity(dataset)
 @hover inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))
@@ -47,6 +51,7 @@ CGMES.is_single_branch_subgraph(edges[10].metadata[:branches][4])
 CGMES.is_multi_branch_subgraph(edges[10].metadata[:branches][2])
 
 pfnw = Network(dataset)
+
 pfs0 = NWState(pfnw)
 pfs0.v[6][:pv₊P] = 0.330231
 pfs = find_fixpoint(pfnw, pfs0)

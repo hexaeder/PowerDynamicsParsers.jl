@@ -39,29 +39,42 @@ function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     src_idx = c.metadata[:src_idx]
     dst_idx = c.metadata[:dst_idx]
 
-    segment_terminals = filter(is_terminal, base_object.(segment.backrefs))
-    src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
-    dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
+    segment_terminals = ascendants(segment, byprop("ConductingEquipment"))
+    @assert length(segment_terminals) == 2 "Expected exactly two terminals for segment $(getname(segment)), got $(length(segment_terminals))!"
 
-    src_terminal = only(src_terminals ∩ segment_terminals)
-    dst_terminal = only(dst_terminals ∩ segment_terminals)
+    # descend to topological node for each terminal
+    top_nodes = descend(byprop("TopologicalNode")).(segment_terminals)
+
+    if top_nodes[1] == src_node && top_nodes[2] == dst_node
+        src_terminal = segment_terminals[1]
+        dst_terminal = segment_terminals[2]
+    elseif top_nodes[1] == dst_node && top_nodes[2] == src_node
+        src_terminal = segment_terminals[2]
+        dst_terminal = segment_terminals[1]
+    else
+        error("Terminals of segment $(getname(segment)) do not match src/dst nodes!")
+    end
+
+    src_terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
+    dst_terminals = ascendants(dst_node, byclass("Terminal", via="TopologicalNode"))
 
     (; src_node, src_terminals, src_terminal, dst_node, dst_terminals, dst_terminal, segment)
 end
 
 function get_components(::MultiBranchSubgraph, c::AbstractCIMCollection)
-    nodes = collect(values(objects(c)))
+    error("I commented out this function i think its not needed")
+    # nodes = collect(values(objects(c)))
 
-    endnodes = c("TopologicalNode")
-    src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
-    dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
-    src_idx = c.metadata[:src_idx]
-    dst_idx = c.metadata[:dst_idx]
+    # endnodes = c("TopologicalNode")
+    # src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
+    # dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
+    # src_idx = c.metadata[:src_idx]
+    # dst_idx = c.metadata[:dst_idx]
 
-    src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
-    dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
+    # src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
+    # dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
 
-    (; src_node, src_terminals, dst_node, dst_terminals)
+    # (; src_node, src_terminals, dst_node, dst_terminals)
 end
 
 function get_edge_model(c)

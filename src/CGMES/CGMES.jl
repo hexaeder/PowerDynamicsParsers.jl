@@ -287,6 +287,9 @@ end
 function byclass(class)
     (rel::Relation) -> is_class(rel.other, class)
 end
+function byclass(class; via)
+    (rel::Relation) -> is_class(rel.other, class) && rel.property == via
+end
 
 """
     descendants(obj, matcher)
