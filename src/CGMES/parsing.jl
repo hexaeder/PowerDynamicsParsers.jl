@@ -109,6 +109,7 @@ function _determine_profile(profiles)
         :SteadyStateHypothesis,
         :GeographicalLocation,
         :Dynamics,
+        :ShortCircuit,
     ]
     candidates = map(profiles) do profile
         keyidx = findall(k -> occursin(string(k), profile), keys)
@@ -123,17 +124,18 @@ function _determine_profile(profiles)
     first(candidates)
 end
 
+KNOWN_PREFIXES = ["cim", "entsoe", "eu"]
 
 # parser function
 function CIMObject(el::Node, profile)
-    name = plain_name(el, ["cim", "entsoe"])
+    name = plain_name(el, KNOWN_PREFIXES)
     id = get(attributes(el), "rdf:ID", "")
     props = _parseprops(el, name)
     CIMObject(profile, id, name, props)
 end
 
 function CIMExtension(el::Node, profile)
-    name = plain_name(el, ["cim", "entsoe"])
+    name = plain_name(el, KNOWN_PREFIXES)
     about = get(attributes(el), "rdf:about", "")
     base = CIMRef(about)
     props = _parseprops(el, name)
@@ -143,7 +145,7 @@ end
 function _parseprops(el::Node, name::AbstractString)
     props = OrderedDict{String, Any}()
     for p in children(el)
-        key = plain_name(p, ["cim", "entsoe"]; strip_ns=[name, "IdentifiedObject"])
+        key = plain_name(p, KNOWN_PREFIXES; strip_ns=[name, "IdentifiedObject"])
         if is_simple(p)
             stringvalue = simple_value(p)
             value = if !isnothing(tryparse(Int, stringvalue))
@@ -252,6 +254,7 @@ function CIMDataset(directory::String)
             files[profile] = cim_file
         catch e
             @warn "Failed to parse file $filename: $e"
+            rethrow(e)
         end
     end
 
