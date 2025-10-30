@@ -41,8 +41,8 @@ function equal_property(a::CIMRef, b::CIMRef)
 end
 
 function matched_backrefs(a::CIMObject, b::CIMObject)
-    namesA = Set(getname(r.source) for r in a.references if hasname(r.source))
-    namesB = Set(getname(r.source) for r in b.references if hasname(r.source))
+    namesA = Set(getname(r.source) for r in a.backrefs if hasname(r.source))
+    namesB = Set(getname(r.source) for r in b.backrefs if hasname(r.source))
     length(namesA ∩ namesB)
 end
 

@@ -44,7 +44,7 @@ struct CIMObject <: CIMEntity
     id::String
     class_name::String
     properties::OrderedDict{String, Any}
-    references::Vector{CIMBackref}
+    backrefs::Vector{CIMBackref}
     extension::Vector{CIMBackref}
     CIMObject(profile, id, n, p) = new(profile, id, n, p, CIMBackref[], CIMBackref[])
 end
@@ -146,9 +146,9 @@ function Base.copy(ext::CIMExtension)
     CIMExtension(ext.profile, base_copy, ext.class_name, props_copy)
 end
 
-function _register_reference!(target::CIMObject, source::Union{CIMObject,CIMExtension})
+function _register_backref!(target::CIMObject, source::Union{CIMObject,CIMExtension}, prop)
     backref = CIMBackref(source)
-    push!(target.references, backref)
+    push!(target.backrefs, backref)
 end
 
 function _register_extension!(target::CIMObject, extension::CIMExtension)
@@ -165,7 +165,7 @@ function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, o
                         target_object = objectdict[ref.id]
                         ref.resolved = true
                         ref.target = target_object
-                        _register_reference!(target_object, source_object)
+                        _register_backref!(target_object, source_object, prop_name)
                     catch e
                         warn && @warn "Failed to resolve reference for property $(prop_name) in object $(source_object): $e"
                         # rethrow(e)
@@ -243,9 +243,20 @@ follow_ref(x) = x
 follow_ref(x::CIMRef) = x.target
 follow_ref(x::CIMBackref) = x.source
 
+"""
+    base_object(x)
+
+Follows references, in case of extensions also returns the base object being extended.
+"""
 base_object(x::AbstractCIMReference) = base_object(follow_ref(x))
 base_object(x::CIMObject) = x
 base_object(x::CIMExtension) = follow_ref(x.base)
+
+
+is_class(x, class::String) = (typeof(x) <: CIMObject) && (x.class_name == class)
+is_class(x, class::Regex) = (typeof(x) <: CIMObject) && (contains(x.class_name, class))
+is_class(x, classes) = any(class -> is_class(x, class), classes)
+is_class(class_es) = Base.Fix2(is_class, class_es)
 
 function merge_collection(c1::CIMCollection, c2::CIMCollection; warn=true, metadatakey=:merger_of)
     merged_objects = Dict{String, CIMObject}()

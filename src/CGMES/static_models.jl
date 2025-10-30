@@ -39,9 +39,9 @@ function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     src_idx = c.metadata[:src_idx]
     dst_idx = c.metadata[:dst_idx]
 
-    segment_terminals = filter(is_terminal, base_object.(segment.references))
-    src_terminals = filter(is_terminal, base_object.(src_node.references))
-    dst_terminals = filter(is_terminal, base_object.(dst_node.references))
+    segment_terminals = filter(is_terminal, base_object.(segment.backrefs))
+    src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
+    dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
 
     src_terminal = only(src_terminals ∩ segment_terminals)
     dst_terminal = only(dst_terminals ∩ segment_terminals)
@@ -58,8 +58,8 @@ function get_components(::MultiBranchSubgraph, c::AbstractCIMCollection)
     src_idx = c.metadata[:src_idx]
     dst_idx = c.metadata[:dst_idx]
 
-    src_terminals = filter(is_terminal, base_object.(src_node.references))
-    dst_terminals = filter(is_terminal, base_object.(dst_node.references))
+    src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
+    dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
 
     (; src_node, src_terminals, dst_node, dst_terminals)
 end
@@ -296,7 +296,7 @@ end
 
 function is_slack(o::CIMObject)
     @assert is_class(o, "TopologicalNode") "Expected TopologicalNode, got $(o.class_name)"
-    islands = filter(is_class("TopologicalIsland"), follow_ref.(o.references))
+    islands = filter(is_class("TopologicalIsland"), follow_ref.(o.backrefs))
     @assert allequal(islands)
     island = first(islands)
     island["AngleRefTopologicalNode"] == o
@@ -312,13 +312,13 @@ function get_base_voltage(ob::CIMObject)
 end
 
 function get_connecting_terminal(injector::CIMObject)
-    ts = filter(is_class("Terminal"), follow_ref.(injector.references))
+    ts = filter(is_class("Terminal"), follow_ref.(injector.backrefs))
     length(ts) == 1 || error("Expected exactly one Terminal for injector, got $(length(ts))!")
     only(ts)
 end
 
 function get_voltage_pu(o::CIMObject)
-    sv = only(filter(is_class("SvVoltage"), CGMES.base_object.(o.references)))
+    sv = only(filter(is_class("SvVoltage"), CGMES.base_object.(o.backrefs)))
     θ = deg2rad(sv["angle"])
     V = sv["v"] / get_base_voltage(o)
     return V * exp(im * θ)
@@ -327,7 +327,7 @@ end
 ATTENTION: we go from load to injector convention
 """
 function get_injected_power_pu(o::CIMObject)
-    sv = only(filter(is_class("SvPowerFlow"), CGMES.base_object.(o.references)))
+    sv = only(filter(is_class("SvPowerFlow"), CGMES.base_object.(o.backrefs)))
     P = sv["p"] / SBASE
     Q = sv["q"] / SBASE
     return -P - im * Q

@@ -408,7 +408,7 @@ function discover_nodes(start_node::CIMObject, stop_classes; filter_out=String[]
             return
         end
 
-        for backref in node.references
+        for backref in node.backrefs
             source_obj = backref.source
             if source_obj isa CIMObject
                 recursive_discover!(source_obj, depth + 1)

@@ -99,9 +99,9 @@ function Base.show(io::IO, mime::MIME"text/plain", obj::CIMObject)
         end
 
         # Show references if any
-        if !isempty(obj.references)
+        if !isempty(obj.backrefs)
             printstyled(io, "\n  Referenced by:", bold=true)
-            for ref in obj.references
+            for ref in obj.backrefs
                 print(io, "\n    ")
                 show(IOContext(io, :compact => true), mime, ref.source)
             end
@@ -120,7 +120,11 @@ end
 
 function Base.show(io::IO, mime::MIME"text/plain", backref::CIMBackref)
     print(io, "@backref ")
-    show(io, mime, backref.source)
+    if !isnothing(backref.prop)
+        show(io, mime, backref.source, " (", backref.prop, ")")
+    else
+        show(io, mime, backref.source)
+    end
 end
 
 function Base.show(io::IO, cim_file::CIMFile)

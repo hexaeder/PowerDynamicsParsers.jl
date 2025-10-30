@@ -1,11 +1,6 @@
 export is_terminal, is_class, is_lineend, discover_subgraph, is_injector, is_busbar_section_terminal, reduce_complexity
 export delete_unconnected, split_topologically
 
-is_class(x, class::String) = (typeof(x) <: CIMObject) && (x.class_name == class)
-is_class(x, class::Regex) = (typeof(x) <: CIMObject) && (contains(x.class_name, class))
-is_class(x, classes) = any(class -> is_class(x, class), classes)
-is_class(class_es) = Base.Fix2(is_class, class_es)
-
 is_terminal(t) = is_class(t, "Terminal")
 
 function is_injector(t)
@@ -97,7 +92,7 @@ function discover_subgraph(
         # Explore backward references - stop for nobackref nodes
         # unless it is a state variable profile! that we allways follow
 
-        for backref in node.references
+        for backref in node.backrefs
             source = base_object(backref)
             if !nobackref(node) || source.profile == :StateVariables
                 recursive_discover!(source, depth + 1)
