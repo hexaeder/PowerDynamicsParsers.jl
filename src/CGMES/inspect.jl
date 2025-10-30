@@ -3,6 +3,19 @@ using GraphMakie: GraphMakie, graphplot!
 using GraphMakie.Makie: Figure, Axis, Legend, Label, scatter!, hidespines!, hidedecorations!, Makie, DataInspector
 using Base.Docs: HTML
 
+PROFILE_COLOR_MAP = Dict(
+    :DiagramLayout => :red,
+    :Dynamics => :blue,
+    :GeographicalLocation => :green,
+    :StateVariables => :orange,
+    :Topology => :purple,
+    # eq like
+    :Equipment => :brown,
+    :EquipmentCore => :brown,
+    :CoreEquipment => :brown,
+    :EquipmentShortCircuit => :brown,
+    :ShortCircuit => :brown,
+)
 
 function inspect_collection(collection::AbstractCIMCollection; filter_out=String[], size=(2000,1500), hl1=[], hl2=[], seed=1, edge_labels=true, node_labels=:long)
     # Extract nodes from collection
@@ -68,18 +81,8 @@ function generate_graphplot_args(nodes::Vector{CIMObject}; hl1=[], hl2=[], seed,
     # Create profiles vector showing which profile each node belongs to
     profiles = [obj.profile for obj in nodes]
 
-    # Create color mapping for profiles
-    profile_color_map = Dict(
-        :DiagramLayout => :red,
-        :Dynamics => :blue,
-        :GeographicalLocation => :green,
-        :StateVariables => :orange,
-        :Topology => :purple,
-        :Equipment => :brown
-    )
-
     # Create colors vector for visualization
-    colors = [get(profile_color_map, p, :gray) for p in profiles]
+    colors = [get(PROFILE_COLOR_MAP, p, :gray) for p in profiles]
 
     hl1_ids = [node.id for node in hl1]
     hl2_ids = [node.id for node in hl2]
@@ -151,7 +154,7 @@ function generate_graphplot_args(nodes::Vector{CIMObject}; hl1=[], hl2=[], seed,
     edge_profiles_sorted = edge_profiles[perm]
 
     # Create edge colors based on property source profiles
-    edge_colors = [get(profile_color_map, p, :gray) for p in edge_profiles_sorted]
+    edge_colors = [get(PROFILE_COLOR_MAP, p, :gray) for p in edge_profiles_sorted]
 
     # Handle edge labels based on edge_labels parameter
     edge_label_data = edge_labels ? edge_names_sorted : nothing
@@ -210,18 +213,9 @@ function _plot_nodelist(nodes::Vector{CIMObject}; size=(1000, 1000), hl1=[], hl2
 
     # Recreate legend data locally
     profiles = [obj.profile for obj in nodes]
-    profile_color_map = Dict(
-        :DiagramLayout => :red,
-        :Dynamics => :blue,
-        :GeographicalLocation => :green,
-        :StateVariables => :orange,
-        :Topology => :purple,
-        :Equipment => :brown
-    )
-
     # Add profile color legend below the axis
     unique_profiles_in_data = unique(profiles)
-    legend_colors = [profile_color_map[profile] for profile in unique_profiles_in_data]
+    legend_colors = [PROFILE_COLOR_MAP[profile] for profile in unique_profiles_in_data]
     legend_labels = [string(profile) for profile in unique_profiles_in_data]
 
     # Create legend with colored markers in horizontal orientation
@@ -327,18 +321,10 @@ function inspect_comparison(comparison::CIMCollectionComparison; size=(2000, 100
     # Recreate legend data locally
     profilesA = [obj.profile for obj in nodesA]
     profilesB = [obj.profile for obj in nodesB]
-    profile_color_map = Dict(
-        :DiagramLayout => :red,
-        :Dynamics => :blue,
-        :GeographicalLocation => :green,
-        :StateVariables => :orange,
-        :Topology => :purple,
-        :Equipment => :brown
-    )
 
     # Add combined profile legend
     all_profiles = unique([profilesA; profilesB])
-    legend_colors = vcat([profile_color_map[profile] for profile in all_profiles], :lightgray)
+    legend_colors = vcat([PROFILE_COLOR_MAP[profile] for profile in all_profiles], :lightgray)
     legend_labels = vcat([string(profile) for profile in all_profiles], "same data in both sets")
 
     Legend(fig[1, 1],
