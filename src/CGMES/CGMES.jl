@@ -13,7 +13,7 @@ export objects, extensions, hasname, getname, properties
 export inspect_collection, inspect_node, inspect_comparison
 export follow_ref
 export CIMCollectionComparison, compare_objects
-export descend, ascend, byprop, byclass
+export descend, ascend, descendants, ascendants, byprop, byclass
 
 SBASE = 100 # Base power in MVA
 
@@ -289,19 +289,58 @@ function byclass(class)
 end
 
 """
+    descendants(obj, matcher)
+    descendants(matcher) # obj |> descendants(matcher)
+
+Get all forward references matching the criteria (plural noun form).
+
+Returns a `Vector{CIMObject}` containing all matching descendants (0 or more).
+Matcher can be `byprop` or `byclass`.
+
+See also: `descend()` to get exactly one match with error checking.
+"""
+function descendants(obj, matcher)
+    relations = forward_relations(obj)
+    matching = filter(matcher, relations)
+    return getproperty.(matching, :other)
+end
+descendants(matcher) = Base.Fix2(descendants, matcher)
+
+"""
+    ascendants(obj, matcher)
+    ascendants(matcher) # obj |> ascendants(matcher)
+
+Get all backward references matching the criteria (plural noun form).
+
+Returns a `Vector{CIMObject}` containing all matching ascendants (0 or more).
+Matcher can be `byprop` or `byclass`.
+
+See also: `ascend()` to get exactly one match with error checking.
+"""
+function ascendants(obj, matcher)
+    relations = backward_relations(obj)
+    matching = filter(matcher, relations)
+    return getproperty.(matching, :other)
+end
+ascendants(matcher) = Base.Fix2(ascendants, matcher)
+
+"""
     descend(obj, matcher)
     descend(matcher) # obj |> descend(matcher)
 
-Follow forward references to the next CIMObject by matcher.
-Matcher can by `byprop` or `byclass`
+Follow forward references to find exactly one matching CIMObject (verb form).
+
+Returns a single `CIMObject`. Errors if 0 or multiple matches are found.
+Matcher can be `byprop` or `byclass`.
+
+See also: `descendants()` to get all matches without error checking.
 """
 function descend(obj, matcher)
-    relations = forward_relations(obj)
-    matching = filter(matcher, relations)
-    if length(matching) == 1
-        return only(matching).other
+    matches = descendants(obj, matcher)
+    if length(matches) == 1
+        return only(matches)
     else
-        return getproperty.(matching, :other)
+        error("Expected exactly 1 descendant matching criteria, found $(length(matches)). Use descendants() to get all matches.")
     end
 end
 descend(matcher) = Base.Fix2(descend, matcher)
@@ -310,16 +349,19 @@ descend(matcher) = Base.Fix2(descend, matcher)
     ascend(obj, matcher)
     ascend(matcher) # obj |> ascend(matcher)
 
-Follow backward references to the next CIMObject by matcher.
-Matcher can by `byprop` or `byclass`
+Follow backward references to find exactly one matching CIMObject (verb form).
+
+Returns a single `CIMObject`. Errors if 0 or multiple matches are found.
+Matcher can be `byprop` or `byclass`.
+
+See also: `ascendants()` to get all matches without error checking.
 """
 function ascend(obj, matcher)
-    relations = backward_relations(obj)
-    matching = filter(matcher, relations)
-    if length(matching) == 1
-        return only(matching).other
+    matches = ascendants(obj, matcher)
+    if length(matches) == 1
+        return only(matches)
     else
-        return getproperty.(matching, :other)
+        error("Expected exactly 1 ascendant matching criteria, found $(length(matches)). Use ascendants() to get all matches.")
     end
 end
 ascend(matcher) = Base.Fix2(ascend, matcher)

@@ -236,7 +236,7 @@ combine(pqA::PQType, pqB::PQType) = PQType(pqA.P + pqB.P, pqA.Q + pqB.Q, vcat(pq
 function get_static_vertex_model(c::CIMCollection)
     injectors = []
     tpn = only(c("TopologicalNode"))
-    is_slack(tpn) && push!(injectors, SlackType(NaN, [tpn]))
+    is_angle_ref(tpn) && push!(injectors, SlackType(NaN, [tpn]))
 
     for t in c("Terminal")
         inj = t["ConductingEquipment"]
@@ -294,12 +294,18 @@ function injector_type(::Val{:ConformLoad}, o::CIMObject)
     return PQType(P, Q, [o])
 end
 
-function is_slack(o::CIMObject)
+function is_angle_ref(o::CIMObject)
     @assert is_class(o, "TopologicalNode") "Expected TopologicalNode, got $(o.class_name)"
-    islands = filter(is_class("TopologicalIsland"), follow_ref.(o.backrefs))
-    @assert allequal(islands)
-    island = first(islands)
-    island["AngleRefTopologicalNode"] == o
+
+    refs = ascendants(o, byprop("AngleRefTopologicalNode"))
+
+    if length(refs) == 0
+        return false
+    elseif length(refs) == 1
+        return true
+    else
+        error("Multiple AngleRefTopologicalNode references found for TopologicalNode $(getname(o))!")
+    end
 end
 
 function get_base_voltage(ob::CIMObject)
@@ -312,13 +318,11 @@ function get_base_voltage(ob::CIMObject)
 end
 
 function get_connecting_terminal(injector::CIMObject)
-    ts = filter(is_class("Terminal"), follow_ref.(injector.backrefs))
-    length(ts) == 1 || error("Expected exactly one Terminal for injector, got $(length(ts))!")
-    only(ts)
+    ascend(injector, byprop("ConductingEquipment"))
 end
 
 function get_voltage_pu(o::CIMObject)
-    sv = only(filter(is_class("SvVoltage"), CGMES.base_object.(o.backrefs)))
+    sv = ascend(o, byclass("SvVoltage"))
     θ = deg2rad(sv["angle"])
     V = sv["v"] / get_base_voltage(o)
     return V * exp(im * θ)
@@ -327,7 +331,7 @@ end
 ATTENTION: we go from load to injector convention
 """
 function get_injected_power_pu(o::CIMObject)
-    sv = only(filter(is_class("SvPowerFlow"), CGMES.base_object.(o.backrefs)))
+    sv = ascend(o, byclass("SvPowerFlow"))
     P = sv["p"] / SBASE
     Q = sv["q"] / SBASE
     return -P - im * Q
