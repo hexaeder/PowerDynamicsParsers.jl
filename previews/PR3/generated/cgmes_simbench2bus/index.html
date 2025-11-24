@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>2 Bus Example Export · PowerDynamicsParsers.jl</title><meta name="title" content="2 Bus Example Export · PowerDynamicsParsers.jl"/><meta property="og:title" content="2 Bus Example Export · PowerDynamicsParsers.jl"/><meta property="twitter:title" content="2 Bus Example Export · PowerDynamicsParsers.jl"/><meta name="description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="twitter:description" content="Documentation for PowerDynamicsParsers.jl."/><meta property="og:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_simbench2bus/"/><meta property="twitter:url" content="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_simbench2bus/"/><link rel="canonical" href="https://hexaeder.github.io/PowerDynamicsParsers.jl/generated/cgmes_simbench2bus/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">PowerDynamicsParsers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../cgmes_testdata/">Inspection of CGMES Test Data</a></li><li><a class="tocitem" href="../cgmes_linemodel/">Wrong Powerflow data in CGMES Export</a></li><li><a class="tocitem" href="../cgmes_testdata_reexport/">Reexported Dataset</a></li><li class="is-active"><a class="tocitem" href>2 Bus Example Export</a><ul class="internal"><li class="toplevel"><a class="tocitem" href="#Load-Dataset-and-Inspect"><span>Load Dataset and Inspect</span></a></li><li class="toplevel"><a class="tocitem" href="#Filtered-Dataset-and-Reduced-Complexity"><span>Filtered Dataset and Reduced Complexity</span></a></li><li><a class="tocitem" href="#Topological-Splitting"><span>Topological Splitting</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>2 Bus Example Export</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>2 Bus Example Export</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/hexaeder/PowerDynamicsParsers.jl/blob/main/docs/examples/cgmes_simbench2bus.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="2-Bus-Example-Export"><a class="docs-heading-anchor" href="#2-Bus-Example-Export">2 Bus Example Export</a><a id="2-Bus-Example-Export-1"></a><a class="docs-heading-anchor-permalink" href="#2-Bus-Example-Export" title="Permalink"></a></h1><pre><code class="language-julia hljs">using PowerDynamics
+using PowerDynamics.Library
+using PowerDynamicsParsers
+using PowerDynamicsParsers.CGMES
+using CairoMakie</code></pre><h1 id="Load-Dataset-and-Inspect"><a class="docs-heading-anchor" href="#Load-Dataset-and-Inspect">Load Dataset and Inspect</a><a id="Load-Dataset-and-Inspect-1"></a><a class="docs-heading-anchor-permalink" href="#Load-Dataset-and-Inspect" title="Permalink"></a></h1><p>First wie load the full data set. Consists of lots of files, but most of them are actually empty.</p><pre><code class="language-julia hljs">dataset = CIMDataset(joinpath(pkgdir(PowerDynamicsParsers), &quot;test&quot;, &quot;CGMES&quot;, &quot;data&quot;, &quot;simbench_2bus&quot;))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CIMDataset: <span class="sgr34">8 profiles</span>
+  Directory: /home/runner/work/PowerDynamicsParsers.jl/PowerDynamicsParsers.jl/test/CGMES/data/simbench_2bus
+  Profiles:
+    CoreEquipment: 19700102T0656Z__EQ_.xml (28 objects, 0 extensions)
+    ShortCircuit: 19700102T0656Z___SC_.xml (0 objects, 2 extensions)
+    Topology: 19700102T0656Z___TP_.xml (2 objects, 7 extensions)
+    StateVariables: 19700102T0656Z___SV_.xml (10 objects, 0 extensions)
+    DiagramLayout: 19700102T0656Z___DL_.xml (15 objects, 0 extensions)
+    SteadyStateHypothesis: 19700102T0656Z___SSH_.xml (0 objects, 13 extensions)
+    GeographicalLocation: 19700102T0656Z___GL_.xml (0 objects, 0 extensions)
+    Dynamics: 19700102T0656Z___DY_.xml (0 objects, 0 extensions)
+</code></pre><p>Lets then plot the full dataset. Those are all entities defined in the CGMES data.</p><div class="admonition is-success" id="Tip-15733130e5fbcaaf"><header class="admonition-header">Tip<a class="admonition-anchor" href="#Tip-15733130e5fbcaaf" title="Permalink"></a></header><div class="admonition-body"><p>Hover on the nodes of the network to see the properties.</p></div></div><pre><code class="language-julia hljs">inspect_collection(dataset; edge_labels=false, node_labels=:short, size=(1000,1000))</code></pre><img src="37252db3.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 12.961174297476708, y: 28.216748321897168, width: 2.0, height: 2.0, label: "CurrentLimit\n\"patl for Line\"\nnormalValue = 1300\nmRID = f619db45-4bf7-7c2e-ca65-d3cc40e0f5bc\nvalue = 1300", node: 1},
+            {x: 12.02163002018283, y: 50.4081337781938, width: 2.0, height: 2.0, label: "CurrentLimit\n\"patl for Line\"\nnormalValue = 1300\nmRID = 006b99e2-d297-9c11-3beb-1349f4dd4212\nvalue = 1300", node: 2},
+            {x: 45.67619715849307, y: 41.70894794325136, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus DUT\"\nmRID = 43eccc80-ffdf-49e4-b681-4bd32e63d523", node: 3},
+            {x: 56.50600350038217, y: 64.463145330552, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus Slack\"\nmRID = 6c8da124-9a78-4a65-be41-dc4e494c50e5", node: 4},
+            {x: 70.96610760303112, y: 58.56822830995449, width: 2.0, height: 2.0, label: "Terminal\n\"Bus Slack\"\nACDCsequenceNumber = 1\nmRID = b678a1a8-2abe-0073-caf4-14d2b4f3dfdc\nACDCconnected = true", node: 5},
+            {x: 37.39419763583338, y: 37.683850864956995, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_1(1)\"\nACDCsequenceNumber = 1\nmRID = 90e91117-5f1d-fa71-1ba6-60790bd15588\nACDCconnected = true", node: 6},
+            {x: 43.77658249399023, y: 59.3564127211667, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_3\"\nACDCsequenceNumber = 2\nmRID = 5934b02e-d18f-7cac-5054-a7e89ffc9e1e\nACDCconnected = true", node: 7},
+            {x: 57.47415929809051, y: 72.60679383990336, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_2\"\nACDCsequenceNumber = 1\nmRID = 2602c371-0c88-9811-aefc-4416ec2e4067\nACDCconnected = true", node: 8},
+            {x: 56.29954362002992, y: 31.426188053456993, width: 2.0, height: 2.0, label: "Terminal\n\"Bus DUT\"\nACDCsequenceNumber = 1\nmRID = 9ac3cf5f-e279-b5a7-bbab-96deac6065ff\nACDCconnected = true", node: 9},
+            {x: 93.82835951475495, y: 43.01852861317409, width: 2.0, height: 2.0, label: "VoltageLimit\n\"high limit for Bus Slack\"\nmRID = 3078e434-d7f5-32b2-563f-7f258c4a2990\nnormalValue = 399\nvalue = 399", node: 10},
+            {x: 81.8826255676415, y: 20.70158822797865, width: 2.0, height: 2.0, label: "VoltageLimit\n\"high limit for Bus DUT\"\nmRID = d00d9d1f-4d87-ace2-c326-d40fe9eebc6d\nnormalValue = 399\nvalue = 399", node: 11},
+            {x: 5.999997384334085, y: 38.42237531828886, width: 2.0, height: 2.0, label: "OperationalLimitType\n\"patl\"\nmRID = b7d77869-70d9-2b77-4a68-c3d2fbb579f5\ndirection = unresolved ref\nisInfiniteDuration = true\nkind = unresolved ref", node: 12},
+            {x: 92.54930630554735, y: 28.991150633340023, width: 2.0, height: 2.0, label: "OperationalLimitType\n\"highVoltage\"\nmRID = 58234e5b-56b2-8848-1b17-48a62acabede\ndirection = unresolved ref\nisInfiniteDuration = true\nkind = unresolved ref", node: 13},
+            {x: 38.628916170423764, y: 51.12412372759182, width: 2.0, height: 2.0, label: "ACLineSegment\n\"Line\"\nbch = 0.000180641\ngch = 0\nr = 4\nx = 16\nConductor.length = 50\nmRID = 49e687d6-e297-433c-8606-964ff738de67\nb0ch = 0\ng0ch = 0\nr0 = 0\nshortCircuitEndTemperature = 80\nx0 = 0\ninService = true", node: 14},
+            {x: 29.582958903709784, y: 43.680394992647905, width: 2.0, height: 2.0, label: "Line\n\"Line\"\nmRID = 6d0d8941-92b4-9c43-e7d6-77bc41109258", node: 15},
+            {x: 57.92678371020861, y: 39.56678291815253, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus DUT\"\nmRID = 38c2b876-41ef-7633-9258-859d25e8c31a", node: 16},
+            {x: 64.53179013365944, y: 57.985255356091024, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus Slack\"\nmRID = b6af8866-fee5-d345-8cbb-b69f9bdee7dd", node: 17},
+            {x: 27.089773306773274, y: 56.86220045281407, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 1940dcc3-71f6-9d82-9ed1-2281ebf303cb", node: 18},
+            {x: 25.56322431177088, y: 30.61077859952369, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 6ad28c68-2d1d-a65f-540b-10184c652f94", node: 19},
+            {x: 68.83854700969401, y: 23.359129786600164, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Voltage limits for Bus DUT\"\nmRID = 3efc7041-a4bd-2c2d-64bd-ec1e34b96812", node: 20},
+            {x: 84.7393975223017, y: 52.913368643118105, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Voltage limits for Bus Slack\"\nmRID = 937e53cb-f7e5-0f2a-624a-38691091b600", node: 21},
+            {x: 78.63138738238993, y: 61.93665828278871, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus Slack\"\nmRID = 100947d5-fba3-968f-6b98-301c0dbcc395\ninService = true", node: 22},
+            {x: 59.38442203709846, y: 25.465888073240073, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus DUT\"\nmRID = 370c23a4-63ab-3bda-f12a-cd3e17cb7323\ninService = true", node: 23},
+            {x: 53.07531781891929, y: 50.12553783474863, width: 2.0, height: 2.0, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV\nmRID = 67a6efe6-e1db-21ee-c0fd-bef847b76c3a", node: 24},
+            {x: 65.73770398548606, y: 72.3554909710441, width: 2.0, height: 2.0, label: "EnergySource\n\"VS NAP\"\nmRID = d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e\nr = 0\nr0 = 0\nrn = 0\nx = 0\nx0 = 0\nxn = 0\nactivePower = 0\nreactivePower = 0\nvoltageAngle = 0\nvoltageMagnitude = 380\nEquipment.inService = true", node: 25},
+            {x: 69.2223240535235, y: 46.125548535660464, width: 2.0, height: 2.0, label: "Substation\n\"Grid\"\nmRID = f4668b59-875b-95f1-8a18-d35a60441a47", node: 26},
+            {x: 81.39213937733423, y: 40.96020438668112, width: 2.0, height: 2.0, label: "SubGeographicalRegion\n\"Grid\"\nmRID = daed9135-2b9f-d5a8-fd78-73675d0f6286", node: 27},
+            {x: 94.00000253422151, y: 37.10331305704382, width: 2.0, height: 2.0, label: "GeographicalRegion\n\"Grid\"\nmRID = d4a891c0-badd-1891-3c58-e22ff388b164", node: 28},
+            {x: 50.502457973500846, y: 38.125257913211975, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus DUT\"\nmRID = 3d7808e7-64a7-e209-869f-32cef64f5126", node: 29},
+            {x: 57.5705061981341, y: 58.87847786700847, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus Slack\"\nmRID = f31cf620-6f83-6a8a-534d-850b35da8458", node: 30},
+            {x: 69.16860664830418, y: 65.21592238665652, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0\nv = 380", node: 31},
+            {x: 47.68157767158209, y: 25.847090469831457, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0.673561\nv = 380", node: 32},
+            {x: 33.690650232432326, y: 25.99213612438841, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 100\nq = -37.4187", node: 33},
+            {x: 35.1583852075261, y: 69.2230410703748, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -99.7065\nq = 12.5079", node: 34},
+            {x: 67.47836169832767, y: 83.33367526579094, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 99.7065\nq = -12.5079", node: 35},
+            {x: 90.67593953298207, y: 67.0544329131816, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 36},
+            {x: 26.274273191655784, y: 48.16045860876452, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 37},
+            {x: 58.29011947893861, y: 13.063636099927178, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 38},
+            {x: 77.0131228156986, y: 80.28156729866748, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 39},
+            {x: 58.33640731204045, y: 47.363913673674354, width: 2.0, height: 2.0, label: "TopologicalIsland\n\"Island_001\"\nmRID = 78ac7061-607a-4270-b4c8-4641e97c84ea", node: 40},
+            {x: 17.637188412368097, y: 69.89966015476504, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 1\nxPosition = 109.375\nyPosition = 91.875", node: 41},
+            {x: 21.511189842666717, y: 75.60552962361578, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 2\nxPosition = 153.125\nyPosition = 91.875", node: 42},
+            {x: 23.575594178689013, y: 52.79556344750125, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 2\nxPosition = 109.375\nyPosition = 78.75", node: 43},
+            {x: 23.28541473430311, y: 60.21299180453854, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 1\nxPosition = 109.375\nyPosition = 105", node: 44},
+            {x: 41.272183039586295, y: 93.1582367616158, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 1\nxPosition = 170.625\nyPosition = 91.875", node: 45},
+            {x: 49.31427100896321, y: 89.11478944954352, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 2\nxPosition = 153.125\nyPosition = 78.75", node: 46},
+            {x: 33.91831946925276, y: 89.46817358730739, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 2\nxPosition = 153.125\nyPosition = 91.875", node: 47},
+            {x: 55.88027495224319, y: 94.33636148233803, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 1\nxPosition = 175\nyPosition = 91.875", node: 48},
+            {x: 60.267327328639865, y: 87.52994293997688, width: 2.0, height: 2.0, label: "DiagramObjectPoint\nsequenceNumber = 1\nxPosition = 153.125\nyPosition = 105", node: 49},
+            {x: 41.98792654764978, y: 70.84944353982765, width: 2.0, height: 2.0, label: "Diagram\n\"Grid\"\norientation = unresolved ref\nmRID = 6e9996f1-84c4-42ff-8e83-c903b52d56ce", node: 50},
+            {x: 53.569319759756475, y: 80.11568138264273, width: 2.0, height: 2.0, label: "DiagramObject\n\"Grafisches Netzelement98\"\nrotation = 270\nmRID = 5b29929f-a2c7-dc17-b0d4-3d944eee120d", node: 51},
+            {x: 51.43246575199115, y: 75.39101355313865, width: 2.0, height: 2.0, label: "DiagramObject\n\"Graphical Net Object1\"\nmRID = c66ff32b-7958-10c3-0367-6c572ad9a618", node: 52},
+            {x: 31.258723203243875, y: 65.93060904890186, width: 2.0, height: 2.0, label: "DiagramObject\n\"Graphical Net Object5\"\nrotation = 270\nmRID = cfe22eac-7023-f247-4c3c-e854297d5591", node: 53},
+            {x: 38.162122386378854, y: 56.383022280595, width: 2.0, height: 2.0, label: "DiagramObject\n\"Graphical Net Object2(1)\"\nmRID = 01c9ce27-879d-33c6-f3b0-ff751ad90383", node: 54},
+            {x: 43.49051101240447, y: 80.35167779599975, width: 2.0, height: 2.0, label: "DiagramObject\n\"GCO_1\"\nmRID = 54c5e763-a0d0-b2ca-cc59-aaa348b5d824", node: 55}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h1 id="Filtered-Dataset-and-Reduced-Complexity"><a class="docs-heading-anchor" href="#Filtered-Dataset-and-Reduced-Complexity">Filtered Dataset and Reduced Complexity</a><a id="Filtered-Dataset-and-Reduced-Complexity-1"></a><a class="docs-heading-anchor-permalink" href="#Filtered-Dataset-and-Reduced-Complexity" title="Permalink"></a></h1><p>Lets filter out all thos <code>Diagram</code> classes, as they just clutter the view.</p><p>We can already see, that we have two <code>TopologicalNodes</code> which will form the Buses in the network later. There isa single <code>ACLineSigment</code> connecting both topoloical busses.</p><pre><code class="language-julia hljs">no_diagram = filter(!is_class(r&quot;Diagram&quot;), dataset)
+inspect_collection(no_diagram; edge_labels=false, node_labels=:short, size=(1000,1000))</code></pre><img src="d4024fef.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 39.20071205646064, y: 94.33636248473833, width: 2.0, height: 2.0, label: "CurrentLimit\n\"patl for Line\"\nnormalValue = 1300\nmRID = f619db45-4bf7-7c2e-ca65-d3cc40e0f5bc\nvalue = 1300", node: 1},
+            {x: 13.583741873527627, y: 82.06311423679519, width: 2.0, height: 2.0, label: "CurrentLimit\n\"patl for Line\"\nnormalValue = 1300\nmRID = 006b99e2-d297-9c11-3beb-1349f4dd4212\nvalue = 1300", node: 2},
+            {x: 64.21955188130286, y: 63.20695413644339, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus DUT\"\nmRID = 43eccc80-ffdf-49e4-b681-4bd32e63d523", node: 3},
+            {x: 29.800865280380663, y: 44.41166009889999, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus Slack\"\nmRID = 6c8da124-9a78-4a65-be41-dc4e494c50e5", node: 4},
+            {x: 40.25999600669486, y: 34.64409785217553, width: 2.0, height: 2.0, label: "Terminal\n\"Bus Slack\"\nACDCsequenceNumber = 1\nmRID = b678a1a8-2abe-0073-caf4-14d2b4f3dfdc\nACDCconnected = true", node: 5},
+            {x: 53.35315725480314, y: 71.65463646536682, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_1(1)\"\nACDCsequenceNumber = 1\nmRID = 90e91117-5f1d-fa71-1ba6-60790bd15588\nACDCconnected = true", node: 6},
+            {x: 26.83527954069463, y: 58.458691510948725, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_3\"\nACDCsequenceNumber = 2\nmRID = 5934b02e-d18f-7cac-5054-a7e89ffc9e1e\nACDCconnected = true", node: 7},
+            {x: 20.576540658211062, y: 40.01994756961964, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_2\"\nACDCsequenceNumber = 1\nmRID = 2602c371-0c88-9811-aefc-4416ec2e4067\nACDCconnected = true", node: 8},
+            {x: 74.24989048747067, y: 57.939316638901516, width: 2.0, height: 2.0, label: "Terminal\n\"Bus DUT\"\nACDCsequenceNumber = 1\nmRID = 9ac3cf5f-e279-b5a7-bbab-96deac6065ff\nACDCconnected = true", node: 9},
+            {x: 71.23365239899712, y: 21.65143973952438, width: 2.0, height: 2.0, label: "VoltageLimit\n\"high limit for Bus Slack\"\nmRID = 3078e434-d7f5-32b2-563f-7f258c4a2990\nnormalValue = 399\nvalue = 399", node: 10},
+            {x: 94.00000401002656, y: 38.97209392451438, width: 2.0, height: 2.0, label: "VoltageLimit\n\"high limit for Bus DUT\"\nmRID = d00d9d1f-4d87-ace2-c326-d40fe9eebc6d\nnormalValue = 399\nvalue = 399", node: 11},
+            {x: 23.366910711476862, y: 92.93586287707576, width: 2.0, height: 2.0, label: "OperationalLimitType\n\"patl\"\nmRID = b7d77869-70d9-2b77-4a68-c3d2fbb579f5\ndirection = unresolved ref\nisInfiniteDuration = true\nkind = unresolved ref", node: 12},
+            {x: 86.62363350459165, y: 26.6120292834768, width: 2.0, height: 2.0, label: "OperationalLimitType\n\"highVoltage\"\nmRID = 58234e5b-56b2-8848-1b17-48a62acabede\ndirection = unresolved ref\nisInfiniteDuration = true\nkind = unresolved ref", node: 13},
+            {x: 39.818675346054576, y: 64.77612738062753, width: 2.0, height: 2.0, label: "ACLineSegment\n\"Line\"\nbch = 0.000180641\ngch = 0\nr = 4\nx = 16\nConductor.length = 50\nmRID = 49e687d6-e297-433c-8606-964ff738de67\nb0ch = 0\ng0ch = 0\nr0 = 0\nshortCircuitEndTemperature = 80\nx0 = 0\ninService = true", node: 14},
+            {x: 37.90875200784715, y: 76.11056200479862, width: 2.0, height: 2.0, label: "Line\n\"Line\"\nmRID = 6d0d8941-92b4-9c43-e7d6-77bc41109258", node: 15},
+            {x: 60.35432708685791, y: 50.27851358142647, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus DUT\"\nmRID = 38c2b876-41ef-7633-9258-859d25e8c31a", node: 16},
+            {x: 40.26240439267847, y: 39.9997063247614, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus Slack\"\nmRID = b6af8866-fee5-d345-8cbb-b69f9bdee7dd", node: 17},
+            {x: 16.579833835672712, y: 68.99816614629127, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 1940dcc3-71f6-9d82-9ed1-2281ebf303cb", node: 18},
+            {x: 49.77767971960992, y: 84.77762639251729, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 6ad28c68-2d1d-a65f-540b-10184c652f94", node: 19},
+            {x: 88.38453889441533, y: 53.34515735546675, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Voltage limits for Bus DUT\"\nmRID = 3efc7041-a4bd-2c2d-64bd-ec1e34b96812", node: 20},
+            {x: 53.9218099252311, y: 24.860202323709004, width: 2.0, height: 2.0, label: "OperationalLimitSet\n\"Voltage limits for Bus Slack\"\nmRID = 937e53cb-f7e5-0f2a-624a-38691091b600", node: 21},
+            {x: 38.37573670460203, y: 26.57408189575241, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus Slack\"\nmRID = 100947d5-fba3-968f-6b98-301c0dbcc395\ninService = true", node: 22},
+            {x: 74.97339594830225, y: 48.64977509385678, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus DUT\"\nmRID = 370c23a4-63ab-3bda-f12a-cd3e17cb7323\ninService = true", node: 23},
+            {x: 46.74180250177876, y: 51.658628020389095, width: 2.0, height: 2.0, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV\nmRID = 67a6efe6-e1db-21ee-c0fd-bef847b76c3a", node: 24},
+            {x: 26.08422041005303, y: 31.40473661247618, width: 2.0, height: 2.0, label: "EnergySource\n\"VS NAP\"\nmRID = d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e\nr = 0\nr0 = 0\nrn = 0\nx = 0\nx0 = 0\nxn = 0\nactivePower = 0\nreactivePower = 0\nvoltageAngle = 0\nvoltageMagnitude = 380\nEquipment.inService = true", node: 25},
+            {x: 55.189974641938264, y: 38.20479411950579, width: 2.0, height: 2.0, label: "Substation\n\"Grid\"\nmRID = f4668b59-875b-95f1-8a18-d35a60441a47", node: 26},
+            {x: 62.33678604761328, y: 26.106111769310548, width: 2.0, height: 2.0, label: "SubGeographicalRegion\n\"Grid\"\nmRID = daed9135-2b9f-d5a8-fd78-73675d0f6286", node: 27},
+            {x: 65.88710428369855, y: 13.063632392434322, width: 2.0, height: 2.0, label: "GeographicalRegion\n\"Grid\"\nmRID = d4a891c0-badd-1891-3c58-e22ff388b164", node: 28},
+            {x: 58.023972958613534, y: 59.428214844552365, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus DUT\"\nmRID = 3d7808e7-64a7-e209-869f-32cef64f5126", node: 29},
+            {x: 34.876934906130174, y: 47.81328190744307, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus Slack\"\nmRID = f31cf620-6f83-6a8a-534d-850b35da8458", node: 30},
+            {x: 20.34831058088409, y: 48.11306505780368, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0\nv = 380", node: 31},
+            {x: 69.69033145236678, y: 68.73625921953817, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0.673561\nv = 380", node: 32},
+            {x: 62.77602870917397, y: 81.68699241283988, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 100\nq = -37.4187", node: 33},
+            {x: 11.623061539097037, y: 59.13097094476463, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -99.7065\nq = 12.5079", node: 34},
+            {x: 5.9999990196566895, y: 37.41636718807677, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 99.7065\nq = -12.5079", node: 35},
+            {x: 33.976904918450884, y: 14.645089265253809, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 36},
+            {x: 29.99031899790449, y: 73.04484248669296, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 37},
+            {x: 90.60364158632497, y: 48.833622962468446, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 38},
+            {x: 15.506773050533493, y: 22.188518839708127, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 39},
+            {x: 45.14850098800468, y: 56.09404257743008, width: 2.0, height: 2.0, label: "TopologicalIsland\n\"Island_001\"\nmRID = 78ac7061-607a-4270-b4c8-4641e97c84ea", node: 40}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<p>Lets reduce the complexity further by throwing away some more nodes like substations, geographical areas and so on: Now the network structure is more visible, because we have less &quot;non electrical&quot; pathes between the topological nodes.</p><pre><code class="language-julia hljs">reduced_dataset = reduce_complexity(dataset)
+inspect_collection(reduced_dataset; edge_labels=false, node_labels=:short, size=(1000,1000))</code></pre><img src="2a921b62.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 67.55285538221219, y: 34.370141960785276, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus DUT\"\nmRID = 43eccc80-ffdf-49e4-b681-4bd32e63d523", node: 1},
+            {x: 39.407809328931464, y: 68.96038657578558, width: 2.0, height: 2.0, label: "ConnectivityNode\n\"Bus Slack\"\nmRID = 6c8da124-9a78-4a65-be41-dc4e494c50e5", node: 2},
+            {x: 30.14335667936157, y: 65.28014171721787, width: 2.0, height: 2.0, label: "Terminal\n\"Bus Slack\"\nACDCsequenceNumber = 1\nmRID = b678a1a8-2abe-0073-caf4-14d2b4f3dfdc\nACDCconnected = true", node: 3},
+            {x: 67.90936838183259, y: 45.50435652087561, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_1(1)\"\nACDCsequenceNumber = 1\nmRID = 90e91117-5f1d-fa71-1ba6-60790bd15588\nACDCconnected = true", node: 4},
+            {x: 51.77344941939489, y: 64.7235683992618, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_3\"\nACDCsequenceNumber = 2\nmRID = 5934b02e-d18f-7cac-5054-a7e89ffc9e1e\nACDCconnected = true", node: 5},
+            {x: 38.517947971016916, y: 82.6896054070412, width: 2.0, height: 2.0, label: "Terminal\n\"Cub_2\"\nACDCsequenceNumber = 1\nmRID = 2602c371-0c88-9811-aefc-4416ec2e4067\nACDCconnected = true", node: 6},
+            {x: 73.9960500509418, y: 24.354340229001803, width: 2.0, height: 2.0, label: "Terminal\n\"Bus DUT\"\nACDCsequenceNumber = 1\nmRID = 9ac3cf5f-e279-b5a7-bbab-96deac6065ff\nACDCconnected = true", node: 7},
+            {x: 58.990175120879854, y: 54.49743148412654, width: 2.0, height: 2.0, label: "ACLineSegment\n\"Line\"\nbch = 0.000180641\ngch = 0\nr = 4\nx = 16\nConductingEquipment.BaseVoltage = unresolved ref\nConductor.length = 50\nmRID = 49e687d6-e297-433c-8606-964ff738de67\nb0ch = 0\ng0ch = 0\nr0 = 0\nshortCircuitEndTemperature = 80\nx0 = 0\ninService = true", node: 8},
+            {x: 70.41807202546504, y: 60.72897986475123, width: 2.0, height: 2.0, label: "Line\n\"Line\"\nmRID = 6d0d8941-92b4-9c43-e7d6-77bc41109258", node: 9},
+            {x: 81.85877666231521, y: 30.662482485478314, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus DUT\"\nmRID = 38c2b876-41ef-7633-9258-859d25e8c31a\nBaseVoltage = unresolved ref\nSubstation = unresolved ref", node: 10},
+            {x: 28.943572378838805, y: 74.55776462153696, width: 2.0, height: 2.0, label: "VoltageLevel\n\"Bus Slack\"\nmRID = b6af8866-fee5-d345-8cbb-b69f9bdee7dd\nBaseVoltage = unresolved ref\nSubstation = unresolved ref", node: 11},
+            {x: 18.02592558776235, y: 68.26479830296257, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus Slack\"\nmRID = 100947d5-fba3-968f-6b98-301c0dbcc395\ninService = true", node: 12},
+            {x: 85.55233322190224, y: 20.283629569283168, width: 2.0, height: 2.0, label: "BusbarSection\n\"Bus DUT\"\nmRID = 370c23a4-63ab-3bda-f12a-cd3e17cb7323\ninService = true", node: 13},
+            {x: 26.119219587810967, y: 85.73856977617709, width: 2.0, height: 2.0, label: "EnergySource\n\"VS NAP\"\nmRID = d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e\nr = 0\nr0 = 0\nrn = 0\nx = 0\nx0 = 0\nxn = 0\nactivePower = 0\nreactivePower = 0\nvoltageAngle = 0\nvoltageMagnitude = 380\nEquipment.inService = true", node: 14},
+            {x: 72.3002539129469, y: 34.654871803176256, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus DUT\"\nmRID = 3d7808e7-64a7-e209-869f-32cef64f5126\nBaseVoltage = unresolved ref", node: 15},
+            {x: 42.58720293556688, y: 73.22780592238554, width: 2.0, height: 2.0, label: "TopologicalNode\n\"Bus Slack\"\nmRID = f31cf620-6f83-6a8a-534d-850b35da8458\nBaseVoltage = unresolved ref", node: 16},
+            {x: 51.337242622833514, y: 81.73948171861763, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0\nv = 380", node: 17},
+            {x: 60.34847844686549, y: 24.9439772434664, width: 2.0, height: 2.0, label: "SvVoltage\nangle = 0.673561\nv = 380", node: 18},
+            {x: 80.87101641078037, y: 50.132452792326255, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 100\nq = -37.4187", node: 19},
+            {x: 62.62115512890284, y: 72.36981614856039, width: 2.0, height: 2.0, label: "SvPowerFlow\np = -99.7065\nq = 12.5079", node: 20},
+            {x: 43.34381014858197, y: 93.90411657859859, width: 2.0, height: 2.0, label: "SvPowerFlow\np = 99.7065\nq = -12.5079", node: 21},
+            {x: 5.999998254669242, y: 66.0380988842503, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 22},
+            {x: 49.19831355613514, y: 46.97220715787481, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 23},
+            {x: 93.99999910723142, y: 13.063635662701678, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 24},
+            {x: 18.595115447894642, y: 94.33636183341049, width: 2.0, height: 2.0, label: "SvStatus\ninService = true", node: 25}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<p>The picture is much clearer now. However there is a problem: there is nothing connected to the busses! The only thing is the &quot;EnergySource&quot;, but that thing does not have lots of information either.</p><pre><code class="language-julia hljs">only(dataset(&quot;EnergySource&quot;))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CoreEquipment:<span class="sgr34">EnergySource</span>
+  Name: VS NAP
+  ID: _d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e
+  Profile: CoreEquipment
+
+<span class="sgr1">  Properties:</span>
+    Equipment.EquipmentContainer = @ref CoreEquipment:<span class="sgr34">VoltageLevel</span> (Bus Slack)
+    mRID = <span class="sgr90">d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e</span>
+<span class="sgr1">  Extended by </span>ShortCircuit:<span class="sgr34">EnergySource</span>-&gt;Extension
+    r = <span class="sgr90">0</span>
+    r0 = <span class="sgr90">0</span>
+    rn = <span class="sgr90">0</span>
+    x = <span class="sgr90">0</span>
+    x0 = <span class="sgr90">0</span>
+    xn = <span class="sgr90">0</span>
+<span class="sgr1">  Extended by </span>SteadyStateHypothesis:<span class="sgr34">EnergySource</span>-&gt;Extension
+    activePower = <span class="sgr90">0</span>
+    reactivePower = <span class="sgr90">0</span>
+    voltageAngle = <span class="sgr90">0</span>
+    voltageMagnitude = <span class="sgr90">380</span>
+    Equipment.inService = <span class="sgr90">true</span>
+
+<span class="sgr1">  Referenced by:</span>
+    CoreEquipment:<span class="sgr34">Terminal</span> (Cub_2)<span class="sgr90"> as </span>ConductingEquipment
+    StateVariables:<span class="sgr34">SvStatus</span><span class="sgr90"> as </span>ConductingEquipment
+    DiagramLayout:<span class="sgr34">DiagramObject</span> (Grafisches Netzelement98)<span class="sgr90"> as </span>IdentifiedObject</code></pre><h2 id="Topological-Splitting"><a class="docs-heading-anchor" href="#Topological-Splitting">Topological Splitting</a><a id="Topological-Splitting-1"></a><a class="docs-heading-anchor-permalink" href="#Topological-Splitting" title="Permalink"></a></h2><p>Eventually, we want to split the dataset into its topological components. We&#39;ll use those subgraphs to build bus in edge models.</p><h3 id="Bus-1:-DUT"><a class="docs-heading-anchor" href="#Bus-1:-DUT">Bus 1: DUT</a><a id="Bus-1:-DUT-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-1:-DUT" title="Permalink"></a></h3><pre><code class="language-julia hljs">nodes, edges = split_topologically(dataset; warn=false, verbose=true);
+inspect_collection(nodes[1]; size=(900,900))</code></pre><img src="115de96a.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 41.77253768060065, y: 49.18545537987533, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"Bus DUT\"\nmRID = 3d7808e7-64a7-e209-869f-32cef64f5126\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 25.27511318327131, y: 94.21211991449474, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV\nmRID = 67a6efe6-e1db-21ee-c0fd-bef847b76c3a", node: 2},
+            {x: 6.161616685729653, y: 14.010094636115799, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0.673561\nv = 380", node: 3},
+            {x: 93.83838596491476, y: 39.45527003515985, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalIsland\n\"Island_001\"\nmRID = 78ac7061-607a-4270-b4c8-4641e97c84ea\nAngleRefTopologicalNode = unresolved ref\nTopologicalNodes = unresolved ref", node: 4}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h3 id="Bus-2:-Slack"><a class="docs-heading-anchor" href="#Bus-2:-Slack">Bus 2: Slack</a><a id="Bus-2:-Slack-1"></a><a class="docs-heading-anchor-permalink" href="#Bus-2:-Slack" title="Permalink"></a></h3><pre><code class="language-julia hljs">inspect_collection(nodes[2]; size=(900,900))</code></pre><img src="11733461.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 29.631732709013942, y: 56.85467202214085, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"Bus Slack\"\nmRID = f31cf620-6f83-6a8a-534d-850b35da8458\nConnectivityNodeContainer = unresolved ref", node: 1},
+            {x: 25.654777264690715, y: 94.21212068601854, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV\nmRID = 67a6efe6-e1db-21ee-c0fd-bef847b76c3a", node: 2},
+            {x: 54.08684067122468, y: 48.83870911793666, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cub_2\"\nACDCsequenceNumber = 1\nmRID = 2602c371-0c88-9811-aefc-4416ec2e4067\nConnectivityNode = unresolved ref\nACDCconnected = true", node: 3},
+            {x: 74.04366061805186, y: 68.9212225141891, width: 2.2222222222222223, height: 2.2222222222222223, label: "EnergySource\n\"VS NAP\"\nEquipment.EquipmentContainer = unresolved ref\nmRID = d51849b3-d3db-4cdf-b7d3-48ad5e0bde4e\nr = 0\nr0 = 0\nrn = 0\nx = 0\nx0 = 0\nxn = 0\nactivePower = 0\nreactivePower = 0\nvoltageAngle = 0\nvoltageMagnitude = 380\nEquipment.inService = true", node: 4},
+            {x: 93.83838041445574, y: 84.97072305716776, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvStatus\ninService = true", node: 5},
+            {x: 63.137441512242795, y: 14.010101459779833, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 99.7065\nq = -12.5079", node: 6},
+            {x: 18.074908825775314, y: 23.334231515698136, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0\nv = 380", node: 7},
+            {x: 6.161619315421663, y: 63.140014148532366, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalIsland\n\"Island_001\"\nmRID = 78ac7061-607a-4270-b4c8-4641e97c84ea\nTopologicalNodes = unresolved ref", node: 8}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<h3 id="Powerline-from-1-to-2"><a class="docs-heading-anchor" href="#Powerline-from-1-to-2">Powerline from 1 to 2</a><a id="Powerline-from-1-to-2-1"></a><a class="docs-heading-anchor-permalink" href="#Powerline-from-1-to-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">inspect_collection(edges[1]; size=(900,900))</code></pre><img src="a6233558.png" alt="Example block output"/><script>
+// Find the previous image element and wrap it with hover functionality
+(function() {
+var script = document.currentScript;
+var img = script.previousElementSibling;
+
+// Find the preceding img element
+while (img && img.tagName !== 'IMG') {
+img = img.previousElementSibling;
+}
+
+if (!img) return; // No image found
+
+function setupHoverZones() {
+// Create wrapper div
+var wrapper = document.createElement('div');
+wrapper.className = 'graph-hover-container';
+wrapper.style.cssText = 'position: relative; display: inline-block;';
+
+// Insert wrapper before img and move img into wrapper
+img.parentNode.insertBefore(wrapper, img);
+wrapper.appendChild(img);
+
+// Ensure wrapper is exactly the same size as the image
+wrapper.style.width = img.offsetWidth + 'px';
+wrapper.style.height = img.offsetHeight + 'px';
+
+// Create hover zones container
+var hoverZones = document.createElement('div');
+hoverZones.className = 'hover-zones';
+hoverZones.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;';
+wrapper.appendChild(hoverZones);
+
+// Create tooltip
+var tooltip = document.createElement('div');
+tooltip.id = 'tooltip-' + Math.random().toString(36).substr(2, 9);
+tooltip.style.cssText = `position: absolute;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 5px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-family: monospace;
+white-space: pre-line;
+pointer-events: none;
+z-index: 20;
+display: none;
+max-width: 400px;
+word-wrap: break-word;`;
+wrapper.appendChild(tooltip);
+
+// Create hover zone data
+var hoverZoneData = [{x: 63.39548794552594, y: 74.9455622574275, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cub_1(1)\"\nACDCsequenceNumber = 1\nmRID = 90e91117-5f1d-fa71-1ba6-60790bd15588\nConnectivityNode = unresolved ref\nACDCconnected = true", node: 1},
+            {x: 65.12621093936023, y: 53.92399604649072, width: 2.2222222222222223, height: 2.2222222222222223, label: "ACLineSegment\n\"Line\"\nbch = 0.000180641\ngch = 0\nr = 4\nx = 16\nConductor.length = 50\nmRID = 49e687d6-e297-433c-8606-964ff738de67\nb0ch = 0\ng0ch = 0\nr0 = 0\nshortCircuitEndTemperature = 80\nx0 = 0\ninService = true", node: 2},
+            {x: 33.51486837425455, y: 55.5381834034828, width: 2.2222222222222223, height: 2.2222222222222223, label: "BaseVoltage\n\"380.00 kV\"\nnominalVoltage = 380\ndescription = BaseVoltage 380.00 kV\nmRID = 67a6efe6-e1db-21ee-c0fd-bef847b76c3a", node: 3},
+            {x: 93.83838167110119, y: 58.90274757331544, width: 2.2222222222222223, height: 2.2222222222222223, label: "Line\n\"Line\"\nmRID = 6d0d8941-92b4-9c43-e7d6-77bc41109258", node: 4},
+            {x: 58.38060903288922, y: 33.323717937556715, width: 2.2222222222222223, height: 2.2222222222222223, label: "Terminal\n\"Cub_3\"\nACDCsequenceNumber = 2\nmRID = 5934b02e-d18f-7cac-5054-a7e89ffc9e1e\nConnectivityNode = unresolved ref\nACDCconnected = true", node: 5},
+            {x: 28.309643985833993, y: 35.92086979154801, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"Bus Slack\"\nmRID = f31cf620-6f83-6a8a-534d-850b35da8458", node: 6},
+            {x: 10.075960875680417, y: 45.90742330645058, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"Bus Slack\"\nmRID = b6af8866-fee5-d345-8cbb-b69f9bdee7dd\nSubstation = unresolved ref", node: 7},
+            {x: 6.161615239078628, y: 22.40772207336551, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0\nv = 380", node: 8},
+            {x: 81.77634870986101, y: 20.679831053323394, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 1940dcc3-71f6-9d82-9ed1-2281ebf303cb", node: 9},
+            {x: 56.51880395395546, y: 14.010096463712118, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = -99.7065\nq = 12.5079", node: 10},
+            {x: 92.18504208574824, y: 46.01496404359333, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvStatus\ninService = true", node: 11},
+            {x: 33.06614323006329, y: 75.44717021829379, width: 2.2222222222222223, height: 2.2222222222222223, label: "TopologicalNode\n\"Bus DUT\"\nmRID = 3d7808e7-64a7-e209-869f-32cef64f5126", node: 12},
+            {x: 12.672735431294486, y: 67.44284004043314, width: 2.2222222222222223, height: 2.2222222222222223, label: "VoltageLevel\n\"Bus DUT\"\nmRID = 38c2b876-41ef-7633-9258-859d25e8c31a\nSubstation = unresolved ref", node: 13},
+            {x: 14.3702205593641, y: 91.03699602999993, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvVoltage\nangle = 0.673561\nv = 380", node: 14},
+            {x: 89.50241415697955, y: 85.05252342698397, width: 2.2222222222222223, height: 2.2222222222222223, label: "OperationalLimitSet\n\"Current rating for Line\"\nmRID = 6ad28c68-2d1d-a65f-540b-10184c652f94", node: 15},
+            {x: 66.1226630502684, y: 94.2121216645749, width: 2.2222222222222223, height: 2.2222222222222223, label: "SvPowerFlow\np = 100\nq = -37.4187", node: 16}];
+
+// Create hover zones with proper aspect ratio
+hoverZoneData.forEach(function(zoneData, i) {
+var zone = document.createElement('div');
+zone.className = 'hover-zone';
+
+// Use the width and height percentages calculated directly in Julia
+var zoneWidth = zoneData.width;
+var zoneHeight = zoneData.height;
+
+zone.style.cssText = `position: absolute;
+left: ${zoneData.x - zoneWidth/2}%;
+top: ${zoneData.y - zoneHeight/2}%;
+width: ${zoneWidth}%;
+height: ${zoneHeight}%;
+pointer-events: all;
+cursor: pointer;
+z-index: 10;
+border: none;
+background: transparent;`;
+zone.setAttribute('data-label', zoneData.label);
+zone.setAttribute('data-node', zoneData.node);
+hoverZones.appendChild(zone);
+});
+
+
+// Add event listeners to hover zones
+var zones = hoverZones.querySelectorAll('.hover-zone');
+zones.forEach(function(zone) {
+zone.addEventListener('mouseenter', function(e) {
+var label = this.getAttribute('data-label');
+tooltip.innerHTML = label;
+tooltip.style.display = 'block';
+
+// Position tooltip
+var rect = wrapper.getBoundingClientRect();
+var zoneRect = this.getBoundingClientRect();
+tooltip.style.left = (zoneRect.left - rect.left + zoneRect.width/2) + 'px';
+tooltip.style.top = (zoneRect.top - rect.top - tooltip.offsetHeight - 5) + 'px';
+
+// Adjust if tooltip goes outside container
+var tooltipRect = tooltip.getBoundingClientRect();
+if (tooltipRect.right > rect.right) {
+tooltip.style.left = (rect.right - rect.left - tooltipRect.width - 5) + 'px';
+}
+if (tooltipRect.left < rect.left) {
+tooltip.style.left = '5px';
+}
+if (tooltipRect.top < rect.top) {
+tooltip.style.top = (zoneRect.bottom - rect.top + 5) + 'px';
+}
+});
+
+zone.addEventListener('mouseleave', function(e) {
+tooltip.style.display = 'none';
+});
+});
+}
+
+// Wait for image to load before setting up hover zones
+if (img.complete && img.offsetWidth > 0) {
+// Image already loaded
+setupHoverZones();
+} else {
+// Wait for image to load
+img.addEventListener('load', setupHoverZones);
+}
+})();
+</script>
+<hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_testdata_reexport/">« Reexported Dataset</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 24 November 2025 17:17">Monday 24 November 2025</span>. Using Julia version 1.12.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
