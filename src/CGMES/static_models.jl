@@ -6,19 +6,15 @@ abstract type AbstractEdgeSubgraph end
 abstract type SingleBranchSubgraph <: AbstractEdgeSubgraph end
 struct ACLineSegment <: SingleBranchSubgraph end
 struct PowerTransformer <: SingleBranchSubgraph end
+struct Breaker <: SingleBranchSubgraph end
 struct MultiBranchSubgraph <: AbstractEdgeSubgraph end
 
 function is_abstract_edge_subgraph(c::CIMCollection)
     length(c("TopologicalNode")) == 2
 end
 
-CONDUCTING_EQUIPMENT = [
-    "ACLineSegment",
-    "PowerTransformer",
-]
-
 function is_single_branch_subgraph(c::AbstractCIMCollection)
-    length(c(CONDUCTING_EQUIPMENT)) == 1 && length(c("Terminal")) == 2
+    length(c(BRANCH_CLASSES)) == 1 && length(c("Terminal")) == 2
 end
 
 function is_multi_branch_subgraph(c::AbstractCIMCollection)
@@ -27,59 +23,71 @@ function is_multi_branch_subgraph(c::AbstractCIMCollection)
     all(is_single_branch_subgraph, branches) || return false
 end
 
-
-function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
-    nodes = collect(values(objects(c)))
-    cond_idx = findall(is_class(CONDUCTING_EQUIPMENT), nodes)
-    segment = nodes[only(cond_idx)]
-
+function get_tpn_nodes(c::AbstractCIMCollection)
     endnodes = c("TopologicalNode")
+    @assert length(endnodes)==2 "Expected a edge subgraph (two Topolocial nodes)!"
     src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
     dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
-    src_idx = c.metadata[:src_idx]
-    dst_idx = c.metadata[:dst_idx]
-
-    segment_terminals = ascendants(segment, byclass("Terminal", via="ConductingEquipment"))
-    @assert length(segment_terminals) == 2 "Expected exactly two terminals for segment $(getname(segment)), got $(length(segment_terminals))!"
-
-    # descend to topological node for each terminal
-    top_nodes = descend(byprop("TopologicalNode")).(segment_terminals)
-
-    if top_nodes[1] == src_node && top_nodes[2] == dst_node
-        src_terminal = segment_terminals[1]
-        dst_terminal = segment_terminals[2]
-    elseif top_nodes[1] == dst_node && top_nodes[2] == src_node
-        src_terminal = segment_terminals[2]
-        dst_terminal = segment_terminals[1]
-    else
-        error("Terminals of segment $(getname(segment)) do not match src/dst nodes!")
-    end
-
-    src_terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
-    dst_terminals = ascendants(dst_node, byclass("Terminal", via="TopologicalNode"))
-
-    (; src_node, src_terminals, src_terminal, dst_node, dst_terminals, dst_terminal, segment)
+    (; src_node, dst_node)
 end
 
-function get_components(::MultiBranchSubgraph, c::AbstractCIMCollection)
-    error("I commented out this function i think its not needed")
-    # nodes = collect(values(objects(c)))
-
-    # endnodes = c("TopologicalNode")
-    # src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
-    # dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
-    # src_idx = c.metadata[:src_idx]
-    # dst_idx = c.metadata[:dst_idx]
-
-    # src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
-    # dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
-
-    # (; src_node, src_terminals, dst_node, dst_terminals)
+function get_branch_name(c)
+    el = only(c(BRANCH_CLASSES))
+    getname(el)
 end
+
+
+# function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
+#     segment = only(c(BRANCH_CLASSES))
+
+#     endnodes = c("TopologicalNode")
+#     src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
+#     dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
+#     src_idx = c.metadata[:src_idx]
+#     dst_idx = c.metadata[:dst_idx]
+
+#     segment_terminals = ascendants(segment, byclass("Terminal", via="ConductingEquipment"))
+#     @assert length(segment_terminals) == 2 "Expected exactly two terminals for segment $(getname(segment)), got $(length(segment_terminals))!"
+
+#     # descend to topological node for each terminal
+#     top_nodes = descend(byprop("TopologicalNode")).(segment_terminals)
+
+#     if top_nodes[1] == src_node && top_nodes[2] == dst_node
+#         src_terminal = segment_terminals[1]
+#         dst_terminal = segment_terminals[2]
+#     elseif top_nodes[1] == dst_node && top_nodes[2] == src_node
+#         src_terminal = segment_terminals[2]
+#         dst_terminal = segment_terminals[1]
+#     else
+#         error("Terminals of segment $(getname(segment)) do not match src/dst nodes!")
+#     end
+
+#     # the plural is in case of multi branch
+#     src_terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
+#     dst_terminals = ascendants(dst_node, byclass("Terminal", via="TopologicalNode"))
+
+#     (; src_node, src_terminals, src_terminal, dst_node, dst_terminals, dst_terminal, segment)
+# end
+
+# function get_components(::MultiBranchSubgraph, c::AbstractCIMCollection)
+#     error("I commented out this function i think its not needed")
+#     # nodes = collect(values(objects(c)))
+
+#     # endnodes = c("TopologicalNode")
+#     # src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
+#     # dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
+#     # src_idx = c.metadata[:src_idx]
+#     # dst_idx = c.metadata[:dst_idx]
+
+#     # src_terminals = filter(is_terminal, base_object.(src_node.backrefs))
+#     # dst_terminals = filter(is_terminal, base_object.(dst_node.backrefs))
+
+#     # (; src_node, src_terminals, dst_node, dst_terminals)
+# end
 
 function get_edge_model(c)
     class = classify_branch_subgraph(c)
-    isnothing(class) && throw(ArgumentError("Cannot parse this edge model!"))
+    isnothing(class) && throw(ArgumentError("Cannot parse this edge model of class $(only(c(BRANCH_CLASSES)).class_name)!"))
 
     model = get_edge_model(class, c)
 
@@ -114,14 +122,14 @@ end
 | shortName (Entsoe)                        | String         | see IdentifiedObject                                                                                                                                                         |
 """
 function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection; i=nothing)
-    comp = CGMES.get_components(class, c)
+    segment = only(c("ACLineSegment"))
 
     # Sbase is just 100 because Vbase is in kv!
-    Vbase = CGMES.get_base_voltage(comp.segment) # kV
+    Vbase = CGMES.get_base_voltage(segment) # kV
     Zbase = Vbase^2 / SBASE
     Ybase = 1 / Zbase
 
-    props = properties(comp.segment)
+    props = properties(segment)
     G_src = props["gch"] / 2 / Ybase
     G_dst = G_src
     B_src = props["bch"] / 2 / Ybase
@@ -129,16 +137,15 @@ function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection; i=noth
     R = props["r"] / Zbase
     X = props["x"] / Zbase
 
-    r_src = CGMES.get_base_voltage(comp.src_node) / Vbase
-    r_dst = CGMES.get_base_voltage(comp.dst_node) / Vbase
+    src_node, dst_node = get_tpn_nodes(c)
+    r_src = CGMES.get_base_voltage(src_node) / Vbase
+    r_dst = CGMES.get_base_voltage(dst_node) / Vbase
 
     name = isnothing(i) ? :ACLineSegment : Symbol("ACLineSegment_Branch$i")
-    # name = symbolify(getname(comp.segment))
     piline = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, r_src, r_dst, name)
 end
 
 function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection; i=nothing)
-    comp = CGMES.get_components(class, c)
     tends = c("PowerTransformerEnd")
     @assert length(tends) == 2 "Expected exactly two PowerTransformerEnd, got $(length(tends))!"
 
@@ -164,14 +171,19 @@ function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection; i=n
     B_dst = dst_end["b"] / Ybase_dst
 
     # specific naming leads to non-egal models (generated function contains name)
-    # name = symbolify(getname(comp.segment))
     name = isnothing(i) ? :PowerTransformer : Symbol("PowerTransformer_Branch$i")
     trafo = Library.PiLine(; G_src, G_dst, B_src, B_dst, R, X, name)
 end
 
+function get_branch_model(class::Breaker, c::AbstractCIMCollection; i=nothing)
+    is_open = isopen(only(c("Breaker")))
+    name = isnothing(i) ? :Breaker : Symbol("Breaker$i")
+    breaker = Library.Breaker(; closed = is_open ? 0 : 1, name)
+end
+
 function get_edge_model(class::SingleBranchSubgraph, c::AbstractCIMCollection)
     bm = get_branch_model(class, c)
-    name = symbolify(getname(CGMES.get_components(class, c).segment))
+    name = symbolify(get_branch_name(c))
     compile_line(MTKLine(bm; name))
 end
 
@@ -182,7 +194,7 @@ function get_edge_model(class::MultiBranchSubgraph, c::AbstractCIMCollection)
     for (i, bm) in enumerate(branches)
         bclass = CGMES.classify_branch_subgraph(bm)
         bmodel = get_branch_model(bclass, bm; i)
-        bname = symbolify(getname(CGMES.get_components(bclass, bm).segment))
+        bname = symbolify(get_branch_name(bm))
         push!(branch_models, bmodel)
         push!(branch_names, bname)
     end
@@ -194,9 +206,10 @@ function classify_branch_subgraph(c::AbstractCIMCollection)
     @assert is_abstract_edge_subgraph(c) "Expected a edge subgraph (two Topolocial nodes)!"
 
     if is_single_branch_subgraph(c)
-        segment = only(c(CONDUCTING_EQUIPMENT))
+        segment = only(c(BRANCH_CLASSES))
         is_class(segment, "ACLineSegment") && return ACLineSegment()
         is_class(segment, "PowerTransformer") && return PowerTransformer()
+        is_class(segment, "Breaker") && return Breaker()
     end
     if is_multi_branch_subgraph(c)
         return MultiBranchSubgraph()
@@ -351,24 +364,22 @@ function get_injected_power_pu(o::CIMObject)
 end
 
 function get_src_voltage_pu(c::CIMCollection)
-    class = classify_branch_subgraph(c)
-    comp = CGMES.get_components(class, c)
-    get_voltage_pu(comp.src_node)
+    src_node, dst_node = get_tpn_nodes(c)
+    get_voltage_pu(src_node)
 end
 function get_dst_voltage_pu(c::CIMCollection)
-    class = classify_branch_subgraph(c)
-    comp = CGMES.get_components(class, c)
-    get_voltage_pu(comp.dst_node)
+    src_node, dst_node = get_tpn_nodes(c)
+    get_voltage_pu(dst_node)
 end
 function get_src_power_pu(c::CIMCollection)
-    class = classify_branch_subgraph(c)
-    comp = CGMES.get_components(class, c)
-    Sref = sum(CGMES.get_injected_power_pu.(comp.src_terminals))
+    src_node, dst_node = get_tpn_nodes(c)
+    terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
+    Sref = sum(CGMES.get_injected_power_pu.(terminals))
 end
 function get_dst_power_pu(c::CIMCollection)
-    class = classify_branch_subgraph(c)
-    comp = CGMES.get_components(class, c)
-    Sref = sum(CGMES.get_injected_power_pu.(comp.dst_terminals))
+    src_node, dst_node = get_tpn_nodes(c)
+    terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
+    Sref = sum(CGMES.get_injected_power_pu.(terminals))
 end
 
 

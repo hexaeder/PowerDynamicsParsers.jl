@@ -425,6 +425,8 @@ function forward_relations(this)
             for ref in val
                 is_resolved(ref) || continue
                 other = follow_ref(ref)
+                # unresolvable refs point to nothing
+                isnothing(other) && continue
                 push!(relations, Relation(this, other, key))
             end
         end

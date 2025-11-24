@@ -34,3 +34,10 @@ nodes, edges = split_topologically(dataset; verbose=true);
 
 @hover inspect_collection(nodes[100]; edge_labels=true, node_labels=:short, size=(1000,1000))
 @hover inspect_collection(edges[1]; edge_labels=true, node_labels=:short, size=(1000,1000))
+
+
+using PowerDynamicsParsers.CGMES: get_edge_model, get_static_vertex_model
+get_edge_model(edges[1])
+
+
+Network(dataset)
