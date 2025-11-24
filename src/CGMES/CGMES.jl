@@ -160,7 +160,9 @@ function Base.copy(col::CIMCollection)
     for ext in col.extensions
         push!(exts_copy, copy(ext))
     end
-    CIMCollection(objs_copy, exts_copy, deepcopy(col.metadata))
+    col = CIMCollection(objs_copy, exts_copy, deepcopy(col.metadata))
+    resolve_references!(col)
+    col
 end
 
 function _register_backref!(target::CIMObject, source::Union{CIMObject,CIMExtension}, prop)

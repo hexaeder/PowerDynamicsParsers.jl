@@ -8,11 +8,45 @@ function is_injector(t)
     eq = t["ConductingEquipment"]
 end
 
-BRANCH_CLASSES = ["ACLineSegment", "PowerTransformer"]
+BRANCH_CLASSES = ["ACLineSegment", "PowerTransformer", "Switch", "Breaker"]
 function is_lineend(t)
     is_terminal(t) || return false
     eq = t["ConductingEquipment"]
     any(class -> is_class(eq, class), BRANCH_CLASSES)
+end
+
+"""
+    follow_branch(t::CIMObject(Terminal))::CIMObject(Terminal)
+
+Follow a branch from a terminal `t` to the other terminal at the opposite end of the branch.
+"""
+function follow_branch(t)
+    @assert is_lineend(t) "Expected terminal to be `is_lineend`"
+    eq = descend(t, byprop("ConductingEquipment"))
+    terms = ascendants(eq, byclass("Terminal", via="ConductingEquipment"))
+    @assert length(terms) == 2 "Expected exactly 2 terminals for branch equipment, found $(length(terms))"
+    if terms[1].id == t.id
+        return terms[2]
+    elseif terms[2].id == t.id
+        return terms[1]
+    else
+        error("Terminal $(t.id) not found among terminals of its conducting equipment $(eq.id)")
+    end
+end
+
+function topological_neighbors(tpn)
+    @assert is_class(tpn, "TopologicalNode") "Expected TopologicalNode, got $(tpn.class_name)"
+    terms = ascendants(tpn, byclass("Terminal", via="TopologicalNode"))
+    linends = filter(is_lineend, terms)
+    neighbors = CIMObject[]
+    for lineend in linends
+        other_term = follow_branch(lineend)
+        other_tpn = descend(other_term, byprop("TopologicalNode"))
+        if other_tpn.id != tpn.id
+            push!(neighbors, other_tpn)
+        end
+    end
+    neighbors
 end
 
 function is_busbar_section_terminal(t)
@@ -107,7 +141,7 @@ function discover_subgraph(
     resolve_references!(collection; warn)
 end
 
-function Base.filter(f, collection::AbstractCIMCollection; warn=true)
+function Base.filter(f, collection::AbstractCIMCollection)
     _objects = OrderedDict{String, CIMObject}()
     _extensions = Vector{CIMExtension}()
 
@@ -121,34 +155,17 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
         end
     end
     collection = CIMCollection(_objects, _extensions)
-    resolve_references!(collection; warn)
+    resolve_references!(collection; warn=false)
 end
 
-function split_topologically(collection::AbstractCIMCollection; verbose=false, warn=true)
+function split_topologically(collection::AbstractCIMCollection; verbose=false, warn=false)
     # sanity checks in presence of connectivity node, ther can be multiple connectivy nodes per topo node
-    @info "ConnectivityNodes contain several terminals (busbar-segment-like), TopologicalNodes contain multiple connectivity nodes. Check for that."
     for cn in collection("ConnectivityNode")
         tn = descend(cn, byprop("TopologicalNode"))
         cn_terms = Set(ascendants(cn, byclass("Terminal")))
-        collect(cn_terms)[1]
         tn_terms = Set(ascendants(tn, byclass("Terminal")))
         if !(cn_terms ⊆ tn_terms)
             @warn "ConnectivityNode $(getname(cn)) has terminals not belonging to its TopologicalNode $(getname(tn)). This may lead to unexpected results in topological splitting."
-        end
-    end
-    @info "Check validity of Breakers/Switches: if closed, both ends should belong to the same TopologicalNode."
-    for br in collection(["Breaker", "Switch"])
-        terms = ascendants(br, byclass("Terminal", via="ConductingEquipment"))
-        @assert length(terms) == 2 "Breaker $(getname(br)) should have exactly 2 terminals, found $(length(terms))."
-        tns = [t["TopologicalNode"] for t in terms]
-        if isopen(br)
-            if tns[1].id == tns[2].id
-                @warn "Open Breaker/Switch $(getname(br)) connects both terminals to the same TopologicalNode $(getname(tns[1])). This may lead to unexpected results in topological splitting."
-            end
-        else
-            if tns[1].id != tns[2].id
-                @warn "Closed Breaker/Switch $(getname(br)) connects terminals on different TopologicalNodes: $(getname(tns[1])) and $(getname(tns[2])). This may lead to unexpected results in topological splitting."
-            end
         end
     end
 
@@ -191,6 +208,14 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
     branch_subgraphs = CIMCollection[]
     while !isempty(undiscovered_lineends)
         lineend = popfirst!(undiscovered_lineends)
+
+        # check for loopback
+        this_tpn = descend(lineend, byprop("TopologicalNode"))
+        other_tpn = descend(follow_branch(lineend), byprop("TopologicalNode"))
+        if this_tpn.id == other_tpn.id
+            error("Found loopback branch at TopologicalNode '$(getname(this_tpn))' ($(this_tpn.id)). Skipping lineend '$(getname(lineend))' ($(lineend.id)). Consider using `filter_loopback_breakers`!")
+        end
+
         subgraph = _discover_linened_subgraph(lineend; warn)
         push!(branch_subgraphs, subgraph)
 
@@ -248,9 +273,12 @@ end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
     # nobackref = is_class(vcat(STOP_BACKREF, "ConnectivityNode", "ReactiveCapabilityCurve"))
+    # nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
     nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
     # noforward = is_class(vcat(STOP_FORWARD, "ConnectivityNode"))
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation"])
+    filter_out = n -> is_lineend(n) ||
+                      is_busbar_section_terminal(n) ||
+                      is_class(n, [r"Diagram", "VoltageLevel", "Substation", "ConnectivityNode"])
     sg = discover_subgraph(t; nobackref, #=noforward,=# filter_out, warn)
     sg.metadata[:busname] = getname(t)
     sg

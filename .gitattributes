@@ -1,0 +1,2 @@
+# Treat CGMES test data XML files as binary to prevent git from modifying them
+test/CGMES/data/**/*.xml binary

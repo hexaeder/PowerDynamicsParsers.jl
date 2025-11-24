@@ -679,8 +679,14 @@ function generate_node_tooltips(nodes::Vector{CIMObject})
             display_value = if value isa Union{CIMRef, Vector{CIMRef}}
                 if all(ref.resolved for ref in value)
                     continue  # Skip fully resolved reference (lists)
+                elseif value isa CIMRef
+                    if is_external_ref(value)
+                        "external link"
+                    else
+                        "unresolved ref"
+                    end
                 else
-                    "unresolved ref"  # Indicate presence of unresolved refs
+                    "vector ref"  # Indicate presence of unresolved refs
                 end
             else
                 value
