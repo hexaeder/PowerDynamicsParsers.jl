@@ -234,25 +234,29 @@ struct PVType <: Injector
     V::Float64
     objs::Vector{CIMObject}
 end
-struct PQType <: Injector
+struct PQYType <: Injector
     P::Float64
     Q::Float64
+    G::Float64  # Shunt conductance in pu
+    B::Float64  # Shunt susceptance in pu
     objs::Vector{CIMObject}
 end
+# Backward compatibility constructor
+PQType(P, Q, objs) = PQYType(P, Q, 0.0, 0.0, objs)
 # S + S
 combine(sA::SlackType, sB::SlackType) = SlackType(compatible_voltage(sA, sB), vcat(sA.objs, sB.objs))
 # S + PV
 combine(s::SlackType, pv::PVType) = SlackType(compatible_voltage(s, pv), vcat(s.objs, pv.objs))
 combine(pv::PVType, s::SlackType) = combine(s, pv)
-# S + PQ
-combine(s::SlackType, pq::PQType) = SlackType(s.V, vcat(s.objs, pq.objs))
-combine(pq::PQType, s::SlackType) = combine(s, pq)
+# S + PQY (Y component absorbed by fixed voltage)
+combine(s::SlackType, pqy::PQYType) = SlackType(s.V, vcat(s.objs, pqy.objs))
+combine(pqy::PQYType, s::SlackType) = combine(s, pqy)
 
 # PV + PV
 combine(pvA::PVType, pvB::PVType) = PVType(pvA.P + pvB.P, compatible_voltage(pvA, pvB), vcat(pvA.objs, pvB.objs))
-# PV + PQ
-combine(pv::PVType, pq::PQType) = PVType(pq.P + pv.P, pv.V, vcat(pq.objs, pv.objs))
-combine(pq::PQType, pv::PVType) = combine(pv, pq)
+# PV + PQY (Y component absorbed by fixed voltage)
+combine(pv::PVType, pqy::PQYType) = PVType(pqy.P + pv.P, pv.V, vcat(pqy.objs, pv.objs))
+combine(pqy::PQYType, pv::PVType) = combine(pv, pqy)
 
 compatible_voltage(v1::Injector, v2::Injector) = compatible_voltage(v1.V, v2.V)
 function compatible_voltage(v1, v2)
@@ -262,8 +266,8 @@ function compatible_voltage(v1, v2)
     error("Incompatible voltage setpoints: $(str_significant(v1)) vs $(str_significant(v2))!")
 end
 
-# PQ + PQ
-combine(pqA::PQType, pqB::PQType) = PQType(pqA.P + pqB.P, pqA.Q + pqB.Q, vcat(pqA.objs, pqB.objs))
+# PQY + PQY
+combine(pqA::PQYType, pqB::PQYType) = PQYType(pqA.P + pqB.P, pqA.Q + pqB.Q, pqA.G + pqB.G, pqA.B + pqB.B, vcat(pqA.objs, pqB.objs))
 
 function get_static_vertex_model(c::CIMCollection)
     injectors = []
@@ -272,19 +276,68 @@ function get_static_vertex_model(c::CIMCollection)
 
     for t in c("Terminal")
         inj = t["ConductingEquipment"]
+        in_service(inj) || continue
         type = injector_type(inj)
         push!(injectors, type)
     end
-    mod = reduce(combine, injectors, init=PQType(0.0, 0.0, CIMObject[]))
+    mod = reduce(combine, injectors, init=PQYType(0.0, 0.0, 0.0, 0.0, CIMObject[]))
     name = symbolify(getname(tpn))
     vm = powerdynamics_model(mod, name)
     set_graphelement!(vm, c.metadata[:busidx])
     vm.metadata[:cgmes_subgraph] = c
     vm
 end
-powerdynamics_model(pq::PQType, name) = pfPQ(; P=pq.P, Q=pq.Q, name)
+function powerdynamics_model(pqy::PQYType, name)
+    # If no shunt admittance, use simple PQ model
+    if iszero(pqy.G) && iszero(pqy.B)
+        return pfPQ(; P=pqy.P, Q=pqy.Q, name)
+    end
+
+    if iszero(pqy.P) && iszero(pqy.Q)
+        @named shunt = Library.ConstantYLoad()
+        bus = compile_bus(MTKBus(shunt))
+        set_default!(bus, :shunt₊G, pqy.G)
+        set_default!(bus, :shunt₊B, pqy.B)
+        return bus
+    end
+
+    @named shunt = Library.ConstantYLoad()
+    @named pq = Library.PQConstraint()
+    bus = compile_bus(MTKBus([pq, shunt]; name))
+    set_default!(bus, :pq₊P, pqy.P)
+    set_default!(bus, :pq₊Q, pqy.Q)
+    set_default!(bus, :shunt₊G, pqy.G)
+    set_default!(bus, :shunt₊B, pqy.B)
+    return bus
+end
 powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.V, name)
 powerdynamics_model(s::SlackType, name) = pfSlack(; V=s.V, name)
+
+function in_service(inj)
+    eqp_service = if haskey(inj, "Equipment.inService")
+        inj["Equipment.inService"]
+    else
+        nothing
+    end
+    svcand = ascendants(inj, byclass("SvStatus", via="ConductingEquipment"))
+    sv_service = if !isempty(svcand)
+        svc = only(svcand)
+        svc["inService"]
+    else
+        nothing
+    end
+    # error if both are defined and different
+    if !isnothing(eqp_service) && !isnothing(sv_service)
+        eqp_service == sv_service || error("Inconsistent inService status for $(getname(inj))!")
+    end
+    if isnothing(eqp_service) && isnothing(sv_service)
+        return true
+    elseif isnothing(eqp_service)
+        return sv_service
+    else
+        return eqp_service
+    end
+end
 
 function PowerDynamics.Network(ds::AbstractCIMCollection; verbose=true, kwargs...)
     println("Split Topology...")
@@ -332,6 +385,47 @@ function injector_type(::Val{:ConformLoad}, o::CIMObject)
     return PQType(P, Q, [o])
 end
 
+function injector_type(::Val{:PowerElectronicsConnection}, o::CIMObject)
+    props = properties(o)
+
+    # Get p and q from SSH (similar to SynchronousMachine but different property names)
+    P = -props["p"]/SBASE
+    Q = -props["q"]/SBASE
+
+    if haskey(props, "RegulatingCondEq.RegulatingControl")
+        baseV = get_base_voltage(get_connecting_terminal(o))
+        controller = follow_ref(props["RegulatingCondEq.RegulatingControl"])
+        is_class(controller, "RegulatingControl") || error("Expected RegulatingControl, got $(controller.class_name)")
+        V = controller["targetValue"]/baseV
+        return PVType(P, V, [o])
+    else
+        return PQType(P, Q, [o])
+    end
+end
+
+function injector_type(::Val{:LinearShuntCompensator}, o::CIMObject)
+    props = properties(o)
+
+    # Get susceptance and conductance per section
+    bPerSection = props["bPerSection"]  # in Siemens
+    gPerSection = props["gPerSection"]  # in Siemens
+
+    # Get actual sections from StateVariables (SvShuntCompensatorSections)
+    sv = ascend(o, byclass("SvShuntCompensatorSections", via="ShuntCompensator"))
+    sections = properties(sv)["sections"]
+
+    # Get base voltage to convert to pu
+    baseV = get_base_voltage(get_connecting_terminal(o))  # kV
+    Ybase = SBASE / (baseV^2)
+
+    # Total admittance in pu
+    G = (gPerSection * sections) / Ybase
+    B = (bPerSection * sections) / Ybase
+
+    # Shunt compensators inject no fixed P or Q (voltage-dependent)
+    return PQYType(0.0, 0.0, G, B, [o])
+end
+
 function is_angle_ref(o::CIMObject)
     @assert is_class(o, "TopologicalNode") "Expected TopologicalNode, got $(o.class_name)"
 
@@ -356,7 +450,7 @@ function get_base_voltage(ob::CIMObject)
 end
 
 function get_connecting_terminal(injector::CIMObject)
-    ascend(injector, byprop("ConductingEquipment"))
+    ascend(injector, byclass("Terminal", via="ConductingEquipment"))
 end
 
 function get_voltage_pu(o::CIMObject)
@@ -395,9 +489,12 @@ function get_dst_power_pu(c::CIMCollection)
 end
 
 
-
 function test_powerflow(e::EdgeModel)
     subgraph = e.metadata[:cgmes_subgraph]
+    if CGMES.classify_branch_subgraph(subgraph) isa Breaker
+        return 0.0
+    end
+
     src_uc = CGMES.get_src_voltage_pu(subgraph)
     dst_uc = CGMES.get_dst_voltage_pu(subgraph)
 
@@ -421,6 +518,7 @@ function test_powerflow(e::EdgeModel)
 
     validate_power_component(P, Pref, "Active Power (P)")
     validate_power_component(Q, Qref, "Reactive Power (Q)")
+    return max(abs(P - Pref), abs(Q - Qref))j
 end
 
 function validate_power_component(computed::Float64, reference::Float64, component_name::String)
