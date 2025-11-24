@@ -14,6 +14,7 @@ PROFILE_COLOR_MAP = Dict(
     :EquipmentCore => :brown,
     :CoreEquipment => :brown,
     :EquipmentShortCircuit => :brown,
+    :EquipmentOperation => :brown,
     :ShortCircuit => :brown,
 )
 

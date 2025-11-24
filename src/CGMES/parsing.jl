@@ -4,6 +4,7 @@ KNOWN_PROFILES = [
     :EquipmentCore,
     :CoreEquipment,
     :EquipmentShortCircuit,
+    :EquipmentOperation,
     :ShortCircuit,
     :Topology,
     :StateVariables,

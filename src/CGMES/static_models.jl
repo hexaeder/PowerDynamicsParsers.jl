@@ -39,7 +39,7 @@ function get_components(::SingleBranchSubgraph, c::AbstractCIMCollection)
     src_idx = c.metadata[:src_idx]
     dst_idx = c.metadata[:dst_idx]
 
-    segment_terminals = ascendants(segment, byprop("ConductingEquipment"))
+    segment_terminals = ascendants(segment, byclass("Terminal", via="ConductingEquipment"))
     @assert length(segment_terminals) == 2 "Expected exactly two terminals for segment $(getname(segment)), got $(length(segment_terminals))!"
 
     # descend to topological node for each terminal

@@ -33,6 +33,8 @@ mutable struct CIMRef <: AbstractCIMReference
 end
 is_resolved(ref::CIMRef) = ref.resolved
 is_external_ref(ref::CIMRef) = startswith(ref.id, "http")
+is_unresolvable_ref(ref::CIMRef) = ref.resolved && ref.target === nothing
+
 Base.iterate(ref::CIMRef) = (ref, nothing)
 Base.iterate(ref::CIMRef, state) = nothing
 
@@ -149,6 +151,18 @@ function Base.copy(ext::CIMExtension)
     CIMExtension(ext.profile, base_copy, ext.class_name, props_copy)
 end
 
+function Base.copy(col::CIMCollection)
+    objs_copy = OrderedDict{String, CIMObject}()
+    for (key, val) in col.objects
+        objs_copy[key] = copy(val)
+    end
+    exts_copy = CIMExtension[]
+    for ext in col.extensions
+        push!(exts_copy, copy(ext))
+    end
+    CIMCollection(objs_copy, exts_copy, deepcopy(col.metadata))
+end
+
 function _register_backref!(target::CIMObject, source::Union{CIMObject,CIMExtension}, prop)
     backref = CIMBackref(source, prop)
     push!(target.backrefs, backref)
@@ -170,6 +184,9 @@ function _resolve_property_refs!(source_object::Union{CIMObject,CIMExtension}, o
                         ref.target = target_object
                         _register_backref!(target_object, source_object, prop_name)
                     catch e
+                        # mark as "unresolvable"
+                        ref.resolved = true
+                        ref.target = nothing
                         warn && @warn "Failed to resolve reference for property $(prop_name) in object $(source_object): $e"
                         # rethrow(e)
                     end
@@ -188,6 +205,9 @@ function _resolve_extension_refs!(extension::CIMExtension, objectdict)
             extension.base.target = base_object
             _register_extension!(base_object, extension)
         catch e
+            # mark as "unresolvable"
+            extension.base.resolved = true
+            extension.base.target = nothing
             # @warn "Failed to resolve extension base reference $(extension.base.id): $e"
             error("Failed to resolve extension $extension: $e")
         end
@@ -195,6 +215,32 @@ function _resolve_extension_refs!(extension::CIMExtension, objectdict)
 end
 
 function resolve_references!(collection::AbstractCIMCollection; warn=true)
+    # clear all references first
+    for obj in values(objects(collection))
+        empty!(obj.backrefs)
+        empty!(obj.extension)
+        for (prop_name, prop_value) in obj.properties
+            if prop_value isa Union{CIMRef, Vector{CIMRef}}
+                for ref in prop_value
+                    ref.resolved = false
+                    ref.target = nothing
+                end
+            end
+        end
+    end
+    for ext in extensions(collection)
+        ext.base.resolved = false
+        ext.base.target = nothing
+        for (prop_name, prop_value) in ext.properties
+            if prop_value isa Union{CIMRef, Vector{CIMRef}}
+                for ref in prop_value
+                    ref.resolved = false
+                    ref.target = nothing
+                end
+            end
+        end
+    end
+
     objectdict = objects(collection)
     # Stage 1: Resolve extension references
     for extension in extensions(collection)
@@ -449,6 +495,9 @@ include("inspect.jl")
 include("subgraph.jl")
 include("show.jl")
 include("static_models.jl")
+
+export fix_and_remove_breakers
+include("utils.jl")
 
 function symbolify(s::String)
     s = replace(s, r"\s" => "_")

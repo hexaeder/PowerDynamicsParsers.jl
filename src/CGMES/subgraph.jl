@@ -83,7 +83,8 @@ function discover_subgraph(
                 refs isa Union{CIMRef,Vector{CIMRef}} || continue
                 for ref in refs
                     is_external_ref(ref) && continue  # Skip external references
-                    @assert is_resolved(ref) "CIMRef $ref should be resolved before discovery."
+                    is_unresolvable_ref(ref) && continue  # Skip unresolvable references
+                    @assert is_resolved(ref) "CIMRef $key => $ref in $node should be resolved before discovery."
                     recursive_discover!(follow_ref(ref), depth + 1)
                 end
             end
@@ -124,14 +125,30 @@ function Base.filter(f, collection::AbstractCIMCollection; warn=true)
 end
 
 function split_topologically(collection::AbstractCIMCollection; verbose=false, warn=true)
-    # sanity checks in presence of connectivity node
+    # sanity checks in presence of connectivity node, ther can be multiple connectivy nodes per topo node
+    @info "ConnectivityNodes contain several terminals (busbar-segment-like), TopologicalNodes contain multiple connectivity nodes. Check for that."
     for cn in collection("ConnectivityNode")
         tn = descend(cn, byprop("TopologicalNode"))
-
         cn_terms = Set(ascendants(cn, byclass("Terminal")))
+        collect(cn_terms)[1]
         tn_terms = Set(ascendants(tn, byclass("Terminal")))
-        if cn_terms != tn_terms
-            @warn "There seems to be a missmatch between ConnectivityNode and TopologicalNode terminals! This is not expected in might lead to wrong topological splits."
+        if !(cn_terms ⊆ tn_terms)
+            @warn "ConnectivityNode $(getname(cn)) has terminals not belonging to its TopologicalNode $(getname(tn)). This may lead to unexpected results in topological splitting."
+        end
+    end
+    @info "Check validity of Breakers/Switches: if closed, both ends should belong to the same TopologicalNode."
+    for br in collection(["Breaker", "Switch"])
+        terms = ascendants(br, byclass("Terminal", via="ConductingEquipment"))
+        @assert length(terms) == 2 "Breaker $(getname(br)) should have exactly 2 terminals, found $(length(terms))."
+        tns = [t["TopologicalNode"] for t in terms]
+        if isopen(br)
+            if tns[1].id == tns[2].id
+                @warn "Open Breaker/Switch $(getname(br)) connects both terminals to the same TopologicalNode $(getname(tns[1])). This may lead to unexpected results in topological splitting."
+            end
+        else
+            if tns[1].id != tns[2].id
+                @warn "Closed Breaker/Switch $(getname(br)) connects terminals on different TopologicalNodes: $(getname(tns[1])) and $(getname(tns[2])). This may lead to unexpected results in topological splitting."
+            end
         end
     end
 
@@ -146,7 +163,22 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
             t["TopologicalNode"] == only(subgraph("TopologicalNode"))
         end
     end
-    @assert allunique(sg.metadata[:busname] for sg in node_subgraphs)
+    if !allunique(sg.metadata[:busname] for sg in node_subgraphs)
+        names = [sg.metadata[:busname] for sg in node_subgraphs]
+        unique_names = unique(names)
+        for name in unique_names
+            appearances = findall(n -> n == name, names)
+            if !isnothing(appearances) && length(appearances) > 1
+                printstyled("WARNING: Bus name '$name' appears in multiple topological nodes at indices: $(appearances)\n", color=:yellow)
+                for idx in appearances
+                    sg = node_subgraphs[idx]
+                    id = only(sg("TopologicalNode")).id
+                    sg.metadata[:busname] *= id
+                    # println("  -> Appending id to bus name for uniqueness: new bus name '$(sg.metadata[:busname])'")
+                end
+            end
+        end
+    end
     # sort
     sort!(node_subgraphs, by = sg->sg.metadata[:busname])
     # attach metadata
@@ -168,7 +200,7 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         !isnothing(foundidx) && deleteat!(undiscovered_lineends, foundidx)
     end
     # sanity checks
-    for subgraph in branch_subgraphs
+    for (i, subgraph) in enumerate(branch_subgraphs)
         @assert length(subgraph("TopologicalNode")) == 2
         @assert length(subgraph("Terminal")) == 2
         # test that all terminals belong to the topological nodes
@@ -215,8 +247,11 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
-    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation", "ConnectivityNode"])
-    sg = discover_subgraph(t; filter_out, warn)
+    # nobackref = is_class(vcat(STOP_BACKREF, "ConnectivityNode", "ReactiveCapabilityCurve"))
+    nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
+    # noforward = is_class(vcat(STOP_FORWARD, "ConnectivityNode"))
+    filter_out = n -> is_lineend(n) || is_busbar_section_terminal(n) || is_class(n, [r"Diagram", "VoltageLevel", "Substation"])
+    sg = discover_subgraph(t; nobackref, #=noforward,=# filter_out, warn)
     sg.metadata[:busname] = getname(t)
     sg
 end
@@ -230,7 +265,7 @@ function _discover_linened_subgraph(t; warn)
 end
 
 
-function reduce_complexity(collection)
+function reduce_complexity(collection, filter_classes=String[]; del_uncon=true)
     new_collection = filter(
         !is_class([
             "OperationalLimitType",
@@ -245,10 +280,16 @@ function reduce_complexity(collection)
             "PositionPoint",
             "Location",
             "TopologicalIsland",
+            "CurveData",
+            filter_classes...
         ]),
         collection; warn=false
     )
-    delete_unconnected(new_collection; warn=false)
+    if del_uncon
+        delete_unconnected(new_collection; warn=false)
+    else
+        new_collection
+    end
 end
 
 function delete_unconnected(collection::CIMCollection, keep=collection("TopologicalNode"); warn=true)
@@ -287,6 +328,7 @@ function to_digraph(collection::CIMCollection)
                 for ref in v
                     ref.resolved || continue
                     target = follow_ref(ref)
+                    isnothing(target) && continue
                     target_idx = findfirst(n -> n.id == target.id, nodes)
                     !isnothing(target_idx) && add_edge!(g, source_idx, target_idx)
                 end

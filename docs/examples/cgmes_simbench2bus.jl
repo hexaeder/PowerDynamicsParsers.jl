@@ -7,7 +7,6 @@ using PowerDynamicsParsers
 using PowerDynamicsParsers.CGMES
 using CairoMakie
 
-
 #=
 # Load Dataset and Inspect
 
@@ -59,7 +58,19 @@ We'll use those subgraphs to build bus in edge models.
 ### Bus 1: DUT
 =#
 nodes, edges = split_topologically(dataset; warn=false, verbose=true);
+
+Network(dataset)
+em = PowerDynamicsParsers.CGMES.get_edge_model(edges[1])
+map(psym(em)) do sym
+    sym => get_default(em, sym)
+end
+
+
+
 @hover inspect_collection(nodes[1]; size=(900,900))
+Network(dataset)
+
+edges[1]
 
 
 #=
