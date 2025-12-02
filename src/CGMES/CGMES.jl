@@ -392,7 +392,7 @@ function descend(obj, matcher)
     if length(matches) == 1
         return only(matches)
     else
-        error("Expected exactly 1 descendant matching criteria, found $(length(matches)). Use descendants() to get all matches.")
+        error("Expected exactly 1 descendant matching criteria $(obj)→$(matcher) , found $(length(matches)). Use descendants() to get all matches.")
     end
 end
 descend(matcher) = Base.Fix2(descend, matcher)
@@ -413,7 +413,7 @@ function ascend(obj, matcher)
     if length(matches) == 1
         return only(matches)
     else
-        error("Expected exactly 1 ascendant matching criteria, found $(length(matches)). Use ascendants() to get all matches.")
+        error("Expected exactly 1 ascendant matching criteria $(obj)←$(matcher), found $(length(matches)). Use ascendants() to get all matches.")
     end
 end
 ascend(matcher) = Base.Fix2(ascend, matcher)

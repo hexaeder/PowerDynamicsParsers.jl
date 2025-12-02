@@ -1,16 +1,28 @@
-export is_terminal, is_class, is_lineend, discover_subgraph, is_injector, is_busbar_section_terminal, reduce_complexity
+export is_terminal, is_class, is_lineend_terminal, discover_subgraph, is_injector, is_busbar_section_terminal, reduce_complexity
 export delete_unconnected, split_topologically
 
 is_terminal(t) = is_class(t, "Terminal")
 
-function is_injector(t)
-    is_terminal(t) || return false
+INJECTOR_CLASSES = [
+    "SynchronousMachine",
+    "ConformLoad",
+    "PowerElectronicsConnection",
+    "LinearShuntCompensator",
+]
+function is_injector_terminal(t)
+    @assert is_terminal(t)
     eq = t["ConductingEquipment"]
+    any(class -> is_class(eq, class), INJECTOR_CLASSES) || return false
 end
 
-BRANCH_CLASSES = ["ACLineSegment", "PowerTransformer", "Switch", "Breaker"]
-function is_lineend(t)
-    is_terminal(t) || return false
+BRANCH_CLASSES = [
+    "ACLineSegment",
+    "PowerTransformer",
+    "Switch",
+    "Breaker"
+]
+function is_lineend_terminal(t)
+    @assert is_terminal(t) "Expected Terminal, got $(t.class_name)"
     eq = t["ConductingEquipment"]
     any(class -> is_class(eq, class), BRANCH_CLASSES)
 end
@@ -21,7 +33,7 @@ end
 Follow a branch from a terminal `t` to the other terminal at the opposite end of the branch.
 """
 function follow_branch(t)
-    @assert is_lineend(t) "Expected terminal to be `is_lineend`"
+    @assert is_lineend_terminal(t) "Expected terminal to be `is_lineend_terminal`"
     eq = descend(t, byprop("ConductingEquipment"))
     terms = ascendants(eq, byclass("Terminal", via="ConductingEquipment"))
     @assert length(terms) == 2 "Expected exactly 2 terminals for branch equipment, found $(length(terms))"
@@ -37,7 +49,7 @@ end
 function topological_neighbors(tpn)
     @assert is_class(tpn, "TopologicalNode") "Expected TopologicalNode, got $(tpn.class_name)"
     terms = ascendants(tpn, byclass("Terminal", via="TopologicalNode"))
-    linends = filter(is_lineend, terms)
+    linends = filter(is_lineend_terminal, terms)
     neighbors = CIMObject[]
     for lineend in linends
         other_term = follow_branch(lineend)
@@ -203,7 +215,7 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         ng.metadata[:busidx] = i
     end
 
-    undiscovered_lineends = filter(is_lineend, collection("Terminal"))
+    undiscovered_lineends = filter(is_lineend_terminal, collection("Terminal"))
     verbose && @info "Found $(length(undiscovered_lineends)) line ends. Discovering line end subgraphs..."
     branch_subgraphs = CIMCollection[]
     while !isempty(undiscovered_lineends)
@@ -219,7 +231,7 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         subgraph = _discover_linened_subgraph(lineend; warn)
         push!(branch_subgraphs, subgraph)
 
-        discovered_ids = [n.id for n in filter(is_lineend, subgraph("Terminal"))]
+        discovered_ids = [n.id for n in filter(is_lineend_terminal, subgraph("Terminal"))]
 
         foundidx = findall(n -> n.id ∈ discovered_ids, undiscovered_lineends)
         !isnothing(foundidx) && deleteat!(undiscovered_lineends, foundidx)
@@ -234,8 +246,8 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
         end
     end
     # check, that all linenends are covered
-    all_linend_ids = mapreduce(branch -> map(t -> t.id, filter(is_lineend, branch("Terminal"))), vcat, branch_subgraphs)
-    linend_ids_in_collection = map(t -> t.id, filter(is_lineend, collection("Terminal")))
+    all_linend_ids = mapreduce(branch -> map(t -> t.id, filter(is_lineend_terminal, branch("Terminal"))), vcat, branch_subgraphs)
+    linend_ids_in_collection = map(t -> t.id, filter(is_lineend_terminal, collection("Terminal")))
     @assert sort(all_linend_ids) == sort(linend_ids_in_collection) "Not all lineends covered in subgraphs discovery!"
 
     # attach metadata
@@ -276,7 +288,7 @@ function _discover_tpn_subgraph(t; warn)
     # nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
     nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
     # noforward = is_class(vcat(STOP_FORWARD, "ConnectivityNode"))
-    filter_out = n -> is_lineend(n) ||
+    filter_out = n -> (is_terminal(n) && is_lineend_terminal(n)) ||
                       is_busbar_section_terminal(n) ||
                       is_class(n, [r"Diagram", "VoltageLevel", "Substation", "ConnectivityNode"])
     sg = discover_subgraph(t; nobackref, #=noforward,=# filter_out, warn)
@@ -284,11 +296,21 @@ function _discover_tpn_subgraph(t; warn)
     sg
 end
 function _discover_linened_subgraph(t; warn)
-    @assert is_lineend(t) "Expected LineEnd, got $(t.class_name)"
+    @assert is_lineend_terminal(t) "Expected LineEnd, got $(t.class_name)"
 
     nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
     filter_out = is_class([r"Diagram", "Substation", "TopologicalIsland", "ConnectivityNode"])
     sg = discover_subgraph(t; nobackref, filter_out, warn)
+    sg
+end
+
+export discover_injector
+function discover_injector(t)
+    @assert is_injector_terminal(t) "Expected Injector Terminal, got $(t.class_name)"
+
+    nobackref = is_class(vcat(STOP_BACKREF, "TopologicalNode", "OperationalLimitSet"))
+    filter_out = is_class(["BaseVoltage", "TopologicalIsland"])
+    sg = discover_subgraph(t; nobackref, filter_out, warn=false)
     sg
 end
 

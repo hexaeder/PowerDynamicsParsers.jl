@@ -453,6 +453,20 @@ function object_text(obj::CIMObject)
         $(getname(obj))
         Vref=$(props["targetValue"])
         """
+    elseif is_class(obj, "PowerElectronicsConnection")
+        props = properties(obj)
+        """
+        PowerElectronicsConnection
+        $(getname(obj))
+        P=$(props["p"])
+        Q=$(props["q"])
+        """
+    elseif is_class(obj, "SvStatus")
+        props = properties(obj)
+        """
+        SvStatus
+        inService=$(props["inService"])
+        """
     else
         obj.class_name * (hasname(obj) ? "\n\"" * getname(obj) * "\"" : "")
     end

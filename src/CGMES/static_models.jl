@@ -1,10 +1,13 @@
 using PowerDynamics
 using PowerDynamics.NetworkDynamics: str_significant
 using PowerDynamics: DataFrame
+using PowerDynamics.ModelingToolkit: @named
 
 const STATIC_EDGEMODEL_CACHE = Dict{Any, NetworkDynamics.EdgeModel}()
+const STATIC_VERTEXMODEL_CACHE = Dict{Any, NetworkDynamics.VertexModel}()
 function wipe_model_caches!()
     empty!(STATIC_EDGEMODEL_CACHE)
+    empty!(STATIC_VERTEXMODEL_CACHE)
 end
 
 abstract type AbstractEdgeSubgraph end
@@ -34,6 +37,9 @@ function get_tpn_nodes(c::AbstractCIMCollection)
     src_node = endnodes[findfirst(n -> getname(n) == c.metadata[:src_name], endnodes)]
     dst_node = endnodes[findfirst(n -> getname(n) == c.metadata[:dst_name], endnodes)]
     (; src_node, dst_node)
+end
+function get_tpn_node(c::CIMCollection)
+    only(c("TopologicalNode"))
 end
 
 function get_branch_name(c)
@@ -200,6 +206,33 @@ function get_cached_edge_model(blueprint::Vector{Tuple})
     end
 end
 
+function get_cached_vertex_model(blueprint::Symbol)
+    get!(STATIC_VERTEXMODEL_CACHE, blueprint) do
+        # @info "cache new vertex model for" blueprint
+        if blueprint == :pfPQ
+            @named pq = Library.PQConstraint()
+            equations(pq)
+            compile_bus(MTKBus(pq))
+        elseif blueprint == :pfPV
+            @named pv = Library.PVConstraint()
+            compile_bus(MTKBus(pv))
+        elseif blueprint == :pfSlack
+            @named slack = Library.VδConstraint()
+            compile_bus(MTKBus(slack))
+        elseif blueprint == :pureShunt
+            @named shunt = Library.ConstantYLoad()
+            compile_bus(MTKBus(shunt))
+        elseif blueprint == :pqShunt
+            @named pq = Library.PQConstraint()
+            @named shunt = Library.ConstantYLoad()
+            bus = compile_bus(MTKBus([pq, shunt]))
+            bus
+        else
+            error("Unknown vertex blueprint: $blueprint")
+        end
+    end
+end
+
 function namespaced_params(ns; kwargs...)
     d = Dict{Symbol,Float64}()
     for (k, v) in pairs(kwargs)
@@ -275,9 +308,11 @@ function get_static_vertex_model(c::CIMCollection)
     is_angle_ref(tpn) && push!(injectors, SlackType(NaN, [tpn]))
 
     for t in c("Terminal")
+        @assert is_injector_terminal(t) "Terminal $t is not an injector terminal!"
         inj = t["ConductingEquipment"]
         in_service(inj) || continue
         type = injector_type(inj)
+        check_svv_consistency(type)
         push!(injectors, type)
     end
     mod = reduce(combine, injectors, init=PQYType(0.0, 0.0, 0.0, 0.0, CIMObject[]))
@@ -290,30 +325,50 @@ end
 function powerdynamics_model(pqy::PQYType, name)
     # If no shunt admittance, use simple PQ model
     if iszero(pqy.G) && iszero(pqy.B)
-        return pfPQ(; P=pqy.P, Q=pqy.Q, name)
+        vm = get_cached_vertex_model(:pfPQ)
+        vm = VertexModel(vm; name)
+        set_default!(vm, :pq₊P, pqy.P)
+        set_default!(vm, :pq₊Q, pqy.Q)
+        return vm
     end
 
     if iszero(pqy.P) && iszero(pqy.Q)
-        @named shunt = Library.ConstantYLoad()
-        bus = compile_bus(MTKBus(shunt))
-        set_default!(bus, :shunt₊G, pqy.G)
-        set_default!(bus, :shunt₊B, pqy.B)
-        return bus
+        vm = get_cached_vertex_model(:pureShunt)
+        vm = VertexModel(vm; name)
+        set_default!(vm, :shunt₊G, pqy.G)
+        set_default!(vm, :shunt₊B, pqy.B)
+        return vm
     end
 
-    @named shunt = Library.ConstantYLoad()
-    @named pq = Library.PQConstraint()
-    bus = compile_bus(MTKBus([pq, shunt]; name))
-    set_default!(bus, :pq₊P, pqy.P)
-    set_default!(bus, :pq₊Q, pqy.Q)
-    set_default!(bus, :shunt₊G, pqy.G)
-    set_default!(bus, :shunt₊B, pqy.B)
-    return bus
+    vm = get_cached_vertex_model(:pqShunt)
+    vm = VertexModel(vm; name)
+    set_default!(vm, :pq₊P, pqy.P)
+    set_default!(vm, :pq₊Q, pqy.Q)
+    set_default!(vm, :shunt₊G, pqy.G)
+    set_default!(vm, :shunt₊B, pqy.B)
+    return vm
 end
-powerdynamics_model(pv::PVType, name) = pfPV(; P=pv.P, V=pv.V, name)
-powerdynamics_model(s::SlackType, name) = pfSlack(; V=s.V, name)
+function powerdynamics_model(pv::PVType, name)
+    vm = get_cached_vertex_model(:pfPV)
+    vm = VertexModel(vm; name)
+    set_default!(vm, :pv₊P, pv.P)
+    set_default!(vm, :pv₊V, pv.V)
+    return vm
+end
+
+function powerdynamics_model(s::SlackType, name)
+    vm = get_cached_vertex_model(:pfSlack)
+    vm = VertexModel(vm; name)
+    set_default!(vm, :slack₊V, s.V)
+    return vm
+end
 
 function in_service(inj)
+    if is_class(inj, "Terminal")
+        @assert is_injector_terminal(inj) "Expected injector Terminal, got $(inj.class_name)"
+        inj = inj["ConductingEquipment"]
+    end
+
     eqp_service = if haskey(inj, "Equipment.inService")
         inj["Equipment.inService"]
     else
@@ -346,14 +401,15 @@ function PowerDynamics.Network(ds::AbstractCIMCollection; verbose=true, kwargs..
 end
 function PowerDynamics.Network(vertices::Vector{CIMCollection}, edges::Vector{CIMCollection}; verbose=true, kwargs...)
     wipe_model_caches!()
-    println("Parse Edges...")
-    ems = map(enumerate(edges)) do (i, e)
-        verbose && println("Processing edge $i")
-        get_edge_model(e)
-    end
+    println("Parse Vertices...")
     vms = map(enumerate(vertices)) do (i, v)
         verbose && println("Processing vertex $i")
         get_static_vertex_model(v)
+    end
+    println("Parse Edges...")
+    ems = map(enumerate(edges)) do (i, e)
+        # verbose && println("Processing edge $i")
+        get_edge_model(e)
     end
     # ems = get_edge_model.(edges)
     # vms = get_static_vertex_model.(vertices)
@@ -373,6 +429,7 @@ function injector_type(::Val{:SynchronousMachine}, o::CIMObject)
         controller = follow_ref(props["RegulatingCondEq.RegulatingControl"])
         is_class(controller, "RegulatingControl") || error("Expected RegulatingControl, got $(controller.class_name)")
         V = controller["targetValue"]/baseV
+
         return PVType(P, V, [o])
     else
         return PQType(P, Q, [o])
@@ -454,16 +511,32 @@ function get_connecting_terminal(injector::CIMObject)
 end
 
 function get_voltage_pu(o::CIMObject)
+    if is_class(o, "Terminal")
+        o = descend(o, byclass("TopologicalNode", via="TopologicalNode"))
+    end
     sv = ascend(o, byclass("SvVoltage"))
     θ = deg2rad(sv["angle"])
     V = sv["v"] / get_base_voltage(o)
     return V * exp(im * θ)
 end
+function get_voltage_pu(o::CIMCollection)
+    tpn = only(o("TopologicalNode"))
+    get_voltage_pu(tpn)
+end
 """
 ATTENTION: we go from load to injector convention
 """
 function get_injected_power_pu(o::CIMObject)
-    sv = ascend(o, byclass("SvPowerFlow"))
+    sv = try
+        ascend(o, byclass("SvPowerFlow"))
+    catch e
+        # check if it is deactivated
+        if is_injector_terminal(o) && !in_service(o)
+            return 0.0
+        else
+            rethrow(e)
+        end
+    end
     P = sv["p"] / SBASE
     Q = sv["q"] / SBASE
     return -P - im * Q
@@ -480,16 +553,94 @@ end
 function get_src_power_pu(c::CIMCollection)
     src_node, dst_node = get_tpn_nodes(c)
     terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
-    Sref = sum(CGMES.get_injected_power_pu.(terminals))
+    Sref = sum(CGMES.get_injected_power_pu.(terminals); init=0.0+0.0im)
 end
 function get_dst_power_pu(c::CIMCollection)
     src_node, dst_node = get_tpn_nodes(c)
     terminals = ascendants(src_node, byclass("Terminal", via="TopologicalNode"))
-    Sref = sum(CGMES.get_injected_power_pu.(terminals))
+    Sref = sum(CGMES.get_injected_power_pu.(terminals); init=0.0+0.0im)
+end
+function get_current_sum_pu(c::CIMCollection)
+    tpn = only(c("TopologicalNode"))
+    terminals = ascendants(tpn, byclass("Terminal", via="TopologicalNode"))
+    @assert all(is_injector_terminal, terminals) "Expected only injector terminals"
+
+    S = sum(CGMES.get_injected_power_pu.(terminals); init=0.0+0.0im)
+    V = CGMES.get_voltage_pu(tpn)
+    conj(S / V)
 end
 
+function check_svv_consistency(pqy::PQYType)
+    obj = only(pqy.objs)
+    term = get_connecting_terminal(obj)
+    S_ref = CGMES.get_injected_power_pu(term)
+    V_ref = CGMES.get_voltage_pu(term)
 
-function test_powerflow(e::EdgeModel)
+    S_shunt = (pqy.G + im * pqy.B) * abs2(V_ref)
+    S_pq = pqy.P + im * pqy.Q
+    S_total = S_shunt + S_pq
+
+    P_err = abs(real(S_total) - real(S_ref))
+    Q_err = abs(imag(S_total) - imag(S_ref))
+
+    if P_err > 1e-6 || Q_err > 1e-6
+        name = getname(obj)
+        if P_err > 1e-3 || Q_err > 1e-3
+            printstyled("⚠ PQY inconsistency at $name: ", color=:yellow)
+            printstyled("ΔP=$(str_significant(P_err; sigdigits=3)), ΔQ=$(str_significant(Q_err; sigdigits=3))\n", color=:yellow)
+        end
+    end
+end
+
+function check_svv_consistency(pv::PVType)
+    obj = only(pv.objs)
+    term = get_connecting_terminal(obj)
+    P_ref = real(CGMES.get_injected_power_pu(term))
+    V_ref = abs(CGMES.get_voltage_pu(term))
+
+    P_err = abs(pv.P - P_ref)
+    V_err = abs(pv.V - V_ref)
+
+    if P_err > 1e-6 || V_err > 1e-6
+        name = getname(obj)
+        if P_err > 1e-3 || V_err > 1e-3
+            printstyled("⚠ PV inconsistency at $name: ", color=:yellow)
+            printstyled("ΔP=$(str_significant(P_err; sigdigits=3)), ΔV=$(str_significant(V_err; sigdigits=3))\n", color=:yellow)
+        end
+    end
+end
+
+function check_svv_consistency(s::SlackType)
+    # Slack nodes should have consistent voltage magnitude
+    # For angle reference nodes, we check if voltage from SV matches the setpoint
+    if isnan(s.V)
+        # NaN voltage means this is just an angle reference without voltage constraint
+        return 0.0
+    end
+
+    obj = only(s.objs)
+    # obj could be TopologicalNode (for angle ref) or a RegulatingControl
+    if is_class(obj, "TopologicalNode")
+        V_ref = abs(CGMES.get_voltage_pu(obj))
+    else
+        term = get_connecting_terminal(obj)
+        V_ref = abs(CGMES.get_voltage_pu(term))
+    end
+
+    V_err = abs(s.V - V_ref)
+
+    if V_err > 1e-6
+        name = getname(obj)
+        if V_err > 1e-3
+            printstyled("⚠ Slack inconsistency at $name: ", color=:yellow)
+            printstyled("ΔV=$(str_significant(V_err; sigdigits=3))\n", color=:yellow)
+        end
+    end
+
+    return V_err
+end
+
+function test_powerflow(e::EdgeModel; verbose=false)
     subgraph = e.metadata[:cgmes_subgraph]
     if CGMES.classify_branch_subgraph(subgraph) isa Breaker
         return 0.0
@@ -516,9 +667,62 @@ function test_powerflow(e::EdgeModel)
     Pref = real(Sref)
     Qref = imag(Sref)
 
-    validate_power_component(P, Pref, "Active Power (P)")
-    validate_power_component(Q, Qref, "Reactive Power (Q)")
-    return max(abs(P - Pref), abs(Q - Qref))j
+    verbose && validate_power_component(P, Pref, "Active Power (P)")
+    verbose && validate_power_component(Q, Qref, "Reactive Power (Q)")
+    return max(abs(P - Pref), abs(Q - Qref))
+end
+
+function test_powerflow(v_ref::VertexModel; verbose=false)
+    subgraph = v.metadata[:cgmes_subgraph]
+    current = CGMES.get_current_sum_pu(subgraph)
+
+    default_overrides = Dict{Symbol, Any}(sym(v) .=> nothing)
+    default_overrides[:busbar₊i_r] = -real(current)
+    default_overrides[:busbar₊i_i] = -imag(current)
+
+    guess_overrides = Dict{Symbol, Any}(
+        :busbar₊u_r => 1.0,
+        :busbar₊u_i => 0.0
+    )
+    state = initialize_component(v; default_overrides, guess_overrides, verbose=false, tol=Inf)
+
+    v_ref = CGMES.get_voltage_pu(subgraph)
+    u_r_ref = real(v_ref)
+    u_i_ref = imag(v_ref)
+    u_r = state[:busbar₊u_r]
+    u_i = state[:busbar₊u_i]
+    return max(abs(u_r - u_r_ref), abs(u_i - u_i_ref))
+end
+
+function test_edge_powerflow(nw)
+    residuals = map(1:ne(nw)) do i
+        edgemodel = nw[EIndex(i)]
+        print("Check Edge $(i)/$(ne(nw))")
+        res = CGMES.test_powerflow(edgemodel)
+        if res < 1e-3
+            printstyled(" => ", res, color=:green, "\n")
+        elseif res < 1e-1
+            printstyled(" => ", res, color=:yellow, "\n")
+        else
+            printstyled(" => ", res, color=:red, "\n")
+        end
+        res
+    end
+end
+function test_vertex_powerflow(nw)
+    residuals = map(1:nv(nw)) do i
+        vertexmodel = nw[VIndex(i)]
+        print("Check Vertex $(i)/$(nv(nw))")
+        res = CGMES.test_powerflow(vertexmodel)
+        if res < 1e-3
+            printstyled(" => ", res, color=:green, "\n")
+        elseif res < 1e-1
+            printstyled(" => ", res, color=:yellow, "\n")
+        else
+            printstyled(" => ", res, color=:red, "\n")
+        end
+        res
+    end
 end
 
 function validate_power_component(computed::Float64, reference::Float64, component_name::String)

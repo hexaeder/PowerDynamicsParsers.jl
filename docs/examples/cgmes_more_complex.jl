@@ -39,7 +39,7 @@ b2.metadata[:discovered_from_lineend]
 b3.metadata[:discovered_from_lineend]
 b4.metadata[:discovered_from_lineend]
 
-filter(CGMES.is_lineend, e("Terminal"))
+filter(CGMES.is_lineend_terminal, e("Terminal"))
 
 findfirst(t->getname(t) == "HV Bus 15", dataset("Terminal"))
 dataset(r"Load")[2]
