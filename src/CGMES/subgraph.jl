@@ -27,6 +27,23 @@ function is_lineend_terminal(t)
     any(class -> is_class(eq, class), BRANCH_CLASSES)
 end
 
+IGNORE_CLASSES = [
+    "BusbarSection",
+]
+function is_ignored_terminal(t)
+    @assert is_terminal(t) "Expected Terminal, got $(t.class_name)"
+    eq = t["ConductingEquipment"]
+    if any(class -> is_class(eq, class), IGNORE_CLASSES)
+        if !isempty(ascendants(t, byclass("SvPowerFlow"))) && !iszero(get_injected_power_pu(t))
+            error("Ignored terminal $(t.id) has non-zero powerflow!")
+        end
+
+        return true
+    else
+        return false
+    end
+end
+
 """
     follow_branch(t::CIMObject(Terminal))::CIMObject(Terminal)
 
@@ -284,6 +301,28 @@ function split_topologically(collection::AbstractCIMCollection; verbose=false, w
 end
 function _discover_tpn_subgraph(t; warn)
     @assert is_class(t, "TopologicalNode") "Expected TopologicalNode, got $(t.class_name)"
+
+    S_sum = zero(ComplexF64)
+    S_branch = zero(ComplexF64)
+    terminals = ascendants(t, byclass("Terminal"))
+    term = terminals[1]
+    for term in terminals
+        _lineend = CGMES.is_lineend_terminal(term)
+        _injector = CGMES.is_injector_terminal(term)
+        _lineend && _injector && error("Terminal $term is classified as both lineend and injector terminal!")
+        if !(_lineend || _injector)
+            CGMES.is_ignored_terminal(term) && continue
+            error("Terminal $term is neither lineend nor injector terminal!")
+        end
+        S_sum += CGMES.get_injected_power_pu(term)
+        if _lineend
+            S_branch += CGMES.get_injected_power_pu(term)
+        end
+    end
+    if abs(S_sum)>1e-3
+        @warn "Terminal power of TopologicalNode '$(getname(t))' ($(t.id)) does not sum to zero: ΣS = $S_sum. This may indicate an inconsistency in the powerflow results."
+    end
+
     # nobackref = is_class(vcat(STOP_BACKREF, "ConnectivityNode", "ReactiveCapabilityCurve"))
     # nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))
     nobackref = is_class(vcat(STOP_BACKREF, "ReactiveCapabilityCurve"))

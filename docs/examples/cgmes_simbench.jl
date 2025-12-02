@@ -7,6 +7,7 @@ using XML
 using WGLMakie
 using ModelingToolkit
 using Graphs
+using NonlinearSolve
 
 ###
 ### first export
@@ -34,30 +35,21 @@ dataset = rename_dangling_tpn(dataset);
 dataset = reattach_regulating_control(dataset);
 nodes, edges = split_topologically(dataset; verbose=true);
 
-
 # @hover inspect_collection(nodes[4]; edge_labels=true, node_labels=:short, size=(1000,1000))
 @hover inspect_collection(nodes[956]; edge_labels=false, node_labels=:short, size=(1000,1000))
 # @hover inspect_collection(edges[126]; edge_labels=true, node_labels=:short, size=(1000,1000))
 
 
 pfnw = Network(nodes, edges)
-# set_jac_prototype!(pfnw; remove_conditions=true)
 
 eresid = CGMES.test_edge_powerflow(pfnw)
+sortperm(eresid)[end-10:end]
+eresid[811]
+@hover inspect_collection(edges[811]; edge_labels=true, node_labels=:short, size=(1000,1000))
+
 vresid = CGMES.test_vertex_powerflow(pfnw)
 
-sortperm(vresid)[end-10:end]
-sort(vresid)
-
-vresid[266]
-
-
-
-v = pfnw[VIndex(4)]
-
 pfs0 = NWState(pfnw)
-
-
 for (i, idx) in enumerate(NetworkDynamics.SII.variable_symbols(pfs0))
     isnan(uflat(pfs0)[i]) || continue
     has_guess(pfnw, idx) || continue
@@ -72,4 +64,8 @@ pfnw[VIndex(1)].metadata[:observed]
 pfs0.v[1]
 pfs0[vidxs(pfnw, : ,:shunt₊terminal₊i_i; s=true, obs=false)] .= 0.1
 
+
+# set_jac_prototype!(pfnw; remove_conditions=true)
+alg = FastShortcutNLLSPolyalg(linsolve=QRFactorization())
 solve_powerflow(nothing; pfnw=pfnw)
+pfnw

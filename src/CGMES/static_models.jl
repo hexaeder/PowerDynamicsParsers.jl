@@ -224,8 +224,30 @@ function get_cached_vertex_model(blueprint::Symbol)
             compile_bus(MTKBus(shunt))
         elseif blueprint == :pqShunt
             @named pq = Library.PQConstraint()
-            @named shunt = Library.ConstantYLoad()
-            bus = compile_bus(MTKBus([pq, shunt]))
+            @named shunt = Library.ConstantYLoad(allow_zero_conductance=true)
+            bus = compile_bus(MTKBus([pq, shunt]), assume_io_coupling=true)
+            # @mtkmodel PQShuntModel begin
+            #     @components begin
+            #         busbar = PowerDynamics.BusBar()
+            #         pq = Library.PQConstraint()
+            #         shunt = Library.ConstantYLoad(allow_zero_conductance=true)
+            #     end
+            #     @equations begin
+            #         connect(busbar.terminal, pq.terminal)
+            #         connect(busbar.terminal, shunt.terminal)
+            #         # pq.terminal.u_r ~ busbar.terminal.u_r
+            #         # pq.terminal.u_i ~ busbar.terminal.u_i
+            #         # shunt.terminal.u_r ~ busbar.terminal.u_r
+            #         # shunt.terminal.u_i ~ busbar.terminal.u_i
+            #         # implicit_output(busbar.u_r) ~ busbar.terminal.i_r + pq.terminal.i_r + shunt.terminal.i_r
+            #         # implicit_output(busbar.u_i) ~ busbar.terminal.i_i + pq.terminal.i_i + shunt.terminal.i_i
+            #     end
+            # end
+            # @named PQY = PQShuntModel()
+            # ModelingToolkit.setirreducible(PQY.busbar.u_r, true)
+            # ModelingToolkit.setirreducible(PQY.busbar.u_i, true)
+
+            # compile_bus(PQY)
             bus
         else
             error("Unknown vertex blueprint: $blueprint")
@@ -312,6 +334,25 @@ function get_static_vertex_model(c::CIMCollection)
         inj = t["ConductingEquipment"]
         in_service(inj) || continue
         type = injector_type(inj)
+
+        if type isa PVType
+            term = get_connecting_terminal(only(type.objs))
+            P_ref = real(CGMES.get_injected_power_pu(term))
+            V_ref = abs(CGMES.get_voltage_pu(term))
+            if !isapprox(type.V, V_ref; rtol=1e-5, atol=1e-8) || !isapprox(type.P, P_ref; rtol=1e-5, atol=1e-8)
+                # @warn "Adjusting PV voltage setpoint from $(str_significant(type.V)) to $(str_significant(V_ref)) for injector $(getname(inj))!"
+                type = PVType(P_ref, V_ref, type.objs)
+            end
+        elseif type isa PQYType && iszero(type.B) && iszero(type.G) # only fix pure PQ not shunt?
+            term = get_connecting_terminal(only(type.objs))
+            P_ref = real(CGMES.get_injected_power_pu(term))
+            Q_ref = imag(CGMES.get_injected_power_pu(term))
+            if !isapprox(type.P, P_ref; rtol=1e-5, atol=1e-8) || !isapprox(type.Q, Q_ref; rtol=1e-5, atol=1e-8)
+                # @warn "Adjusting PQ injection from ($(str_significant(type.P)), $(str_significant(type.Q))) to ($(str_significant(P_ref)), $(str_significant(Q_ref))) for injector $(getname(inj))!"
+                type = PQYType(P_ref, Q_ref, type.G, type.B, type.objs)
+            end
+        end
+
         check_svv_consistency(type)
         push!(injectors, type)
     end
@@ -411,6 +452,9 @@ function PowerDynamics.Network(vertices::Vector{CIMCollection}, edges::Vector{CI
         # verbose && println("Processing edge $i")
         get_edge_model(e)
     end
+    slack = findall(v -> :slack₊V ∈ psym(v), vms)
+    length(slack) == 1 || @warn "Expected exactly one slack bus, found $(length(slack)) at $slack!"
+
     # ems = get_edge_model.(edges)
     # vms = get_static_vertex_model.(vertices)
     PowerDynamics.Network(vms, ems; warn_order=false, kwargs...)
@@ -640,7 +684,7 @@ function check_svv_consistency(s::SlackType)
     return V_err
 end
 
-function test_powerflow(e::EdgeModel; verbose=false)
+function test_powerflow(e::EdgeModel; verbose=true)
     subgraph = e.metadata[:cgmes_subgraph]
     if CGMES.classify_branch_subgraph(subgraph) isa Breaker
         return 0.0
@@ -661,7 +705,7 @@ function test_powerflow(e::EdgeModel; verbose=false)
         :dst₊i_r => 1.0,
         :dst₊i_i => 0.0
     )
-    state = initialize_component(e; default_overrides, guess_overrides, verbose=false)
+    state = initialize_component(e; default_overrides, guess_overrides, verbose)
     P, Q = get_initial_state(e, state, [:src₊P, :src₊Q])
     Sref = CGMES.get_src_power_pu(subgraph)
     Pref = real(Sref)
@@ -672,7 +716,7 @@ function test_powerflow(e::EdgeModel; verbose=false)
     return max(abs(P - Pref), abs(Q - Qref))
 end
 
-function test_powerflow(v_ref::VertexModel; verbose=false)
+function test_powerflow(v::VertexModel; verbose=true)
     subgraph = v.metadata[:cgmes_subgraph]
     current = CGMES.get_current_sum_pu(subgraph)
 
@@ -680,15 +724,20 @@ function test_powerflow(v_ref::VertexModel; verbose=false)
     default_overrides[:busbar₊i_r] = -real(current)
     default_overrides[:busbar₊i_i] = -imag(current)
 
-    guess_overrides = Dict{Symbol, Any}(
-        :busbar₊u_r => 1.0,
-        :busbar₊u_i => 0.0
-    )
-    state = initialize_component(v; default_overrides, guess_overrides, verbose=false, tol=Inf)
-
     v_ref = CGMES.get_voltage_pu(subgraph)
     u_r_ref = real(v_ref)
     u_i_ref = imag(v_ref)
+
+    guess_overrides = Dict{Symbol, Any}(
+        :busbar₊u_r => u_r_ref,
+        :busbar₊u_i => u_i_ref
+    )
+    residual = Ref(NaN)
+    state = initialize_component(v; default_overrides, guess_overrides, verbose, residual, tol=Inf)
+    if residual[] > 1e-6
+        @warn "High residual $residual[]"
+    end
+
     u_r = state[:busbar₊u_r]
     u_i = state[:busbar₊u_i]
     return max(abs(u_r - u_r_ref), abs(u_i - u_i_ref))
@@ -698,7 +747,7 @@ function test_edge_powerflow(nw)
     residuals = map(1:ne(nw)) do i
         edgemodel = nw[EIndex(i)]
         print("Check Edge $(i)/$(ne(nw))")
-        res = CGMES.test_powerflow(edgemodel)
+        res = CGMES.test_powerflow(edgemodel; verbose=false)
         if res < 1e-3
             printstyled(" => ", res, color=:green, "\n")
         elseif res < 1e-1
@@ -713,7 +762,7 @@ function test_vertex_powerflow(nw)
     residuals = map(1:nv(nw)) do i
         vertexmodel = nw[VIndex(i)]
         print("Check Vertex $(i)/$(nv(nw))")
-        res = CGMES.test_powerflow(vertexmodel)
+        res = CGMES.test_powerflow(vertexmodel; verbose=false)
         if res < 1e-3
             printstyled(" => ", res, color=:green, "\n")
         elseif res < 1e-1
