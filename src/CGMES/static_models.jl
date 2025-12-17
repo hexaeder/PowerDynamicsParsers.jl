@@ -104,7 +104,7 @@ function get_branch_model(class::ACLineSegment, c::AbstractCIMCollection; i=noth
     r_dst = CGMES.get_base_voltage(dst_node) / Vbase
 
     name = isnothing(i) ? :ACLineSegment : Symbol("ACLineSegment_Branch$i")
-    blueprint = (Library.PiLine, name)
+    blueprint = (Library.PiLine_fault, name)
     params = namespaced_params(name; G_src, G_dst, B_src, B_dst, R, X, r_src, r_dst)
     (; blueprint, params)
 end
@@ -136,7 +136,7 @@ function get_branch_model(class::PowerTransformer, c::AbstractCIMCollection; i=n
 
     # specific naming leads to non-egal models (generated function contains name)
     name = isnothing(i) ? :PowerTransformer : Symbol("PowerTransformer_Branch$i")
-    blueprint = (Library.PiLine, name)
+    blueprint = (Library.PiLine_fault, name)
     params = namespaced_params(name; G_src, G_dst, B_src, B_dst, R, X)
     (; blueprint, params)
 end
@@ -571,6 +571,9 @@ end
 ATTENTION: we go from load to injector convention
 """
 function get_injected_power_pu(o::CIMObject)
+    if is_class(o, INJECTOR_CLASSES)
+        o = get_connecting_terminal(o)
+    end
     sv = try
         ascend(o, byclass("SvPowerFlow"))
     catch e
@@ -747,11 +750,18 @@ function test_edge_powerflow(nw)
     residuals = map(1:ne(nw)) do i
         edgemodel = nw[EIndex(i)]
         print("Check Edge $(i)/$(ne(nw))")
-        res = CGMES.test_powerflow(edgemodel; verbose=false)
+        local res
+        try
+            res = CGMES.test_powerflow(edgemodel; verbose=false)
+        catch e
+            res = NaN
+        end
         if res < 1e-3
             printstyled(" => ", res, color=:green, "\n")
         elseif res < 1e-1
             printstyled(" => ", res, color=:yellow, "\n")
+        elseif isnan(res)
+            printstyled(" => NaN (skipped)\n", color=:red)
         else
             printstyled(" => ", res, color=:red, "\n")
         end
@@ -942,4 +952,41 @@ function PowerDynamics.show_powerflow(ds::AbstractCIMCollection)
     end
 
     DataFrame(dict)
+end
+
+export show_powerflow_comparison
+function show_powerflow_comparison(pfs::NWState)
+    df = show_powerflow(pfs)
+    nw = extract_nw(pfs)
+    umag_ref = Float64[]
+    uarg_ref = Float64[]
+    P_ref = Float64[]
+    Q_ref = Float64[]
+    for i in 1:nv(nw)
+        vm = nw[VIndex(i)]
+        subgraph = vm.metadata[:cgmes_subgraph]
+        ic = CGMES.get_current_sum_pu(subgraph)
+        uc = CGMES.get_voltage_pu(subgraph)
+        S = uc * conj(ic)
+        push!(umag_ref, abs(uc))
+        push!(uarg_ref, angle(uc))
+        push!(P_ref, real(S))
+        push!(Q_ref, imag(S))
+    end
+    # df."vm_ref [pu]" = umag_ref
+    # df."varg_ref [deg]" = rad2deg.(uarg_ref)
+    # df."P_ref [pu]" = P_ref
+    # df."Q_ref [pu]" = Q_ref
+    df."Δvm [pu]" = df."vm [pu]" .- umag_ref
+    df."Δvarg [deg]" = df."varg [deg]" .- rad2deg.(uarg_ref)
+    df."ΔP [pu]" = df."P [pu]" .- P_ref
+    df."ΔQ [pu]" = df."Q [pu]" .- Q_ref
+    # print some statistics
+    println("Powerflow Comparison Statistics:")
+    println("Max |Δvm| [pu]:    ", maximum(abs.(df."Δvm [pu]")))
+    println("Max |Δvarg| [deg]: ", maximum(abs.(df."Δvarg [deg]")))
+    println("Max |ΔP| [pu]:     ", maximum(abs.(df."ΔP [pu]")))
+    println("Max |ΔQ| [pu]:     ", maximum(abs.(df."ΔQ [pu]")))
+
+    df
 end

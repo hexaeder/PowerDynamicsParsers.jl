@@ -340,6 +340,10 @@ function byclass(class; via=nothing)
     end
 end
 
+function get_by_name(collection, name)
+    values(collection) |> filter(obj -> hasname(obj) && getname(obj) == name)
+end
+
 """
     descendants(obj, matcher)
     descendants(matcher) # obj |> descendants(matcher)

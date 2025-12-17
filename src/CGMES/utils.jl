@@ -109,92 +109,79 @@ function rename_dangling_tpn(_data::CIMCollection)
 end
 
 
-# function fix_and_remove_breakers(_data::CIMCollection)
-#     # _data = cgmes
-#     data = copy(_data)
-#     resolve_references!(data; warn=false)
-#     # find topological nodes with duplicated names
-#     topnodes = data("TopologicalNode")
-#     names = [getname(t) for t in topnodes]
-#     unique_names = unique(names)
-#     duplicated_idxs = Int[]
-#     for name in unique_names
-#         appearances = findall(n -> n == name, names)
-#         if !isnothing(appearances) && length(appearances) > 1
-#             append!(duplicated_idxs, appearances)
-#         end
-#     end
-#     problematic_topnodes = topnodes[duplicated_idxs]
-#     if !isempty(problematic_topnodes)
-#         println("- Found multiple problematic TopologicalNodes with duplicated names.")
-#     end
+export merge_tpn_on_breakers
+function merge_tpn_on_breakers(_data::CIMCollection)
+    data = copy(_data)
+    resolve_references!(data; warn=false)
+    # find topological nodes with duplicated names
+    topnodes = data("TopologicalNode")
+    names = [getname(t) for t in topnodes]
+    unique_names = unique(names)
+    duplicated_idxs = Int[]
+    for name in unique_names
+        appearances = findall(n -> n == name, names)
+        if !isnothing(appearances) && length(appearances) > 1
+            append!(duplicated_idxs, appearances)
+        end
+    end
+    problematic_topnodes = topnodes[duplicated_idxs]
+    if !isempty(problematic_topnodes)
+        println("- Found multiple problematic TopologicalNodes with duplicated names.")
+    end
 
-#     open_but_same = CIMObject[]
-#     open_and_different = CIMObject[]
-#     closed_but_different = CIMObject[]
-#     closed_and_same = CIMObject[]
-#     for br in data(["Switch", "Breaker"])
-#         terms = ascendants(br, byclass("Terminal", via="ConductingEquipment"))
-#         @assert length(terms) == 2
-#         for t in terms
-#             p = get_injected_power_pu(t)
-#             if p != 0.0
-#                 printstyled("- Warn: found $(getname(t)) with non-zero injection $(p) on ", isopen(br) ? "open " : "closed ", br.class_name, "\n", color=:yellow)
-#                 isopen(br) && error()
-#             end
-#         end
+    open_and_different = CIMObject[]
+    closed_but_different = CIMObject[]
+    for br in data(["Switch", "Breaker"])
+        terms = ascendants(br, byclass("Terminal", via="ConductingEquipment"))
+        @assert length(terms) == 2
 
-#         tns = [t["TopologicalNode"] for t in terms]
-#         if isopen(br)
-#             if tns[1].id == tns[2].id
-#                 push!(open_but_same, br)
-#             else
-#                 push!(open_and_different, br)
-#             end
-#         else
-#             if tns[1].id != tns[2].id
-#                 push!(closed_but_different, br)
-#                 if tns[1] ∈ problematic_topnodes
-#                     remove = tns[1]
-#                     keep = tns[2]
-#                 elseif tns[2] ∈ problematic_topnodes
-#                     remove = tns[2]
-#                     keep = tns[1]
-#                 else
-#                     error("Cannot decide which TopologicalNode to remove for Breaker $(getname(br)). Both TopologicalNodes are not in the list of problematic TopologicalNodes with duplicated names.")
-#                 end
+        tns = [t["TopologicalNode"] for t in terms]
+        if tns[1].id == tns[2].id
+            error("Found breaker/switch $(getname(br)) connecting the same TopologicalNode on both terminals. This should have been removed already. (see filter_loopback_breakers)")
+        end
 
-#                 # reassign all terminals connected to 'remove' to 'keep'
-#                 reassign_backrefs!(remove, keep)
-#                 reassign_extensions!(remove, keep)
-#                 # delete 'remove' from dataset
-#                 delete_object!(data, remove)
-#             else
-#                 push!(closed_and_same, br)
-#             end
-#         end
-#         # delete breaker
-#         delete_object!(data, br)
-#         delete_object!(data, terms[1])
-#         delete_object!(data, terms[2])
-#     end
-#     if !isempty(open_and_different)
-#         printstyled("- INFO: Removed $(length(open_and_different)) open Breakers/Switches connecting different TopologicalNodes.\n", color=:green)
-#     end
-#     if !isempty(closed_and_same)
-#         printstyled("- INFO: Removed $(length(closed_and_same)) closed Breakers/Switches connecting the same TopologicalNode.\n", color=:green)
-#     end
-#     if !isempty(open_but_same)
-#         printstyled("- WARN: Removed $(length(open_but_same)) open Breakers/Switches connecting the same TopologicalNode.\n", color=:yellow)
-#     end
-#     if !isempty(closed_but_different)
-#         printstyled("- WARN: Removed $(length(closed_but_different)) closed Breakers/Switches connecting different TopologicalNodes with duplicated names.\n", color=:yellow)
-#     end
+        if isopen(br)
+            push!(open_and_different, br)
+        else
+            push!(closed_but_different, br)
+            if tns[1] ∈ problematic_topnodes
+                remove = tns[1]
+                keep = tns[2]
+            elseif tns[2] ∈ problematic_topnodes
+                remove = tns[2]
+                keep = tns[1]
+            else
+                error("Cannot decide which TopologicalNode to remove for Breaker $(getname(br)). Both TopologicalNodes are not in the list of problematic TopologicalNodes with duplicated names.")
+            end
 
-#     # reresolve all references
-#     resolve_references!(data; warn=false)
-#     data
-# end
+            if !(get_voltage_pu(remove) ≈ get_voltage_pu(keep))
+                @warn "Merging TopologicalNodes $(getname(remove)) and $(getname(keep)) with different voltages: $(get_voltage_pu(remove)) vs $(get_voltage_pu(keep))."
+            end
+
+            # reassign all terminals connected to 'remove' to 'keep'
+            reassign_backrefs!(remove, keep)
+            reassign_extensions!(remove, keep)
+            delete_object!(data, remove)
+            # delete SvVoltage for removed
+            svs_remove = ascend(remove, byclass("SvVoltage"))
+            delete_object!(data, svs_remove)
+        end
+        # delete breaker
+        delete_object!(data, br)
+        delete_object!(data, terms[1])
+        delete_object!(data, terms[2])
+    end
+    if !isempty(open_and_different)
+        printstyled("- INFO: Removed $(length(open_and_different)) open Breakers/Switches connecting different TopologicalNodes.\n", color=:green)
+    end
+    if !isempty(closed_but_different)
+        printstyled("- INFO: Removed $(length(closed_but_different)) closed Breakers/Switches connecting different TopologicalNodes with duplicated names.\n", color=:yellow)
+    end
+
+    # reresolve all references
+    resolve_references!(data; warn=false)
+    data
+end
 
 function isopen(br)
     if is_class(br, "Breaker")
