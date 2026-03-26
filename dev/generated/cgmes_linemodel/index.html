@@ -27,12 +27,12 @@ nodes, edges = split_topologically(dataset1; warn=false)</code></pre><p>In this 
 
   <span class="sgr1">Parameter Conversion to Per-Unit:</span>
 
-  Parameter CGMES Value     Calculation         Per-Unit Value            Calculated
-  ––––––––– ––––––––––– ––––––––––––––– –––––––––––––––––––––– –––––––––––––––––––––
-          R  0.301627 Ω       r / Zbase   0.002492785123966942    0.0066967774191285
-          X  0.815356 Ω       x / Zbase   0.006738479338842975  0.005344772670975106
-          G         0 S gch / 2 / Ybase                    0.0 -6.715691134654992e-9
-          B 7.7883e-6 S bch / 2 / Ybase 0.00047119214999999994 0.0004711873233025483
+  Parameter CGMES Value     Calculation         Per-Unit Value             Calculated
+  ––––––––– ––––––––––– ––––––––––––––– –––––––––––––––––––––– ––––––––––––––––––––––
+          R  0.301627 Ω       r / Zbase   0.002492785123966942    0.00669677741918176
+          X  0.815356 Ω       x / Zbase   0.006738479338842975   0.005344772670912793
+          G         0 S gch / 2 / Ybase                    0.0 -6.7156911344958704e-9
+          B 7.7883e-6 S bch / 2 / Ybase 0.00047119214999999994 0.00047118732330254817
 
   <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
   <span class="sgr4">split equally between source and destination ends.</span></code></pre><p>We see that the R and X values are different from the calculated ones. If we use the calculated variables instead, the power flow result matches the values from the dataset:</p><pre><code class="language-julia hljs">set_default!(em, :ACLineSegment₊R, 0.00669677741911068)
@@ -67,12 +67,12 @@ CGMES.test_powerflow(em)</code></pre><pre class="documenter-example-output"><cod
 
   <span class="sgr1">Parameter Conversion to Per-Unit:</span>
 
-  Parameter   CGMES Value     Calculation        Per-Unit Value            Calculated
-  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– –––––––––––––––––––––
-          R    0.509088 Ω       r / Zbase 0.0003525540166204986 0.0003525544382523331
-          X     5.09088 Ω       x / Zbase  0.003525540166204986 0.0035255382845059465
-          G           0 S gch / 2 / Ybase                   0.0 -5.965590406247972e-7
-          B 0.000350576 S bch / 2 / Ybase           0.253115872    0.2531161563263732
+  Parameter   CGMES Value     Calculation        Per-Unit Value             Calculated
+  ––––––––– ––––––––––––– ––––––––––––––– ––––––––––––––––––––– ––––––––––––––––––––––
+          R    0.509088 Ω       r / Zbase 0.0003525540166204986 0.00035255443825233317
+          X     5.09088 Ω       x / Zbase  0.003525540166204986  0.0035255382845059465
+          G           0 S gch / 2 / Ybase                   0.0  -5.965590406347596e-7
+          B 0.000350576 S bch / 2 / Ybase           0.253115872     0.2531161563263732
 
   <span class="sgr4">Note: G and B are divided by 2 because they represent total shunt values</span>
-  <span class="sgr4">split equally between source and destination ends.</span></code></pre><p>This confirms the results.</p><div class="admonition is-danger" id="Error-in-the-CGMES-Data?-79ba41702e90c55c"><header class="admonition-header">Error in the CGMES Data?<a class="admonition-anchor" href="#Error-in-the-CGMES-Data?-79ba41702e90c55c" title="Permalink"></a></header><div class="admonition-body"><p>In conclusion, it looks like the CGMES data is not consistent in the newer dataset! Either the branch parameters are wrong, or the power flow results are wrong.</p></div></div><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_testdata/">« Inspection of CGMES Test Data</a><a class="docs-footer-nextpage" href="../cgmes_testdata_reexport/">Reexported Dataset »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Friday 31 October 2025 10:05">Friday 31 October 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+  <span class="sgr4">split equally between source and destination ends.</span></code></pre><p>This confirms the results.</p><div class="admonition is-danger" id="Error-in-the-CGMES-Data?-fe7f1315ccf616f8"><header class="admonition-header">Error in the CGMES Data?<a class="admonition-anchor" href="#Error-in-the-CGMES-Data?-fe7f1315ccf616f8" title="Permalink"></a></header><div class="admonition-body"><p>In conclusion, it looks like the CGMES data is not consistent in the newer dataset! Either the branch parameters are wrong, or the power flow results are wrong.</p></div></div><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../cgmes_testdata/">« Inspection of CGMES Test Data</a><a class="docs-footer-nextpage" href="../cgmes_testdata_reexport/">Reexported Dataset »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 26 March 2026 09:11">Thursday 26 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
