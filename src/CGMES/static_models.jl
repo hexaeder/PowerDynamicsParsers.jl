@@ -527,6 +527,7 @@ function injector_type(::Val{:LinearShuntCompensator}, o::CIMObject)
     return PQYType(0.0, 0.0, G, B, [o])
 end
 
+is_angle_ref(o::CIMCollection) = is_angle_ref(get_tpn_node(o))
 function is_angle_ref(o::CIMObject)
     @assert is_class(o, "TopologicalNode") "Expected TopologicalNode, got $(o.class_name)"
 

@@ -315,6 +315,7 @@ function CIMDataset(directory::String)
 
     # handle duplicate ids
     allkeys = Set{String}()
+    duplicate_counts = Dict{Tuple{String,Symbol}, Int}()
     for (profile, file) in files_ordered
         filekeys = keys(objects(file))
         duplicatekeys = intersect(allkeys, filekeys)
@@ -322,7 +323,8 @@ function CIMDataset(directory::String)
         if !isempty(duplicatekeys)
             for key in duplicatekeys
                 obj = objects(file)[key]
-                printstyled("Duplicate key! Transforming \"$(obj.class_name)\"-object from $profile into extension.\n"; color=:yellow)
+                k = (obj.class_name, profile)
+                duplicate_counts[k] = get(duplicate_counts, k, 0) + 1
 
                 # move to extension
                 base = CIMRef(obj.id)
@@ -334,6 +336,10 @@ function CIMDataset(directory::String)
         end
 
         union!(allkeys, keys(objects(file)))
+    end
+    if !isempty(duplicate_counts)
+        lines = ["  $(count)x \"$(cls)\" from $profile" for ((cls, profile), count) in sort(collect(duplicate_counts))]
+        printstyled("Duplicate keys found — transformed into extensions:\n" * join(lines, "\n") * "\n"; color=:yellow)
     end
 
     dataset = CIMDataset(files_ordered, directory)

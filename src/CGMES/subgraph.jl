@@ -30,6 +30,13 @@ end
 IGNORE_CLASSES = [
     "BusbarSection",
 ]
+
+# Equipment classes that are silently ignored during topological splitting
+# because no dynamic model exists for them yet.
+WARN_IGNORE_CLASSES = [
+    "ExternalNetworkInjection",
+]
+
 function is_ignored_terminal(t)
     @assert is_terminal(t) "Expected Terminal, got $(t.class_name)"
     eq = t["ConductingEquipment"]
@@ -37,7 +44,12 @@ function is_ignored_terminal(t)
         if !isempty(ascendants(t, byclass("SvPowerFlow"))) && !iszero(get_injected_power_pu(t))
             error("Ignored terminal $(t.id) has non-zero powerflow!")
         end
-
+        return true
+    elseif any(class -> is_class(eq, class), WARN_IGNORE_CLASSES)
+        printstyled("Ignoring terminal $(t.id) (name=$(get(t.properties, "name", "?"))) connected to $(eq.class_name) '$(get(eq.properties, "name", "?"))' — no dynamic model implemented for this equipment class yet.\n"; color=:yellow)
+        if !isempty(ascendants(t, byclass("SvPowerFlow"))) && !iszero(get_injected_power_pu(t))
+            error("Ignored terminal $(t.id) has non-zero powerflow!")
+        end
         return true
     else
         return false
