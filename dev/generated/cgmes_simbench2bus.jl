@@ -52,7 +52,20 @@ only(dataset("EnergySource"))
 # ### Bus 1: DUT
 
 nodes, edges = split_topologically(dataset; warn=false, verbose=true);
+
+Network(dataset)
+em = PowerDynamicsParsers.CGMES.get_edge_model(edges[1])
+map(psym(em)) do sym
+    sym => get_default(em, sym)
+end
+
+
+
 inspect_collection(nodes[1]; size=(900,900))
+
+Network(dataset)
+
+edges[1]
 
 # ### Bus 2: Slack
 
