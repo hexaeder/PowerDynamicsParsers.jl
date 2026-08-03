@@ -3,7 +3,7 @@ module CGMES
 using XML: XML, Node, nodetype, attributes, children, tag,
            is_simple, simple_value
 using OrderedCollections: OrderedDict
-using PowerDynamics: Library, Line, MTKLine
+using PowerDynamics: Library, MTKLine
 using NetworkDynamics: EdgeModel, VertexModel, set_graphelement!, initialize_component, get_initial_state
 
 export rdf_node, CIMObject, CIMRef, CIMBackref, CIMCollection, CIMFile, CIMDataset

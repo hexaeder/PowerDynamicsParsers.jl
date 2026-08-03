@@ -70,8 +70,8 @@ pfnw[EIndex(2)]
 pfnw
 
 
-ModelingToolkit.getname(pfnw[EIndex(1)].metadata[:odesystem])
-ModelingToolkit.setname(pfnw[EIndex(1)].metadata[:odesystem], :foobar)
+ModelingToolkitBase.getname(pfnw[EIndex(1)].metadata[:odesystem])
+ModelingToolkitBase.setname(pfnw[EIndex(1)].metadata[:odesystem], :foobar)
 
 getname
 

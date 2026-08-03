@@ -1,7 +1,7 @@
 using PowerDynamics
 using PowerDynamics.NetworkDynamics: str_significant
 using PowerDynamics: DataFrame
-using PowerDynamics.ModelingToolkit: @named
+using PowerDynamics.ModelingToolkitBase: @named
 
 const STATIC_EDGEMODEL_CACHE = Dict{Any, NetworkDynamics.EdgeModel}()
 const STATIC_VERTEXMODEL_CACHE = Dict{Any, NetworkDynamics.VertexModel}()
@@ -244,8 +244,8 @@ function get_cached_vertex_model(blueprint::Symbol)
             #     end
             # end
             # @named PQY = PQShuntModel()
-            # ModelingToolkit.setirreducible(PQY.busbar.u_r, true)
-            # ModelingToolkit.setirreducible(PQY.busbar.u_i, true)
+            # ModelingToolkitBase.setirreducible(PQY.busbar.u_r, true)
+            # ModelingToolkitBase.setirreducible(PQY.busbar.u_i, true)
 
             # compile_bus(PQY)
             bus
@@ -813,8 +813,10 @@ end
 
 using Markdown
 using PowerDynamics
-using PowerDynamics.ModelingToolkit
-using PowerDynamics.ModelingToolkit: t_nounits as t, D_nounits as Dt
+using PowerDynamics.ModelingToolkitBase
+using PowerDynamics.ModelingToolkitBase: t_nounits as t, D_nounits as Dt
+using SciCompDSL
+
 @mtkmodel PiLineFreeP begin
     @parameters begin
         R, [description="Resistance of branch in pu", guess=0]

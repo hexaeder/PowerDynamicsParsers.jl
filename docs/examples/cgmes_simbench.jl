@@ -5,7 +5,7 @@ using PowerDynamicsParsers.CGMES
 using CairoMakie
 using XML
 using WGLMakie
-using ModelingToolkit
+using ModelingToolkitBase
 using Graphs
 using NonlinearSolve
 using GraphMakie

@@ -8,6 +8,7 @@ INJECTOR_CLASSES = [
     "ConformLoad",
     "PowerElectronicsConnection",
     "LinearShuntCompensator",
+    "ExternalNetworkInjection",
 ]
 function is_injector_terminal(t)
     @assert is_terminal(t)
